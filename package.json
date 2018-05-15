@@ -1,0 +1,15 @@
+{
+  "name": "fulptronjs",
+  "version": "1.0.0",
+  "description": "A Discord Bot made with DiscordJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.3.2",
+    "eslint": "^4.19.1"
+  }
+}
