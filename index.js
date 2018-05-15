@@ -26,23 +26,22 @@ client.on('message', message => {
   .catch(console.error);
 	}
 
-	if (message.content === 'fulpPlay') {
-		if (message.channel.type !== 'text') return;
+	if (message.content === '!play') {
+					if (message.channel.type !== 'text') return;
 
-		const { voiceChannel } = message.member;
+					const { voiceChannel } = message.member;
 
-		if (!voiceChannel) {
-			return message.reply('Please join a voice channel first!');
-		}
+					if (!voiceChannel) {
+						return message.reply('please join a voice channel first!');
+					}
 
-		voiceChannel.join().then(connection => {
-			const stream = ytdl('https://www.youtube.com/watch?v=09R8_2nJtjg', { filter: 'audioonly' });
-			const dispatcher = connection.playStream(stream);
+					voiceChannel.join().then(connection => {
+	            const stream = ytdl('https://www.youtube.com/watch?v=Qlsu7RhOnsQ', { filter: 'audioonly' });
+	            const dispatcher = connection.playStream(stream, { volume: 0.5 });
 
-			dispatcher.on('end', () => voiceChannel.leave());
-		});
-
-	}
+	            dispatcher.on('end', () => voiceChannel.leave());
+	        });
+	    }
 
 	if (message.content == 'fulpReboot') {
 

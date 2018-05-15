@@ -12,6 +12,7 @@
     "discord.js": "^11.3.2",
     "eslint": "^4.19.1",
     "ffmpeg-binaries": "^3.2.2-3",
+    "node-opus": "^0.3.0",
     "ytdl-core": "^0.20.4"
   }
 }
