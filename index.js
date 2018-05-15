@@ -49,6 +49,11 @@ client.on('message', message =>
 
 		message.channel.send(`Pong! Ping: ${client.ping}ms`);
 	}
+
+	if (command == 'shame')
+	{
+		message.channel.send('**SHAAAAAME**');
+	}
 	
 
 
