@@ -133,6 +133,11 @@ client.on('message', message =>
 					if (!voiceChannel) {
 						return message.reply('please join a voice channel first!');
 					}
+
+					if (args[0] === undefined)
+					{
+						return message.reply('Ya gotta add a youtube link ya doofus');
+					}
 				
 					if (!args[0].startsWith('https://www.youtube.com/watch'))
 					{
