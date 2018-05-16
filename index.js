@@ -118,7 +118,8 @@ client.on('message', message =>
 
 	if (command == 'playing') 
 	{
-			client.user.setActivity(args.toString(), { type: 'PLAYING' })
+		let text = args.slice(0).join(" ");
+			client.user.setActivity(text, { type: 'PLAYING' })
 			.then(presence => console.log(`Activity set to ${presence.game ? presence.game.name : 'none'}`))
   			.catch(console.error);
 	}
