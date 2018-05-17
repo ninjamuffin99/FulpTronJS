@@ -185,6 +185,16 @@ client.on('message', message =>
 		message.channel.send(text);
 	}
 
+	if (command == 'loli')
+	{
+		 message.channel.send({ files: ['https://cdn.discordapp.com/attachments/422660110830272514/446516094006460417/unknown.png']})
+		.then(message.channel.send('**inb4 BAN**'))
+		.then(message.channel.send({ files: ['https://cdn.discordapp.com/attachments/422660110830272514/446516105880535041/unknown.png']}));
+
+		
+	}
+
+
 });
 
 process.on('unhandledRejection', error => console.error(`Uncaught Promise Rejection:\n${error}`));
