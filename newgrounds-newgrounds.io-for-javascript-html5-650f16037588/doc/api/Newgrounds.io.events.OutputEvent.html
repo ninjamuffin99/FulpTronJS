@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: OutputEvent</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: OutputEvent</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+            <span class="ancestors"><a href="Newgrounds.html">Newgrounds</a><a href="Newgrounds.io.html">.io</a><a href="Newgrounds.io.events.html">.events</a>.</span>OutputEvent</h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+
+    <h4 class="name" id="OutputEvent"><span class="type-signature"></span>new OutputEvent<span class="signature">(type, call, data)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Contains data output by the Newgrounds.io server for use in event listeners
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the event, typically the component name.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>call</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Newgrounds.io.model.call.html">Newgrounds.io.model.call</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The call object that was posted to the server.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+|
+
+<span class="param-type">Array.&lt;object></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The results from the server.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the event, typically the component name.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>success</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Will be true if the call was successful.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>call</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Newgrounds.io.model.call.html">Newgrounds.io.model.call</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The call object that was posted to the server.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+|
+
+<span class="param-type">Array.&lt;object></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The results from the server.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>preventDefault</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">If set to true, event will not perform default behaviour (if any).</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="newgroundsio.js.html">newgroundsio.js</a>, <a href="newgroundsio.js.html#line111">line 111</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Newgrounds.io.core.html">core</a></li><li><a href="Newgrounds.io.events.EventDispatcher.html">EventDispatcher</a></li><li><a href="Newgrounds.io.events.OutputEvent.html">OutputEvent</a></li><li><a href="Newgrounds.io.events.SessionEvent.html">SessionEvent</a></li><li><a href="Newgrounds.io.model.debug.html">debug</a></li><li><a href="Newgrounds.io.model.error.html">error</a></li><li><a href="Newgrounds.io.model.input.html">input</a></li><li><a href="Newgrounds.io.model.medal.html">medal</a></li><li><a href="Newgrounds.io.model.output.html">output</a></li><li><a href="Newgrounds.io.model.result.html">result</a></li><li><a href="Newgrounds.io.model.score.html">score</a></li><li><a href="Newgrounds.io.model.scoreboard.html">scoreboard</a></li><li><a href="Newgrounds.io.model.session.html">session</a></li><li><a href="Newgrounds.io.model.user.html">user</a></li><li><a href="Newgrounds.io.model.usericons.html">usericons</a></li><li><a href="Newgrounds.io.SessionLoader.html">SessionLoader</a></li></ul><h3>Namespaces</h3><ul><li><a href="Newgrounds.html">Newgrounds</a></li><li><a href="Newgrounds.io.html">io</a></li><li><a href="Newgrounds.io.call_validators.html">call_validators</a></li><li><a href="Newgrounds.io.events.html">events</a></li><li><a href="Newgrounds.io.model.html">model</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Tue Jul 12 2016 15:22:01 GMT-0400 (EDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
