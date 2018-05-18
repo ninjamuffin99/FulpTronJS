@@ -95,8 +95,14 @@ client.on('message', message =>
 		message.reply("tesst");
 	}
 
+	if (message.content === "fulp")
+	{
+		// message.reply basically the same as message.channel.send, but @'s the person who sent it
+		message.reply("What's up bud?");
+	}
+
 	//IF IT DOESNT START WITH "FULP" then IT DONT REGISTER PAST THIS POINT
-	if (!message.content.startsWith(prefix) || message.author.bot) return;
+	if (!message.content.startsWith(prefix) + " " || message.author.bot + " ") return;
 
 	const args = message.content.slice(prefix.length).split(/ +/);
 	const command = args.shift().toLowerCase();
@@ -105,7 +111,6 @@ client.on('message', message =>
 	if (command == 'ping') 
 	{
 		// var emoji = Discord.emoji.from
-
 		message.channel.send(`Pong! Ping: ${client.ping}ms`);
 	}
 
@@ -113,8 +118,6 @@ client.on('message', message =>
 	{
 		message.channel.send('**SHAAAAAME**');
 	}
-	
-
 
 	if (command == 'playing') 
 	{
@@ -151,7 +154,6 @@ client.on('message', message =>
 	            dispatcher.on('end', () => voiceChannel.leave());
 	        });
 	}
-
 
 	// STUPID JS NOTE: MAKE SURE YOU USE ` BACKTICKS LIKE THIS, INSTEAD OF ' APOSTROPHES LIKE THIS
 	// IF YOU WANT TO USE EZ VARIABLES AND SHIT
@@ -190,11 +192,7 @@ client.on('message', message =>
 		 message.channel.send({ files: ['https://cdn.discordapp.com/attachments/422660110830272514/446516094006460417/unknown.png']})
 		.then(message.channel.send('**inb4 BAN**'))
 		.then(message.channel.send({ files: ['https://cdn.discordapp.com/attachments/422660110830272514/446516105880535041/unknown.png']}));
-
-		
 	}
-
-
 });
 
 process.on('unhandledRejection', error => console.error(`Uncaught Promise Rejection:\n${error}`));
