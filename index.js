@@ -173,7 +173,7 @@ client.on('message', message =>
 		message.channel.send(`You wanted to kick: ${taggedUser.username}`);
 	}
 
-	if (command == 'prune')
+	if (command == 'prune' || command == 'purge')
 	{
 		const amount = parseInt(args[0]) + 1;
 
@@ -195,6 +195,8 @@ client.on('message', message =>
 
 
 	}
+
+	
 
 	if (command == 'args-info')
 	{
@@ -219,6 +221,37 @@ client.on('message', message =>
 		let text = args.slice(0).join(" ");
 		message.delete();
 		message.channel.send(text);
+	}
+
+	if (command == 'roll')
+	{
+		let min = parseInt(args[0]);
+		let max = parseInt(args[1]);
+
+		if (isNaN(min))
+			min = 0;
+		if (isNaN(max))
+			max = 20;
+		
+		message.channel.send(`🎲 You rolled a: ${Math.floor(Math.random() * (max - min + 1)) + min}`)
+
+	}
+
+	if (command == 'ngfollow')
+	{
+		let usr = args[0];
+		if (usr == undefined)
+		{
+			return message.channel.send("Go to Newgrounds.com!\nhttps://newgrounds.com")
+		}
+		else
+		{
+			if (usr == 'Tom' || usr == 'TomFulp')
+			{
+				return message.channel.send("Go follow Tom Fulp himself on Newgrounds!\nhttps://TomFulp.newgrounds.com")
+			}
+			message.channel.send(`Go follow ${usr} on Newgrounds!\nhttps://${usr}.newgrounds.com`)
+		}
 	}
 
 	if (command == 'loli')
