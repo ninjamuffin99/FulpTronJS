@@ -102,7 +102,7 @@ client.on('message', message =>
 	}
 
 	//IF IT DOESNT START WITH "FULP" then IT DONT REGISTER PAST THIS POINT
-	if (!message.content.startsWith(prefix) + " " || message.author.bot + " ") return;
+	if (!message.content.startsWith(prefix) || message.author.bot ) return;
 
 	const args = message.content.slice(prefix.length).split(/ +/);
 	const command = args.shift().toLowerCase();
