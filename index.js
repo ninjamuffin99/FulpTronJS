@@ -6,14 +6,13 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 //command set up
 client.commands = new Discord.Collection();
-const commandFiles = fs.readdirSync(`./commands`);
 
-for (const file of commandFiles)
-{
+const commandFiles = fs.readdirSync('./commands');
+
+for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
 }
-
 //extra shit
 const ytdl = require('ytdl-core');
 const { prefix, token } = require('./config.json')
@@ -160,6 +159,41 @@ client.on('message', message =>
 	if (command == 'server') 
 	{
 		message.channel.send(`This server's name is: ${message.guild.name}\nTotal members: ${message.guild.memberCount}\nServer Region: ${message.guild.region}`);
+	}
+
+	if (command == 'kick')
+	{
+		if (!message.mentions.users.size)
+		{
+			return message.reply('you need to @ someone to kick em')
+		}
+
+		const taggedUser = message.mentions.users.first();
+
+		message.channel.send(`You wanted to kick: ${taggedUser.username}`);
+	}
+
+	if (command == 'prune')
+	{
+		const amount = parseInt(args[0]) + 1;
+
+		if (isNaN(amount))
+		{
+			return message.reply('that does not seem to be a valid number');
+		}
+		else if (amount <= 1 || amount > 100)
+		{
+			return message.reply('you need to input a number between 1 and 99');
+		}
+
+		message.channel.bulkDelete(amount, true).catch(err =>
+		{
+			console.error(err);
+			message.channel.send("OOPSIE WOOPSIE!! Uwu We madea fucky wucky!! A wittle fucko boingo! The code monkeys at our headquarters are working VEWY HAWD to fix this!");
+			message.channel.send("acutally there was just an error trying to prune message oopsies");
+		})
+
+
 	}
 
 	if (command == 'args-info')
