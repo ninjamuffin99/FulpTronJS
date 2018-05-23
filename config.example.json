@@ -1,3 +1,5 @@
 {
-  "token": "insert token here"
+  "token": "insert token here",
+  "prefix": "fulp",
+  "ownerID": ""
 }

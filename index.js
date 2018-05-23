@@ -15,7 +15,7 @@ for (const file of commandFiles) {
 }
 //extra shit
 const ytdl = require('ytdl-core');
-const { prefix, token } = require('./config.json')
+const { prefix, token, ownerID } = require('./config.json')
 
 // when the client is ready, run this code
 // this event will trigger whenever your bot:
@@ -260,7 +260,39 @@ client.on('message', message =>
 		.then(message.channel.send('**inb4 BAN**'))
 		.then(message.channel.send({ files: ['https://cdn.discordapp.com/attachments/422660110830272514/446516105880535041/unknown.png']}));
 	}
+
+	// WARNING VERY DANGEROUS COMMAND THAT CAN RUIN THE BOT'S HOST IF IN THE WRONG HANDS
+	// BUT IM CODING IT IN FOR THE LOLS LMAOOO
+	// make sure you set 'ownerID' as your discord ID (the numbers and shit) to make sure that no goon besides the host uses it
+	if (command == 'eval')
+	{
+			if (message.author.id !== ownerID) return;
+			try
+			{
+				const code = args.join(" ");
+				let evaled = eval(code);
+
+				if (typeof evaled !== "string")
+					evaled = require("util").inspect(evaled);
+
+				message.channel.send(clean(evaled), {code:"xl"});
+
+			}
+			catch(err)
+			{
+				message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
+			}
+	}
+
 });
+
+function clean(text)
+{
+	if (typeof(text) == "string")
+		return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
+	else
+		return text;
+}
 
 process.on('unhandledRejection', error => console.error(`Uncaught Promise Rejection:\n${error}`));
 
