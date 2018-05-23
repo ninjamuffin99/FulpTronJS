@@ -200,6 +200,12 @@ client.on('message', message =>
 
 	}
 
+	// lol I gotta fix it so that it's in this format hh:mm:ss
+	if (command == "uptime")
+	{
+		message.reply(`Current uptime is : ${client.uptime.toPrecision(2) * 0.001} seconds`)
+	}
+
 	
 
 	if (command == 'args-info')
