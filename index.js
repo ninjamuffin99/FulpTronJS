@@ -1,4 +1,6 @@
 const fs = require('fs');
+const rp = require('request-promise');
+const cheerio = require('cheerio');
 
 // require the discord.js module
 const Discord = require('discord.js');
@@ -294,7 +296,33 @@ client.on('message', message =>
 			}
 	}
 
+	if (command == "ngscrape")
+	{
+		let usr = args[0];
+
+		if (usr === undefined)
+			return message.reply("please input a name");
+	
+		const options = {
+			uri: `https://${usr}.newgrounds.com`,
+			transform: function (body) {
+			  return cheerio.load(body);
+			}
+		  };
+		  
+		  rp(options)
+			.then(($) => {
+			  console.log($('dl.stats-general').text());
+			  message.channel.send($('dl.stats-general').text());
+			})
+			.catch((err) => {
+			  console.log(err);
+			});
+		
+	}
+
 });
+
 
 function clean(text)
 {
