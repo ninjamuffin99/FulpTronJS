@@ -296,6 +296,9 @@ client.on('message', message =>
 			}
 	}
 
+	// cheerio.js scraping help and info:
+	// https://codeburst.io/an-introduction-to-web-scraping-with-node-js-1045b55c63f7
+	// also check out the cheerio.js github and website
 	if (command == "ngscrape")
 	{
 		let usr = args[0];
@@ -312,8 +315,33 @@ client.on('message', message =>
 		  
 		  rp(options)
 			.then(($) => {
-			  console.log($('dl.stats-general').text());
-			  message.channel.send($('dl.stats-general').text());
+			  console.log($('.stats-general').text());
+			  message.channel.send($('.stats-general').text());
+			})
+			.catch((err) => {
+			  console.log(err);
+			});
+		
+	}
+
+	if (command == "ngaura")
+	{
+		let usr = args[0];
+
+		if (usr === undefined)
+			return message.reply("please input a name");
+	
+		const options = {
+			uri: `https://${usr}.newgrounds.com`,
+			transform: function (body) {
+			  return cheerio.load(body);
+			}
+		  };
+		  
+		  rp(options)
+			.then(($) => {
+			  console.log($('.user-header-nav').text());
+			  message.channel.send($('.user-header-nav').text());
 			})
 			.catch((err) => {
 			  console.log(err);
