@@ -1,5 +1,7 @@
 {
   "token": "insert token here",
   "prefix": "fulp",
-  "ownerID": ""
+  "ownerID": "",
+  "NGappID": "",
+  "NGencKey": ""
 }
