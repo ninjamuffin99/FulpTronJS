@@ -17,5 +17,6 @@
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
     "ytdl-core": "^0.20.4"
-  }
+  },
+  "bin": "index.js"
 }

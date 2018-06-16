@@ -303,6 +303,11 @@ client.on('message', message =>
 		.then(message.channel.send({ files: ['https://cdn.discordapp.com/attachments/422660110830272514/446516105880535041/unknown.png']}));
 	}
 
+	if (command == 'source' || command == 'sourcecode' || command == 'github')
+	{
+		message.channel.send("Dig through my code on Github: \nhttps://github.com/ninjamuffin99/FulpTronJS");
+	}
+
 	// WARNING VERY DANGEROUS COMMAND THAT CAN RUIN THE BOT'S HOST IF IN THE WRONG HANDS
 	// BUT IM CODING IT IN FOR THE LOLS LMAOOO
 	// make sure you set 'ownerID' as your discord ID (the numbers and shit) to make sure that no goon besides the host uses it
