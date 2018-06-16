@@ -120,14 +120,6 @@ client.on('message', message =>
 		message.channel.send('**SHAAAAAME**');
 	}
 
-	if (command == 'playing') 
-	{
-		let text = args.slice(0).join(" ");
-			client.user.setActivity(text, { type: 'PLAYING' })
-			.then(presence => console.log(`Activity set to ${presence.game ? presence.game.name : 'none'}`))
-  			.catch(console.error);
-	}
-
 	if (command == 'play' || command == 'join') 
 	{
 					if (message.channel.type !== 'text') return;
@@ -208,18 +200,26 @@ client.on('message', message =>
 		message.reply(`Current uptime is : ${client.uptime.toPrecision(2) * 0.001} seconds`)
 	}
 
-	if (command == "role")
+	if (command == "addrole")
 	{
 		let role = args.slice(0).join(" ");
 		let curRole = message.guild.roles.find("name", role);
 
 		if (message.member.roles.exists("name", role))
 		{
-			return message.reply("you alread have that role!")
+			return message.reply(`you alread have the ${curRole.name} role!`)
 		}
 
 		message.member.addRole(curRole);
-		message.channel.send("added that role");
+		message.channel.send(`added the ${curRole.name} role`);
+	}
+
+	if (command == "removerole")
+	{
+		let role = args.slice(0).join(" ");
+		let curRole = message.guild.roles.find('name', role);
+
+		message.member.removeRole(curRole).then(message.channel.send(`Removed the ${curRole.name} role from you!`))
 	}
 
 	
@@ -241,6 +241,22 @@ client.on('message', message =>
 		let location = args[2];
 		message.reply(`Hello ${message.author.username}, I see you're a ${age} year old ${sex} from ${location}. Wanna date?`);
 	}
+
+	if (command == "watching")
+	{
+		let text = args.slice(0).join(" ");
+		client.user.setActivity(text, { type: 'WATCHING'});
+	}
+
+	
+	if (command == 'playing') 
+	{
+		let text = args.slice(0).join(" ");
+			client.user.setActivity(text, { type: 'PLAYING' })
+			.then(presence => console.log(`Activity set to ${presence.game ? presence.game.name : 'none'}`))
+  			.catch(console.error);
+	}
+
 
 	if (command === 'say')
 	{
