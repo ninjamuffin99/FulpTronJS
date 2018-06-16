@@ -17,7 +17,7 @@ for (const file of commandFiles) {
 }
 //extra shit
 const ytdl = require('ytdl-core');
-const { prefix, token, ownerID } = require('./config.json')
+const { prefix, token, ownerID, NGappID, NGencKey} = require('./config.json')
 
 // when the client is ready, run this code
 // this event will trigger whenever your bot:
@@ -206,6 +206,20 @@ client.on('message', message =>
 	if (command == "uptime")
 	{
 		message.reply(`Current uptime is : ${client.uptime.toPrecision(2) * 0.001} seconds`)
+	}
+
+	if (command == "role")
+	{
+		let role = args.slice(0).join(" ");
+		let curRole = message.guild.roles.find("name", role);
+
+		if (message.member.roles.exists("name", role))
+		{
+			return message.reply("you alread have that role!")
+		}
+
+		message.member.addRole(curRole);
+		message.channel.send("added that role");
 	}
 
 	
