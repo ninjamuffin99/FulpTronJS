@@ -102,6 +102,13 @@ client.on('message', message =>
 		message.reply("What's up bud?");
 	}
 
+	if (message.content.toLowerCase() === "are we talking about tom fulp?" || message.content.toLowerCase() === "are we talking about tom fulp?" )
+	{
+		// message.reply basically the same as message.channel.send, but @'s the person who sent it
+		message.reply("I **LOVE** talking about Tom Fulp!");
+	}
+
+
 	//IF IT DOESNT START WITH "FULP" then IT DONT REGISTER PAST THIS POINT
 	if (!message.content.toLowerCase().startsWith(prefix) || message.author.bot ) return;
 
@@ -392,13 +399,15 @@ client.on('message', message =>
 				let ngInfo = $('.user-header').text();
 				let ngArray = ngInfo.split("\n");
 
+				// NOTE This needs  alot of cleaning up. Currently the ngArray just slices out the first few bits, and the embed doesn't account
+				// for if the user doesn't have a certain submission type, so currrently the embed is commented out
 				ngArray.slice(0, 19);
 
 				console.log(ngArray);
-
+				
 				embed.addField(`Submission stats`, `[${ngArray[21]}](https://${usr}.newgrounds.com/fans) Fans\n[${ngArray[35]}](https://${usr}.newgrounds.com/${ngArray[34]}) ${ngArray[34]} Submissions\n[${ngArray[42]}](https://${usr}.newgrounds.com/${ngArray[41]}) ${ngArray[41]} Submissions\n[${ngArray[49]}](https://${usr}.newgrounds.com/${ngArray[48]}) ${ngArray[48]} Submissions\n[${ngArray[56]}](https://${usr}.newgrounds.com/${ngArray[55]}) ${ngArray[55]} Submissions\n[${ngArray[63]}](https://${usr}.newgrounds.com/favorites) Faves\n[${ngArray[70]}](https://${usr}.newgrounds.com/reviews) Reviews\n[${ngArray[77]}](https://www.newgrounds.com/bbs/search/author/${usr}) Forum Posts`);
 
-				message.channel.send({embed});
+				// message.channel.send({embed});
 				message.channel.send($('.stats-general').text());
 			})
 			.catch((err) => {
