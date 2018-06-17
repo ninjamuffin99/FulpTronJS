@@ -7,6 +7,7 @@ The prefix is `fulp` so an example command would be `fulpPlaying` with no spaces
 
 parameters will be indicated in <> these brackets when required. If there's multiple they should be seperated by a single space
 
+- `fulpHelp` will drop a link to this page!
 - `fulpPing` pings the host and returns the time in milliseconds
 - `fulpShame` just shouts SHAAAME
 - `fulpServer` sends some info about the server, like amount of memebers
