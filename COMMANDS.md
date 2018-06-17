@@ -1,6 +1,7 @@
 # FulpTronJS
 A stinky DiscordJS bot
 
+If you want to suggest stuff for the bot, drop them in this chat: https://discord.gg/GBJwxs
 
 ## List of commands!!!
 The prefix is `fulp` so an example command would be `fulpPlaying` with no spaces like that. Also the commands are not case sensitive, so you could do something like `FUlpPiNG` if you're some weirdo
