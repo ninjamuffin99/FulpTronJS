@@ -5,7 +5,7 @@ A stinky DiscordJS bot
 ## List of commands!!!
 The prefix is `fulp` so an example command would be `fulpPlaying` with no spaces like that. Also the commands are not case sensitive, so you could do something like `FUlpPiNG` if you're some weirdo
 
-parameters will be indicated in <> these brackets when required. If there's multiple they should be seperated by a single space
+parameters will be indicated in <> these brackets when required. If there's multiple they should be seperated by a single space (NOTE: the brackets do not need to be included in the message! Those are just to show when to seperate parameters)
 
 - `fulpHelp` will drop a link to this page!
 - `fulpPing` pings the host and returns the time in milliseconds
