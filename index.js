@@ -205,13 +205,17 @@ client.on('message', message =>
 		let role = args.slice(0).join(" ");
 		let curRole = message.guild.roles.find("name", role);
 
+		if (!message.guild.roles.exists("name", role))
+		{
+			return message.reply(`This server doesn't seem to have ${role} as a role... you should know that the roles are case sensitive!`)
+		}
 		if (message.member.roles.exists("name", role))
 		{
 			return message.reply(`you alread have the ${curRole.name} role!`)
 		}
 
 		message.member.addRole(curRole);
-		message.channel.send(`added the ${curRole.name} role`);
+		message.channel.reply(`just got the ${curRole.name} role!`);
 	}
 
 	if (command == "removerole")
@@ -219,7 +223,18 @@ client.on('message', message =>
 		let role = args.slice(0).join(" ");
 		let curRole = message.guild.roles.find('name', role);
 
-		message.member.removeRole(curRole).then(message.channel.send(`Removed the ${curRole.name} role from you!`))
+		
+		if (!message.guild.roles.exists("name", role))
+		{
+			return message.reply(`This server doesn't seem to have ${role} as a role... you should know that the roles are case sensitive!`)
+		}
+		if (!message.member.roles.exists("name", role))
+		{
+			return message.reply(`you alread have the ${curRole.name} role removed!`)
+		}
+
+
+		message.member.removeRole(curRole).then(message.reply(`removed your ${curRole.name} role!`))
 	}
 
 	
@@ -336,11 +351,20 @@ client.on('message', message =>
 	// also check out the cheerio.js github and website
 	if (command == "ngscrape")
 	{
+
 		let usr = args[0];
 
 		if (usr === undefined)
 			return message.reply("please input a name");
 	
+		// Buuilds the embed
+		let embed = new Discord.RichEmbed()
+		.setURL(`https://${usr}.newgrounds.com`)
+		.setTitle(`${usr}'s stats on Newgrounds`, )
+		.setTimestamp();
+
+		
+
 		const options = {
 			uri: `https://${usr}.newgrounds.com`,
 			transform: function (body) {
@@ -350,14 +374,29 @@ client.on('message', message =>
 		  
 		  rp(options)
 			.then(($) => {
-			  console.log($('.stats-general').text());
-			  message.channel.send($('.stats-general').text());
+				let ngInfo = $('.user-header').text();
+				let ngArray = ngInfo.split("\n");
+
+				ngArray.slice(0, 19);
+
+				console.log(ngArray);
+
+				embed.setThumbnail("https://i.ytimg.com/vi/ZRFIqusuqN8/maxresdefault.jpg");
+				embed.setImage("https://desu-usergeneratedcontent.xyz/g/image/1499/80/1499801793392.png");
+				embed.addField(`General stats`, `[${ngArray[21]}](https://${usr}.newgrounds.com/fans) Fans\n[${ngArray[35]}](https://${usr}.newgrounds.com/${ngArray[34]}) ${ngArray[34]} Submissions\n[${ngArray[42]}](https://${usr}.newgrounds.com/${ngArray[41]}) ${ngArray[41]} Submissions\n[${ngArray[49]}](https://${usr}.newgrounds.com/${ngArray[48]}) ${ngArray[48]} Submissions\n[${ngArray[56]}](https://${usr}.newgrounds.com/${ngArray[55]}) ${ngArray[55]} Submissions\n[${ngArray[63]}](https://${usr}.newgrounds.com/favorites) Faves\n[${ngArray[70]}](https://${usr}.newgrounds.com/reviews) Reviews\n[${ngArray[77]}](https://www.newgrounds.com/bbs/search/author/${usr}) Forum Posts`);
+
+				message.channel.send({embed});
+				message.channel.send($('.stats-general').text());
 			})
 			.catch((err) => {
 			  console.log(err);
+			  message.channel.send(`an error occured because <@${ownerID}> is a fukken dumbass` );
 			});
 		
 	}
+
+	if (command == "testerror" && message.channel.author.id == ownerID)
+		message.channel.send(` <@${ownerID}> an error occured`);
 
 	if (command == "ngaura")
 	{
