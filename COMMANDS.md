@@ -24,3 +24,6 @@ parameters will be indicated in <> these brackets when required. If there's mult
 - `fulpSource` drops a link to the sourcecode on Github
 - `fulpEval` literally a command that lets you hack into my PC, no jokes. However only I can use it heheheh
 - `fulpNGScrape <Newgrounds user>` sends you some info about whatever Newgrounds user you input, into a nifty little Rich Embed.
+
+## coming eventually
+- The ability to play music in voice chat (just need to fix up queues and shit)
