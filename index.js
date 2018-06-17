@@ -119,7 +119,12 @@ client.on('message', message =>
 	{
 		message.channel.send('**SHAAAAAME**');
 	}
-	
+
+	if (command == 'help')
+	{
+		message.channel.send("https://github.com/ninjamuffin99/FulpTronJS/blob/master/COMMANDS.md");
+	}
+
 	/* 
 	if (command == 'play' || command == 'join') 
 	{
