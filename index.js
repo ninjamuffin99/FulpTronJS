@@ -119,7 +119,8 @@ client.on('message', message =>
 	{
 		message.channel.send('**SHAAAAAME**');
 	}
-
+	
+	/* 
 	if (command == 'play' || command == 'join') 
 	{
 					if (message.channel.type !== 'text') return;
@@ -147,7 +148,8 @@ client.on('message', message =>
 	            dispatcher.on('end', () => voiceChannel.leave());
 	        });
 	}
-
+	 */
+	 
 	// STUPID JS NOTE: MAKE SURE YOU USE ` BACKTICKS LIKE THIS, INSTEAD OF ' APOSTROPHES LIKE THIS
 	// IF YOU WANT TO USE EZ VARIABLES AND SHIT
 	if (command == 'server') 
@@ -173,6 +175,11 @@ client.on('message', message =>
 
 	if (command == 'prune' || command == 'purge')
 	{
+		if (!message.member.roles.exists("name", "MOD"))
+		{
+			return message.channel.send("You need to be a mod to do that!");
+		}
+
 		const amount = parseInt(args[0]) + 1;
 
 		if (isNaN(amount))
@@ -398,7 +405,7 @@ client.on('message', message =>
 
 	if (command == "testerror" && message.channel.author.id == ownerID)
 		message.channel.send(` <@${ownerID}> an error occured`);
-
+	/* 
 	if (command == "ngaura")
 	{
 		let usr = args[0];
@@ -423,7 +430,7 @@ client.on('message', message =>
 			});
 		
 	}
-
+ 	*/
 });
 
 
