@@ -355,13 +355,16 @@ client.on('message', message =>
 		let usr = args[0];
 
 		if (usr === undefined)
-			return message.reply("please input a name");
+			return message.reply("please input a newgrounds username!");
 	
 		// Buuilds the embed
 		let embed = new Discord.RichEmbed()
 		.setURL(`https://${usr}.newgrounds.com`)
 		.setTitle(`${usr}'s stats on Newgrounds`, )
-		.setTimestamp();
+		.setTimestamp()
+		.setColor(0xfda238)
+		.setThumbnail("https://i.ytimg.com/vi/ZRFIqusuqN8/maxresdefault.jpg")
+		.setImage("https://desu-usergeneratedcontent.xyz/g/image/1499/80/1499801793392.png");
 
 		
 
@@ -381,9 +384,7 @@ client.on('message', message =>
 
 				console.log(ngArray);
 
-				embed.setThumbnail("https://i.ytimg.com/vi/ZRFIqusuqN8/maxresdefault.jpg");
-				embed.setImage("https://desu-usergeneratedcontent.xyz/g/image/1499/80/1499801793392.png");
-				embed.addField(`General stats`, `[${ngArray[21]}](https://${usr}.newgrounds.com/fans) Fans\n[${ngArray[35]}](https://${usr}.newgrounds.com/${ngArray[34]}) ${ngArray[34]} Submissions\n[${ngArray[42]}](https://${usr}.newgrounds.com/${ngArray[41]}) ${ngArray[41]} Submissions\n[${ngArray[49]}](https://${usr}.newgrounds.com/${ngArray[48]}) ${ngArray[48]} Submissions\n[${ngArray[56]}](https://${usr}.newgrounds.com/${ngArray[55]}) ${ngArray[55]} Submissions\n[${ngArray[63]}](https://${usr}.newgrounds.com/favorites) Faves\n[${ngArray[70]}](https://${usr}.newgrounds.com/reviews) Reviews\n[${ngArray[77]}](https://www.newgrounds.com/bbs/search/author/${usr}) Forum Posts`);
+				embed.addField(`Submission stats`, `[${ngArray[21]}](https://${usr}.newgrounds.com/fans) Fans\n[${ngArray[35]}](https://${usr}.newgrounds.com/${ngArray[34]}) ${ngArray[34]} Submissions\n[${ngArray[42]}](https://${usr}.newgrounds.com/${ngArray[41]}) ${ngArray[41]} Submissions\n[${ngArray[49]}](https://${usr}.newgrounds.com/${ngArray[48]}) ${ngArray[48]} Submissions\n[${ngArray[56]}](https://${usr}.newgrounds.com/${ngArray[55]}) ${ngArray[55]} Submissions\n[${ngArray[63]}](https://${usr}.newgrounds.com/favorites) Faves\n[${ngArray[70]}](https://${usr}.newgrounds.com/reviews) Reviews\n[${ngArray[77]}](https://www.newgrounds.com/bbs/search/author/${usr}) Forum Posts`);
 
 				message.channel.send({embed});
 				message.channel.send($('.stats-general').text());
