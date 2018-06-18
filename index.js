@@ -308,7 +308,7 @@ client.on('message', message =>
   			.catch(console.error);
 	}
 
-	if (command == "shoom")
+	if (command == "shoom" || command == "jojo")
 	{
 		let shoomBeginning = "**SH";
 
@@ -318,7 +318,7 @@ client.on('message', message =>
 		}
 
 		shoomBeginning += "M**";
-		shoomBeginning += ` Current O count: ${shoomOCound} **O**'s`
+		shoomBeginning += ` Current O count: ${shoomOCound} O's`
 
 		shoomOCound += 1;
 
