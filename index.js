@@ -26,7 +26,6 @@ const youtube = new YouTube(GOOGLE_API_KEY);
 
 const queue = new Map();
 
-
 const fulpPics = ["tomAlienHominid.jpg", "tomBar.jpg", 
 "tomFulpExcited.jpg", "tomfulphentai.png", "tomfulppaint.jpg", "tomFulpReading.jpg", "tomFulpSquat.jpg",
 "tomHackerman.jpg", "tomLoliPops.jpg", "tomMiddleFInger.jpg", "tomMiddleFInger2.jpg", "tomPicoDau.jpg",
@@ -134,13 +133,15 @@ client.on('message', async message =>
 		message.channel.send("https://github.com/ninjamuffin99/FulpTronJS/blob/master/COMMANDS.md");
 	}
 
+	const serverQueue = queue.get(message.guild.id);
+		console.log(serverQueue);
 	 
 	if (command == 'play' || command == 'join') 
 	{
 
 		const searchString = args.slice(0).join(" ");
 		const url = args[0] ? args[0].replace(/<(.+)>/g, '$1') : '';
-		const serverQueue = queue.get(message.guild.id);
+		
 
 		if (message.channel.type !== 'text') return;
 
@@ -186,7 +187,7 @@ client.on('message', async message =>
 					message.channel.send(`
 __**Song selection:**__
 ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
-Please provide a value to select one of the search results ranging from 1-10.
+**Please provide a value to select one of the search results ranging from 1-10.**
 					`);
 					// eslint-disable-next-line max-depth
 					try 
@@ -248,7 +249,8 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		}
 		return message.channel.send('There is nothing playing.');
 	} else if (command === 'resume') {
-		if (serverQueue && !serverQueue.playing) {
+		if (serverQueue && !serverQueue.playing) 
+		{
 			serverQueue.playing = true;
 			serverQueue.connection.dispatcher.resume();
 			return message.channel.send('▶ Resumed the music for you!');
