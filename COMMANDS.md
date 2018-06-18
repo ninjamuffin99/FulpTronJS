@@ -28,9 +28,9 @@ parameters will be indicated in <> these brackets when required. If there's mult
 - `fulpEval` literally a command that lets you hack into my PC, no jokes. However only I can use it heheheh
 
 ### VARIOUS MUSIC COMMANDS!!
-Right now, the music bot side is *VERY* WIP. Currently you can only make a queue of songs, and wait for each of them to playthrough.
+I got a bunch of music code from this bot lol I pretty much stole all that shit so go check it out: https://github.com/Dev-Yukine/Music-Bot/
 
-Also you need to be in a voice channel
+Also you need to be in a voice channel to use these
 
 - `fulpPlay <youtube link/playlist or search terms>` The bot allows you to search for music through discord! Or you can drop a link to an individual song or playlist
 - `fulpSkip` Skips the current song and goes to the next one in the queue
