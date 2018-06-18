@@ -229,9 +229,9 @@ ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
 		if (!serverQueue) return message.channel.send('There is nothing playing.');
 		if (!args[0]) return message.channel.send(`The current volume is: **${serverQueue.volume}**`);
 		serverQueue.volume = args[0];
-		serverQueue.connection.dispatcher.setVolumeLogarithmic(args[0] / 5);
+		serverQueue.connection.dispatcher.setVolumeLogarithmic(args[0] / 100);
 		return message.channel.send(`I set the volume to: **${args[0]}**`);
-	} else if (command === 'np') {
+	} else if (command === 'np' || command === 'nowplaying') {
 		if (!serverQueue) return message.channel.send('There is nothing playing.');
 		return message.channel.send(`🎶 Now playing: **${serverQueue.songs[0].title}**`);
 	} else if (command === 'queue') {
@@ -649,7 +649,7 @@ function play(guild, song) {
 		})
 		.on('error', error => console.error(error));
 	// dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-	dispatcher.setVolumeLogarithmic(0.50);
+	dispatcher.setVolumeLogarithmic(0.30);
 
 	serverQueue.textChannel.send(`🎶 Start playing: **${song.title}**`);
 }
