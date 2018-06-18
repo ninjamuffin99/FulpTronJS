@@ -28,8 +28,16 @@ parameters will be indicated in <> these brackets when required. If there's mult
 - `fulpEval` literally a command that lets you hack into my PC, no jokes. However only I can use it heheheh
 
 ### VARIOUS MUSIC COMMANDS!!
-Right now, the music bot side is *VERY* WIP. Currently you can only make a queue of songs, and wait for each of them to playthrough
-- `fulpPlay <youtube link/playlist or search terms>` The bot allows you to search for music through discord! Or you can drop a link to an individual song or playlist
+Right now, the music bot side is *VERY* WIP. Currently you can only make a queue of songs, and wait for each of them to playthrough.
 
-## coming eventually
-- The ability to play music in voice chat (just need to fix up queues and shit)
+Also you need to be in a voice channel
+
+- `fulpPlay <youtube link/playlist or search terms>` The bot allows you to search for music through discord! Or you can drop a link to an individual song or playlist
+- `fulpSkip` Skips the current song and goes to the next one in the queue
+- `fulpStop` Stops all the music and empties the queue
+- `fulpVolume <volume from 0-100>` Changes the volume for all users. 100 usually sounds yucky and distorted if you have the defauilt discord user audio set at 100% as well. Usually 25-50 sounds alright
+- `fulpnp` aka `fulpNowPlaying` as the command suggests, it shows what song is currently playing.
+- `fulpQueue` Displays the list of songs to be played, or as some schmoes call it, a *queue*
+- `fulpPause` Pauses the current song
+- `fulpResume` If paused, resumes the music
+
