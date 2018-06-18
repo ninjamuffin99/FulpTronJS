@@ -20,10 +20,12 @@ parameters will be indicated in <> these brackets when required. If there's mult
 - `fulpWatching <also anything lol>` sets FulpTron's watching status to what you input
 - `fulpSay <anyhting>` make fulptron say funny things ahah epci
 - `fulpRoll <min number> <max number>` pretty much the same shit as every other bot with a dice command lol. If you dont input any number it rolls a D20
+- `fulpPic` gets a random Tom Fulp pic from my collection
 - `fulpNGFollow <newgrounds user>` gives a shoutout to whatever Newgrounds user you input!
+- `fulpNGScrape <Newgrounds user>` sends you some info about whatever Newgrounds user you input, into a nifty little Rich Embed.
 - `fulpSource` drops a link to the sourcecode on Github
 - `fulpEval` literally a command that lets you hack into my PC, no jokes. However only I can use it heheheh
-- `fulpNGScrape <Newgrounds user>` sends you some info about whatever Newgrounds user you input, into a nifty little Rich Embed.
+
 
 ## coming eventually
 - The ability to play music in voice chat (just need to fix up queues and shit)

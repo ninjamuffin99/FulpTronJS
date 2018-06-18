@@ -19,6 +19,11 @@ for (const file of commandFiles) {
 const ytdl = require('ytdl-core');
 const { prefix, token, ownerID, NGappID, NGencKey} = require('./config.json')
 
+const fulpPics = ["tomAlienHominid.jpg", "tomBar.jpg", 
+"tomFulpExcited.jpg", "tomfulphentai.png", "tomfulppaint.jpg", "tomFulpReading.jpg", "tomFulpSquat.jpg",
+"tomHackerman.jpg", "tomLoliPops.jpg", "tomMiddleFInger.jpg", "tomMiddleFInger2.jpg", "tomPicoDau.jpg",
+"tomPicoDay2.jpg", "tomRide.jpg", "turtleTom.jpg"];
+
 // when the client is ready, run this code
 // this event will trigger whenever your bot:
 // - finishes logging in
@@ -234,7 +239,7 @@ client.on('message', message =>
 		}
 
 		message.member.addRole(curRole);
-		message.channel.reply(`just got the ${curRole.name} role!`);
+		message.reply(`just got the ${curRole.name} role!`);
 	}
 
 	if (command == "removerole")
@@ -274,6 +279,16 @@ client.on('message', message =>
 		let sex = args[1];
 		let location = args[2];
 		message.reply(`Hello ${message.author.username}, I see you're a ${age} year old ${sex} from ${location}. Wanna date?`);
+	}
+
+	if (command == `pic`)
+	{
+		let min = 0;
+		let max = fulpPics.length - 1;
+
+		let curPic = Math.floor(Math.random() * (max - min + 1)) + min;
+
+		message.channel.send(fulpPics[curPic], {file: fulpPics[curPic]});
 	}
 
 	if (command == "watching")
@@ -382,8 +397,9 @@ client.on('message', message =>
 		.setTitle(`${usr}'s stats on Newgrounds`, )
 		.setTimestamp()
 		.setColor(0xfda238)
-		.setThumbnail("https://i.ytimg.com/vi/ZRFIqusuqN8/maxresdefault.jpg")
-		.setImage("https://desu-usergeneratedcontent.xyz/g/image/1499/80/1499801793392.png");
+		.setThumbnail("https://i.ytimg.com/vi/ZRFIqusuqN8/maxresdefault.jpg");
+		// Dont want this stinky footer image
+		// .setImage("https://desu-usergeneratedcontent.xyz/g/image/1499/80/1499801793392.png");
 
 		
 
@@ -398,17 +414,26 @@ client.on('message', message =>
 			.then(($) => {
 				let ngInfo = $('.user-header').text();
 				let ngArray = ngInfo.split("\n");
-
+				
 				// NOTE This needs  alot of cleaning up. Currently the ngArray just slices out the first few bits, and the embed doesn't account
 				// for if the user doesn't have a certain submission type, so currrently the embed is commented out
-				ngArray.slice(0, 19);
+				let listOfShit = "";
 
-				console.log(ngArray);
+				for (i = 0; i < ngArray.length; i++)
+				{
+					if (ngArray[i] != "" && ngArray[i] != " " && ngArray[i] != "View Profile" && ngArray[i] != `${usr} `)
+					{
+						listOfShit += ngArray[i + 1];
+						listOfShit += ` ${ngArray[i]}\n`;
+						i += 1;
+					}
+				}
 				
-				embed.addField(`Submission stats`, `[${ngArray[21]}](https://${usr}.newgrounds.com/fans) Fans\n[${ngArray[35]}](https://${usr}.newgrounds.com/${ngArray[34]}) ${ngArray[34]} Submissions\n[${ngArray[42]}](https://${usr}.newgrounds.com/${ngArray[41]}) ${ngArray[41]} Submissions\n[${ngArray[49]}](https://${usr}.newgrounds.com/${ngArray[48]}) ${ngArray[48]} Submissions\n[${ngArray[56]}](https://${usr}.newgrounds.com/${ngArray[55]}) ${ngArray[55]} Submissions\n[${ngArray[63]}](https://${usr}.newgrounds.com/favorites) Faves\n[${ngArray[70]}](https://${usr}.newgrounds.com/reviews) Reviews\n[${ngArray[77]}](https://www.newgrounds.com/bbs/search/author/${usr}) Forum Posts`);
+				embed.addField(`Submission stats`, `${listOfShit}`, true);
+				embed.addField(`General Stats`, $('.stats-general').text(), true)
 
-				// message.channel.send({embed});
-				message.channel.send($('.stats-general').text());
+				message.channel.send({embed});
+				// message.channel.send($('.stats-general').text());
 			})
 			.catch((err) => {
 			  console.log(err);
