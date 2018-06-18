@@ -27,6 +27,9 @@ parameters will be indicated in <> these brackets when required. If there's mult
 - `fulpSource` drops a link to the sourcecode on Github
 - `fulpEval` literally a command that lets you hack into my PC, no jokes. However only I can use it heheheh
 
+### VARIOUS MUSIC COMMANDS!!
+Right now, the music bot side is *VERY* WIP. Currently you can only make a queue of songs, and wait for each of them to playthrough
+- `fulpPlay <youtube link/playlist or search terms>` The bot allows you to search for music through discord! Or you can drop a link to an individual song or playlist
 
 ## coming eventually
 - The ability to play music in voice chat (just need to fix up queues and shit)
