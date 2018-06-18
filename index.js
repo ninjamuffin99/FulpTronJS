@@ -24,6 +24,8 @@ const fulpPics = ["tomAlienHominid.jpg", "tomBar.jpg",
 "tomHackerman.jpg", "tomLoliPops.jpg", "tomMiddleFInger.jpg", "tomMiddleFInger2.jpg", "tomPicoDau.jpg",
 "tomPicoDay2.jpg", "tomRide.jpg", "turtleTom.jpg"];
 
+let shoomOCound = 2;
+
 // when the client is ready, run this code
 // this event will trigger whenever your bot:
 // - finishes logging in
@@ -304,6 +306,24 @@ client.on('message', message =>
 			client.user.setActivity(text, { type: 'PLAYING' })
 			.then(presence => console.log(`Activity set to ${presence.game ? presence.game.name : 'none'}`))
   			.catch(console.error);
+	}
+
+	if (command == "shoom")
+	{
+		let shoomBeginning = "**SH";
+
+		for (i = shoomOCound; i > 0; i--)
+		{
+			shoomBeginning += "O";
+		}
+
+		shoomBeginning += "M**";
+		shoomBeginning += ` Current O count: ${shoomOCound} **O**'s`
+
+		shoomOCound += 1;
+
+		message.channel.send(shoomBeginning);
+
 	}
 
 
