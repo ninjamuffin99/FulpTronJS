@@ -22,7 +22,7 @@ const { prefix, token, ownerID, NGappID, NGencKey} = require('./config.json')
 const fulpPics = ["tomAlienHominid.jpg", "tomBar.jpg", 
 "tomFulpExcited.jpg", "tomfulphentai.png", "tomfulppaint.jpg", "tomFulpReading.jpg", "tomFulpSquat.jpg",
 "tomHackerman.jpg", "tomLoliPops.jpg", "tomMiddleFInger.jpg", "tomMiddleFInger2.jpg", "tomPicoDau.jpg",
-"tomPicoDay2.jpg", "tomRide.jpg", "turtleTom.jpg"];
+"tomPicoDay2.jpg", "tomRide.jpg", "turtleTom.jpg", "tomFulpBeer.jpg", "tomOldSchool.jpg", "tomOldSchool2.jpg","tomFrodoBoys.jpg"];
 
 let shoomOCound = 2;
 
@@ -96,19 +96,6 @@ client.on('ready', () =>
 
 client.on('message', message => 
 {
-	//this message does not need the prefix 'fulp', because it's before that if statement below
-	if (message.content === "testlol")
-	{
-		// message.reply basically the same as message.channel.send, but @'s the person who sent it
-		message.reply("tesst");
-	}
-
-	if (message.content === "fulp")
-	{
-		// message.reply basically the same as message.channel.send, but @'s the person who sent it
-		message.reply("What's up bud?");
-	}
-
 	if (message.content.toLowerCase() === "are we talking about tom fulp?" || message.content.toLowerCase() === "are we talking about tom fulp?" )
 	{
 		// message.reply basically the same as message.channel.send, but @'s the person who sent it
@@ -318,7 +305,7 @@ client.on('message', message =>
 		}
 
 		shoomBeginning += "M**";
-		shoomBeginning += ` Current O count: ${shoomOCound} O's`
+		shoomBeginning += `\nO Amount: ${shoomOCound}`
 
 		shoomOCound += 1;
 
