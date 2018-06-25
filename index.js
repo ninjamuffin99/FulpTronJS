@@ -375,12 +375,17 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 
 	if (command == `pic`)
 	{
+		if (args[0] == "luis")
+		{
+			return message.channel.send("luis.jpg", {file: "pics/" + "luis.jpg"});
+		}
+
 		let min = 0;
 		let max = fulpPics.length - 1;
 
 		let curPic = Math.floor(Math.random() * (max - min + 1)) + min;
 
-		message.channel.send(fulpPics[curPic], {file: fulpPics[curPic]});
+		message.channel.send(fulpPics[curPic], {file: "pics/" + fulpPics[curPic]});
 	}
 
 	if (command == "watching")
