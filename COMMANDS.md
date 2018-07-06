@@ -18,7 +18,7 @@ parameters will be indicated in <> these brackets when required. If there's mult
 - `fulpASL <age> <sex> <location>` fulp is a fukken creep
 - `fulpPlaying <anything lol>` sets FulpTron's discord playing status to whatever you input
 - `fulpWatching <also anything lol>` sets FulpTron's watching status to what you input
-- `fulpSay <anyhting>` make fulptron say funny things ahah epci
+- `fulpSay <anything>` make fulptron say funny things ahah epic
 - `fulpRoll <min number> <max number>` pretty much the same shit as every other bot with a dice command lol. If you dont input any number it rolls a D20
 - `fulpPic` gets a random Tom Fulp pic from my collection
 - `fulpSHOOM` **SHOOOOOOOOOOOOOOOOOOOOOOOOOOOM**
