@@ -29,7 +29,8 @@ const queue = new Map();
 const fulpPics = ["tomAlienHominid.jpg", "tomBar.jpg", 
 "tomFulpExcited.jpg", "tomfulphentai.png", "tomfulppaint.jpg", "tomFulpReading.jpg", "tomFulpSquat.jpg",
 "tomHackerman.jpg", "tomLoliPops.jpg", "tomMiddleFInger.jpg", "tomMiddleFInger2.jpg", "tomPicoDau.jpg",
-"tomPicoDay2.jpg", "tomRide.jpg", "turtleTom.jpg", "tomFulpBeer.jpg", "tomOldSchool.jpg", "tomOldSchool2.jpg","tomFrodoBoys.jpg"];
+"tomPicoDay2.jpg", "tomRide.jpg", "turtleTom.jpg", "tomFulpBeer.jpg", "tomOldSchool.jpg", "tomOldSchool2.jpg",
+"tomFrodoBoys.jpg", "tomBeardo.jpg"];
 
 let shoomOCound = 2;
 
@@ -108,7 +109,6 @@ client.on('message', async message =>
 		// message.reply basically the same as message.channel.send, but @'s the person who sent it
 		message.reply("I **LOVE** talking about Tom Fulp!");
 	}
-
 
 	//IF IT DOESNT START WITH "FULP" then IT DONT REGISTER PAST THIS POINT
 	if (!message.content.toLowerCase().startsWith(prefix) || message.author.bot ) return;
@@ -313,7 +313,14 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 	// lol I gotta fix it so that it's in this format hh:mm:ss
 	if (command == "uptime")
 	{
-		message.reply(`Current uptime is : ${client.uptime.toPrecision(2) * 0.001} seconds`)
+		//message.reply(`Current uptime is : ${client.uptime.toPrecision(2) * 0.001} seconds`)
+		let totalSeconds = (client.uptime / 1000);
+		let hours = Math.floor(totalSeconds / 3600);
+		totalSeconds %= 3600;
+		let minutes = Math.floor(totalSeconds / 60);
+		let seconds = totalSeconds % 60;
+		let uptime = `${hours} hours, ${minutes} minutes and ${seconds} seconds`;
+		message.reply(`Current uptime is : ` + uptime)
 	}
 
 	if (command == "addrole")
@@ -353,7 +360,22 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		message.member.removeRole(curRole).then(message.reply(`removed your ${curRole.name} role!`))
 	}
 
-	
+	if (command == "timeout" && message.author.role("mod")
+	{
+		let usr = args[0];
+		
+		if (!message.guild.roles.exists("name", role))
+		{
+			return message.reply(`This server doesn't seem to have ${role} as a role... you should know that the roles are case sensitive!`)
+		}
+		if (message.member.roles.exists("name", role))
+		{
+			return message.reply(`you alread have the ${curRole.name} role!`)
+		}
+
+		message.member.addRole(curRole);
+		//message.reply('just got the ${curRole.name} role!');
+	}
 
 	if (command == 'args-info')
 	{
