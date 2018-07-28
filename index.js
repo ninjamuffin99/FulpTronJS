@@ -359,8 +359,8 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 
 		message.member.removeRole(curRole).then(message.reply(`removed your ${curRole.name} role!`))
 	}
-
-	if (command == "timeout" && message.author.role("mod")
+	/* 
+	if (command == "timeout" && message.author.role("mod"))
 	{
 		let usr = args[0];
 		
@@ -376,7 +376,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		message.member.addRole(curRole);
 		//message.reply('just got the ${curRole.name} role!');
 	}
-
+ 	*/
 	if (command == 'args-info')
 	{
 		if (!args.length)
