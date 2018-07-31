@@ -100,6 +100,7 @@ client.on('ready', () =>
 	..'''''''    '''''''''''''''''''  ''''''''....'''''''''  ''''''''''''' '''' '''''''''''......'''''''
 	.'.''''       ''''''''''''''''''''''''''''''''''''''  ''''''''''            ''''''''''.......'''''''`);
 	console.info("FULPTRON IS ONLINE");
+	console.info(`FulpTron is on ${client.guilds.size} servers!`);
 });
 
 client.on('message', async message => 
