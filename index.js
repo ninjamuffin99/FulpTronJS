@@ -18,11 +18,18 @@ for (const file of commandFiles) {
 }
 //extra shit
 const ytdl = require('ytdl-core');
-const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY} = require('./config.json')
+//const { prefix, token, ownerID, NGappID, NGencKey, process.env.GOOGLE_API_KEY} = require('./config.json')
+
+const prefix = process.env.prefix;
+const ownerID = process.env.ownerID;
+const token = process.env.token;
+const NGappID = process.env.NGappID;
+const NGencKey = process.env.NGencKey;
+// the google one is just find and replaced heheh
 
 // Music bot shit
 const YouTube = require(`simple-youtube-api`);
-const youtube = new YouTube(GOOGLE_API_KEY);
+const youtube = new YouTube(process.env.GOOGLE_API_KEY);
 
 const queue = new Map();
 
