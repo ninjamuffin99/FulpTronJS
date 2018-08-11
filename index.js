@@ -328,24 +328,22 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 
 	//Cam you do it
 	if (command == "addrole"){
-		if(!args("BOTS")){
-			if(!args("gay!!")){
-				let role = args.slice(0).join(" ");
-				let curRole = message.guild.roles.find("name", role);
+		let role = args.slice(0).join(" ");
+		if (['BOTS', 'gay!!'].indexOf(role) > -1)
+			return message.reply('stuff');
+		let curRole = message.guild.roles.find("name", role);
 
-				if (!message.guild.roles.exists("name", role))
-				{
-					return message.reply(`This server doesn't seem to have ${role} as a role... you should know that the roles are case sensitive!`)
-				}
-				if (message.member.roles.exists("name", role))
-				{
-					return message.reply(`you already have the ${curRole.name} role!`)
-				}
-				
-				message.member.addRole(curRole);
-				message.reply(`just got the ${curRole.name} role!`);
-			}
-		}	
+		if (!message.guild.roles.exists("name", role))
+		{
+			return message.reply(`This server doesn't seem to have ${role} as a role... you should know that the roles are case sensitive!`)
+		}
+		if (message.member.roles.exists("name", role))
+		{
+			return message.reply(`you already have the ${curRole.name} role!`)
+		}
+			
+		message.member.addRole(curRole);
+		message.reply(`just got the ${curRole.name} role!`);
 	}
 
 	if (command == "removerole")
