@@ -146,17 +146,15 @@ client.on('message', async message =>
 	 
 	if (command == 'play' || command == 'join') 
 	{
-
 		const searchString = args.slice(0).join(" ");
 		const url = args[0] ? args[0].replace(/<(.+)>/g, '$1') : '';
-		
 
 		if (message.channel.type !== 'text') return;
 
 		const { voiceChannel } = message.member;
 
 		if (!voiceChannel) {
-					return message.reply('please join a voice channel first!');
+			return message.reply('please join a voice channel first!');
 		}
 
 		const permissions = voiceChannel.permissionsFor(message.client.user);
@@ -314,11 +312,8 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 			message.channel.send("OOPSIE WOOPSIE!! Uwu We madea fucky wucky!! A wittle fucko boingo! The code monkeys at our headquarters are working VEWY HAWD to fix this!");
 			message.channel.send("acutally there was just an error trying to prune message oopsies");
 		})
-
-
 	}
 
-	// lol I gotta fix it so that it's in this format hh:mm:ss
 	if (command == "uptime")
 	{
 		//message.reply(`Current uptime is : ${client.uptime.toPrecision(2) * 0.001} seconds`)
@@ -332,8 +327,8 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 	}
 
 	if (command == "addrole"){
-		if(!message.guild.role("BOTS")){
-			if(!message.guild.role("gay!!")){
+		if(!args("BOTS")){
+			if(!args("gay!!")){
 				let role = args.slice(0).join(" ");
 				let curRole = message.guild.roles.find("name", role);
 
