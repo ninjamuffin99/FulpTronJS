@@ -326,6 +326,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		message.reply(`Current uptime is : ` + uptime)
 	}
 
+	//Cam you do it
 	if (command == "addrole"){
 		if(!args("BOTS")){
 			if(!args("gay!!")){
