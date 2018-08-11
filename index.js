@@ -344,8 +344,12 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		{
 			return message.reply(`you alread have the ${curRole.name} role!`)
 		}
-
-		message.member.addRole(curRole);
+		if(curRole != "BOTS"){
+			if(curRole != "gay!!"){
+				message.member.addRole(curRole);
+			}
+		}
+		
 		message.reply(`just got the ${curRole.name} role!`);
 	}
 
