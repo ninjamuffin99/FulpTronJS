@@ -342,15 +342,14 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		}
 		if (message.member.roles.exists("name", role))
 		{
-			return message.reply(`you alread have the ${curRole.name} role!`)
+			return message.reply(`you already have the ${curRole.name} role!`)
 		}
-		if(curRole !== "BOTS"){
-			if(curRole !== "gay!!"){
+		if(message.member.roles.exists("name", role) != "BOTS"){
+			if(message.member.roles.exists("name", role) != "gay!!"){
 				message.member.addRole(curRole);
+				message.reply(`just got the ${curRole.name} role!`);
 			}
-		}
-		
-		message.reply(`just got the ${curRole.name} role!`);
+		}	
 	}
 
 	if (command == "removerole")
@@ -365,9 +364,8 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		}
 		if (!message.member.roles.exists("name", role))
 		{
-			return message.reply(`you alread have the ${curRole.name} role removed!`)
+			return message.reply(`you already had the ${curRole.name} role removed!`)
 		}
-
 
 		message.member.removeRole(curRole).then(message.reply(`removed your ${curRole.name} role!`))
 	}
