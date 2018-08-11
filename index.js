@@ -331,21 +331,21 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		message.reply(`Current uptime is : ` + uptime)
 	}
 
-	if (command == "addrole")
-	{
-		let role = args.slice(0).join(" ");
-		let curRole = message.guild.roles.find("name", role);
-
-		if (!message.guild.roles.exists("name", role))
-		{
-			return message.reply(`This server doesn't seem to have ${role} as a role... you should know that the roles are case sensitive!`)
-		}
-		if (message.member.roles.exists("name", role))
-		{
-			return message.reply(`you already have the ${curRole.name} role!`)
-		}
+	if (command == "addrole"){
 		if(message.member.roles.exists("name", role) != "BOTS"){
 			if(message.member.roles.exists("name", role) != "gay!!"){
+				let role = args.slice(0).join(" ");
+				let curRole = message.guild.roles.find("name", role);
+
+				if (!message.guild.roles.exists("name", role))
+				{
+					return message.reply(`This server doesn't seem to have ${role} as a role... you should know that the roles are case sensitive!`)
+				}
+				if (message.member.roles.exists("name", role))
+				{
+					return message.reply(`you already have the ${curRole.name} role!`)
+				}
+				
 				message.member.addRole(curRole);
 				message.reply(`just got the ${curRole.name} role!`);
 			}
