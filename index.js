@@ -332,8 +332,8 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 	}
 
 	if (command == "addrole"){
-		if(message.member.roles.exists("name", role) != "BOTS"){
-			if(message.member.roles.exists("name", role) != "gay!!"){
+		if(!message.guild.role("BOTS")){
+			if(!message.guild.role("gay!!")){
 				let role = args.slice(0).join(" ");
 				let curRole = message.guild.roles.find("name", role);
 
