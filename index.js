@@ -117,10 +117,10 @@ client.on('message', async message =>
 		// message.reply basically the same as message.channel.send, but @'s the person who sent it
 		message.reply("I **LOVE** talking about Tom Fulp!");
 	}
-	if (message.content.toLowerCase() === "can i get a rip in twitch chat?")
+	if (message.content.toLowerCase() === "can i get a rip in chat?")
 	{
 		// message.reply basically the same as message.channel.send, but @'s the person who sent it
-		message.reply("RIP\nRIP\nRIP");
+		message.reply("\nRIP\nRIP\nRIP");
 	}
 
 	//IF IT DOESNT START WITH "FULP" then IT DONT REGISTER PAST THIS POINT
