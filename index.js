@@ -1,4 +1,4 @@
-const fs = require('fs');
+﻿const fs = require('fs');
 const rp = require('request-promise');
 const cheerio = require('cheerio');
 
@@ -37,7 +37,7 @@ const fulpPics = ["tomAlienHominid.jpg", "tomBar.jpg",
 "tomFulpExcited.jpg", "tomfulphentai.png", "tomfulppaint.jpg", "tomFulpReading.jpg", "tomFulpSquat.jpg",
 "tomHackerman.jpg", "tomLoliPops.jpg", "tomMiddleFInger.jpg", "tomMiddleFInger2.jpg", "tomPicoDau.jpg",
 "tomPicoDay2.jpg", "tomRide.jpg", "turtleTom.jpg", "tomFulpBeer.jpg", "tomOldSchool.jpg", "tomOldSchool2.jpg",
-"tomFrodoBoys.jpg", "tomBeardo.jpg"];
+"tomFrodoBoys.jpg", "tomBeardo.jpg", "fulpDesk.jpg", "fulpHappy.jpg"];
 
 let shoomOCound = 2;
 
