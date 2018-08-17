@@ -117,6 +117,11 @@ client.on('message', async message =>
 		// message.reply basically the same as message.channel.send, but @'s the person who sent it
 		message.reply("I **LOVE** talking about Tom Fulp!");
 	}
+	if (message.content.toLowerCase() === "can i get a rip in chat?")
+	{
+		// message.reply basically the same as message.channel.send, but @'s the person who sent it
+		message.reply("\nRIP\nRIP\nRIP");
+	}
 
 	//IF IT DOESNT START WITH "FULP" then IT DONT REGISTER PAST THIS POINT
 	if (!message.content.toLowerCase().startsWith(prefix) || message.author.bot ) return;
@@ -146,17 +151,15 @@ client.on('message', async message =>
 	 
 	if (command == 'play' || command == 'join') 
 	{
-
 		const searchString = args.slice(0).join(" ");
 		const url = args[0] ? args[0].replace(/<(.+)>/g, '$1') : '';
-		
 
 		if (message.channel.type !== 'text') return;
 
 		const { voiceChannel } = message.member;
 
 		if (!voiceChannel) {
-					return message.reply('please join a voice channel first!');
+			return message.reply('please join a voice channel first!');
 		}
 
 		const permissions = voiceChannel.permissionsFor(message.client.user);
@@ -314,11 +317,8 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 			message.channel.send("OOPSIE WOOPSIE!! Uwu We madea fucky wucky!! A wittle fucko boingo! The code monkeys at our headquarters are working VEWY HAWD to fix this!");
 			message.channel.send("acutally there was just an error trying to prune message oopsies");
 		})
-
-
 	}
 
-	// lol I gotta fix it so that it's in this format hh:mm:ss
 	if (command == "uptime")
 	{
 		//message.reply(`Current uptime is : ${client.uptime.toPrecision(2) * 0.001} seconds`)
@@ -331,9 +331,11 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		message.reply(`Current uptime is : ` + uptime)
 	}
 
-	if (command == "addrole")
-	{
+	//Cam you do it
+	if (command == "addrole"){
 		let role = args.slice(0).join(" ");
+		if (['BOTS', 'gay!!', 'MOD', 'Jeff', 'Admin', 'Tom Fulp', 'Developer'].indexOf(role) > -1)
+			return message.reply('Hey stop that!');
 		let curRole = message.guild.roles.find("name", role);
 
 		if (!message.guild.roles.exists("name", role))
@@ -342,9 +344,9 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		}
 		if (message.member.roles.exists("name", role))
 		{
-			return message.reply(`you alread have the ${curRole.name} role!`)
+			return message.reply(`you already have the ${curRole.name} role!`)
 		}
-
+			
 		message.member.addRole(curRole);
 		message.reply(`just got the ${curRole.name} role!`);
 	}
@@ -361,9 +363,8 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		}
 		if (!message.member.roles.exists("name", role))
 		{
-			return message.reply(`you alread have the ${curRole.name} role removed!`)
+			return message.reply(`you already had the ${curRole.name} role removed!`)
 		}
-
 
 		message.member.removeRole(curRole).then(message.reply(`removed your ${curRole.name} role!`))
 	}
