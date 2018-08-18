@@ -334,7 +334,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 	//Cam you do it
 	if (command == "addrole"){
 		let role = args.slice(0).join(" ");
-		if (['BOTS', 'gay!!', 'MOD', 'Jeff', 'Admin', 'Tom Fulp', 'Developer'].indexOf(role) > -1)
+		if (['BOTS', 'gay!!', 'MOD', 'Jeff', 'Admin', 'Tom Fulp', 'Developer', 'DBZ', 'OG Ando', 'NG', 'Timeout', 'BrenBot', 'Contributor', 'james'].indexOf(role) > -1)
 			return message.reply('Hey stop that!');
 		let curRole = message.guild.roles.find("name", role);
 
@@ -356,7 +356,6 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		let role = args.slice(0).join(" ");
 		let curRole = message.guild.roles.find('name', role);
 
-		
 		if (!message.guild.roles.exists("name", role))
 		{
 			return message.reply(`This server doesn't seem to have ${role} as a role... you should know that the roles are case sensitive!`)
