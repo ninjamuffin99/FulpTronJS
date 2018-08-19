@@ -143,7 +143,7 @@ client.on('message', async message =>
 	if (command == 'ping') 
 	{
 		// var emoji = Discord.emoji.from
-		message.channel.send(`Pong! Ping: ${client.ping}ms`);
+		message.channel.send(`Pong! Ping: ${client.ping.Math.round()}ms`);
 	}
 
 	if (command == 'shame')
@@ -329,8 +329,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		})
 	}
 
-	if (command == "uptime")
-	{
+	if (command == "uptime"){
 		//message.reply(`Current uptime is : ${client.uptime.toPrecision(2) * 0.001} seconds`)
 		let totalSeconds = (client.uptime / 1000);
 		let hours = Math.floor(totalSeconds / 3600);
@@ -397,7 +396,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		message.member.addRole(curRole);
 		//message.reply('just got the ${curRole.name} role!');
 	}
- 	*/
+	 */
 	if (command == 'args-info')
 	{
 		if (!args.length)
@@ -425,7 +424,6 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 
 		let min = 0;
 		let max = fulpPics.length - 1;
-
 		let curPic = Math.floor(Math.random() * (max - min + 1)) + min;
 
 		message.channel.send(fulpPics[curPic], {file: "pics/" + fulpPics[curPic]});
@@ -437,7 +435,6 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		client.user.setActivity(text, { type: 'WATCHING'});
 	}
 
-	
 	if (command == 'playing') 
 	{
 		let text = args.slice(0).join(" ");
@@ -628,7 +625,6 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 	}
  	*/
 });
-
 
 function clean(text)
 {
