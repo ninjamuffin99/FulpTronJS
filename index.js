@@ -124,8 +124,9 @@ client.on('message', async message =>
 	}
 
 	//Automate welcome channel WIP
-	if(message.content.endsWith(".newgrounds.com/") && bot.channel("read-the-rules-for-access")){
+	if(message.content.endsWith(".newgrounds.com/") &&  msg.channel.id === "read-the-rules-for-access"){
 		message.member.addRole("NG");
+		alert("good check");
 		/*let usr = args[0];
 		if (usr == undefined)
 		{
@@ -143,7 +144,8 @@ client.on('message', async message =>
 	if (command == 'ping') 
 	{
 		// var emoji = Discord.emoji.from
-		message.channel.send(`Pong! Ping: ${client.ping.Math.round()}ms`);
+		let pang = Math.round(client.ping);
+		message.channel.send(`Pong! Ping: ${pang}ms`);
 	}
 
 	if (command == 'shame')
