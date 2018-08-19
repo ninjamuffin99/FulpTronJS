@@ -123,6 +123,11 @@ client.on('message', async message =>
 		message.reply("\nRIP\nRIP\nRIP");
 	}
 
+	//Automate welcome channel WIP
+	if(message.content.endsWith(".newgrounds.com/") && bot.channel("read-the-rules-for-access")){
+		message.member.addRole("NG");
+	}
+
 	//IF IT DOESNT START WITH "FULP" then IT DONT REGISTER PAST THIS POINT
 	if (!message.content.toLowerCase().startsWith(prefix) || message.author.bot ) return;
 
@@ -327,7 +332,8 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		totalSeconds %= 3600;
 		let minutes = Math.floor(totalSeconds / 60);
 		let seconds = totalSeconds % 60;
-		let uptime = `${hours} hours, ${minutes} minutes and ${seconds} seconds`;
+		let secondsInt = round(seconds);
+		let uptime = `${hours} hours, ${minutes} minutes and ${secondsInt} seconds`;
 		message.reply(`Current uptime is : ` + uptime)
 	}
 
@@ -354,6 +360,8 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 	if (command == "removerole")
 	{
 		let role = args.slice(0).join(" ");
+		if (['NG'].indexOf(role) > -1)
+			return message.reply('Hey stop that!');
 		let curRole = message.guild.roles.find('name', role);
 
 		if (!message.guild.roles.exists("name", role))
