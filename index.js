@@ -126,6 +126,11 @@ client.on('message', async message =>
 	//Automate welcome channel WIP
 	if(message.content.endsWith(".newgrounds.com/") && bot.channel("read-the-rules-for-access")){
 		message.member.addRole("NG");
+		/*let usr = args[0];
+		if (usr == undefined)
+		{
+			return message.channel.send("Go to Newgrounds.com!\nhttps://newgrounds.com")
+		}*/
 	}
 
 	//IF IT DOESNT START WITH "FULP" then IT DONT REGISTER PAST THIS POINT
@@ -332,9 +337,9 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		totalSeconds %= 3600;
 		let minutes = Math.floor(totalSeconds / 60);
 		let seconds = totalSeconds % 60;
-		let secondsInt = round(seconds);
-		let uptime = `${hours} hours, ${minutes} minutes and ${secondsInt} seconds`;
-		message.reply(`Current uptime is : ` + uptime)
+		let sec = Math.round(seconds);
+		let uptime = `${hours} hours, ${minutes} minutes and ${sec} seconds`;
+		message.reply("Current uptime is : " + uptime);
 	}
 
 	//Cam you do it
@@ -458,7 +463,6 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		message.channel.send(shoomBeginning);
 
 	}
-
 
 	if (command === 'say')
 	{
