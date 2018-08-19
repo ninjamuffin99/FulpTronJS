@@ -124,10 +124,9 @@ client.on('message', async message =>
 	}
 
 	//Automate Welcome Channel WIP
-	if(message.content.toLowerCase() === "test" || message.channel.id("read-the-rules-for-access")){
+	if(message.content.toLowerCase() === "test" || message.channel.id() === "read-the-rules-for-access"){
 		//message.member.addRole("NG");
-		alert("good check");
-		
+		message.reply("works");
 		/*
 		let usr = args[0];
 		if (usr == undefined)
