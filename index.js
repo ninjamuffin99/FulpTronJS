@@ -123,15 +123,27 @@ client.on('message', async message =>
 		message.reply("\nRIP\nRIP\nRIP");
 	}
 
-	//Automate welcome channel WIP
-	if(message.content.endsWith(".newgrounds.com/") &&  msg.channel.id === "read-the-rules-for-access"){
-		message.member.addRole("NG");
-		alert("good check");
-		/*let usr = args[0];
+	//Automate Welcome Channel WIP
+	/*if(message.content.toLowerCase() === "test" || message.channel.id() === "read-the-rules-for-access"){
+		//message.member.addRole("NG");
+		message.reply("works");
+
+		let usr = args[0];
 		if (usr == undefined)
 		{
 			return message.channel.send("Go to Newgrounds.com!\nhttps://newgrounds.com")
-		}*/
+		}
+
+		//let usr = args[0];
+		//`https://${usr}.newgrounds.com`
+
+		if(class === "level-${}-${}"){
+			
+		}
+	}*/
+
+	if(message.content.toLowerCase() === "monster mashing"){
+		message.reply("Did someone say M0NSTER MASHING!?\n\nhttps://www.newgrounds.com/portal/view/707498");
 	}
 
 	//IF IT DOESNT START WITH "FULP" then IT DONT REGISTER PAST THIS POINT
