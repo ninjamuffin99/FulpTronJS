@@ -36,7 +36,7 @@ const queue = new Map();
 const fulpPics = ["tomAlienHominid.jpg", "tomBar.jpg", "tomFulpExcited.jpg", "tomfulphentai.png", "tomfulppaint.jpg", "tomFulpReading.jpg", "tomFulpSquat.jpg",
 "tomHackerman.jpg", "tomLoliPops.jpg", "tomMiddleFInger.jpg", "tomMiddleFInger2.jpg", "tomPicoDau.jpg",
 "tomPicoDay2.jpg", "tomRide.jpg", "turtleTom.jpg", "tomFulpBeer.jpeg", "tomOldSchool.jpg", "tomOldSchool2.jpg",
-"tomFrodoBoys.jpg", "tomBeardo.jpg", "fulpbowl.jpg", "fulpfrank.jpg", "fulppaint.jpg", "darkFulp.png", "fulpink.jpg",
+"tomFrodoBoys.jpg", "tomBeardo.jpg", "fulpbowl.jpg", "fulpfrank.jpg", "fulppaint.jpg", "darkFulp.png", "fulpink.jpg", "fulpAnime.png",
 "TOMFULP.jpg", "tomgood.jpg", "tomold.jpg"];
 
 let shoomOCound = 2;
