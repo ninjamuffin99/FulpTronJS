@@ -143,7 +143,7 @@ client.on('message', async message =>
 	}*/
 
 	if(message.content.toLowerCase() === "monster mashing"){
-		message.reply("Did someone say M0NSTER MASHING!?\n\nhttps://www.newgrounds.com/portal/view/707498");
+		message.reply("Did someone say M0NSTER MASHING!?\nhttps://www.newgrounds.com/portal/view/707498");
 	}
 
 	//IF IT DOESNT START WITH "FULP" then IT DONT REGISTER PAST THIS POINT
