@@ -484,6 +484,8 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		let text = args.slice(0).join(" ");
 		message.delete();
 		message.channel.send(text);
+		
+		console.log(message.channel.author + " says:  + text);
 	}
 
 	if (command == 'roll')
