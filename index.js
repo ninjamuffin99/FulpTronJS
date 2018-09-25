@@ -125,7 +125,7 @@ client.on('guildMemberAdd', async member =>
 	// code specific to the Flash Holes server
 	if (member.guild.id == 283807027720093697)
 	{
-		let curRole = message.guild.roles.find("name", "Flash Hole");
+		let curRole = member.guild.roles.find("name", "Flash Hole");
 			
 		member.addRole(curRole);
 	}
