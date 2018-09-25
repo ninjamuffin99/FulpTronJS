@@ -18,13 +18,21 @@ for (const file of commandFiles) {
 }
 //extra shit
 const ytdl = require('ytdl-core');
-//const { prefix, token, ownerID, NGappID, NGencKey, process.env.GOOGLE_API_KEY} = require('./config.json')
 
+// NOTE IMPORTANT READ THIS
+// This line is commented in the master/heroku version, but it is needed if you were to run the code locally
+// const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY} = require('./config.json')
+
+/* loads the secret variables that are set on the heroku site
+	when pushing to master, make sure that this stuff is uncommented!
+	 */
 const prefix = process.env.prefix;
 const ownerID = process.env.ownerID;
 const token = process.env.token;
 const NGappID = process.env.NGappID;
 const NGencKey = process.env.NGencKey;
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY
+
 // the google one is just find and replaced heheh
 
 // Music bot shit
@@ -40,6 +48,8 @@ const fulpPics = ["tomAlienHominid.jpg", "tomBar.jpg",
 "tomFrodoBoys.jpg", "tomBeardo.jpg", "fulpbowl.jpg", "fulpfrank.jpg", "fulppaint.jpg", "darkFulp.png", "fulpink.jpg", "TOMFULP.jpg"];
 
 let shoomOCound = 2;
+
+
 
 // when the client is ready, run this code
 // this event will trigger whenever your bot:
@@ -108,6 +118,17 @@ client.on('ready', () =>
 	.'.''''       ''''''''''''''''''''''''''''''''''''''  ''''''''''            ''''''''''.......'''''''`);
 	console.info("FULPTRON IS ONLINE");
 	console.info(`FulpTron is on ${client.guilds.size} servers!`);
+});
+
+client.on('guildMemberAdd', async member =>
+{
+	// code specific to the Flash Holes server
+	if (member.guild.id == 283807027720093697)
+	{
+		let curRole = message.guild.roles.find("name", "Flash Hole");
+			
+		member.addRole(curRole);
+	}
 });
 
 client.on('message', async message => 
@@ -350,7 +371,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		totalSeconds %= 3600;
 		let minutes = Math.floor(totalSeconds / 60);
 		let seconds = totalSeconds % 60;
-		let sec = Math.round(seconds);
+		let sec = Math.floor(seconds);
 		let uptime = `${hours} hours, ${minutes} minutes and ${sec} seconds`;
 		message.reply("Current uptime is : " + uptime);
 	}
@@ -639,6 +660,8 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 	}
  	*/
 });
+
+
 
 function clean(text)
 {
