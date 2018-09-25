@@ -323,7 +323,12 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 	// IF YOU WANT TO USE EZ VARIABLES AND SHIT
 	if (command == 'server') 
 	{
-		message.channel.send(`This server's name is: ${message.guild.name}\nTotal members: ${message.guild.memberCount}\nServer Region: ${message.guild.region}`);
+		message.channel.send(`This server's name is: ${message.guild.name}
+		Total members: ${message.guild.memberCount}
+		Server Region: ${message.guild.region}
+		
+		FulpTron joined this server at: ${message.guild.joinedAt}
+		The Owner is: ${message.guild.owner}`);
 	}
 
 	if (command == 'kick')
