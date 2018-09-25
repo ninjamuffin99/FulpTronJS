@@ -324,11 +324,11 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 	if (command == 'server') 
 	{
 		message.channel.send(`This server's name is: ${message.guild.name}
-	Total members: ${message.guild.memberCount}
-	Server Region: ${message.guild.region}
+Total members: ${message.guild.memberCount}
+Server Region: ${message.guild.region}
 		
-	FulpTron joined this server at: ${message.guild.joinedAt}
-	The Owner is: ${message.guild.owner.user.username}`);
+FulpTron joined this server at: ${message.guild.joinedAt}
+The Owner is: ${message.guild.owner.user.username}`);
 	}
 
 	if (command == 'kick')
