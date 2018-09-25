@@ -41,11 +41,11 @@ const youtube = new YouTube(process.env.GOOGLE_API_KEY);
 
 const queue = new Map();
 
-const fulpPics = ["tomAlienHominid.jpg", "tomBar.jpg", 
-"tomFulpExcited.jpg", "tomfulphentai.png", "tomfulppaint.jpg", "tomFulpReading.jpg", "tomFulpSquat.jpg",
+const fulpPics = ["tomAlienHominid.jpg", "tomBar.jpg", "tomFulpExcited.jpg", "tomfulphentai.jpg", "tomfulppaint.jpg", "tomFulpReading.jpg", "tomFulpSquat.jpg",
 "tomHackerman.jpg", "tomLoliPops.jpg", "tomMiddleFInger.jpg", "tomMiddleFInger2.jpg", "tomPicoDau.jpg",
-"tomPicoDay2.jpg", "tomRide.jpg", "turtleTom.jpg", "tomFulpBeer.jpeg", "tomOldSchool.jpg", "tomOldSchool2.jpg",
-"tomFrodoBoys.jpg", "tomBeardo.jpg", "fulpbowl.jpg", "fulpfrank.jpg", "fulppaint.jpg", "darkFulp.png", "fulpink.jpg", "TOMFULP.jpg"];
+"tomPicoDay2.jpg", "tomRide.jpg", "turtletom.jpg", "tomFulpBeer.jpeg", "tomOldSchool.jpg", "tomOldSchool2.jpg",
+"tomFrodoBoys.jpg", "tomBeardo.jpg", "fulpbowl.jpg", "fulpfrank.jpg", "fulppaint.jpg", "darkFulp.png", "fulpink.jpg", "tomAnime.png",
+"TOMFULP.jpg", "tomgood.jpg", "tomold.jpg", "fulpBeard.png", "fulphelp.jpg", "fulpsketchy.png", "tombox.png", "SentimentalSnivelingAmericanpainthorse-size_restricted.gif", "fulpGuns.png"];
 
 let shoomOCound = 2;
 
@@ -164,7 +164,7 @@ client.on('message', async message =>
 	}*/
 
 	if(message.content.toLowerCase() === "monster mashing"){
-		message.reply("Did someone say M0NSTER MASHING!?\n\nhttps://www.newgrounds.com/portal/view/707498");
+		message.reply("Did someone say M0NSTER MASHING!?\nhttps://www.newgrounds.com/portal/view/707498");
 	}
 
 	//IF IT DOESNT START WITH "FULP" then IT DONT REGISTER PAST THIS POINT
@@ -184,6 +184,10 @@ client.on('message', async message =>
 	if (command == 'shame')
 	{
 		message.channel.send('**SHAAAAAME**');
+	}
+
+	if(command == 'die'){
+		message.channel.send(`(＾A＾)  ̿ ̿'̿'\̵͇̿̿\з`);
 	}
 
 	if (command == 'help')
@@ -501,6 +505,8 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		let text = args.slice(0).join(" ");
 		message.delete();
 		message.channel.send(text);
+		
+		console.log(message.author.username + " says: " + text);
 	}
 
 	if (command == 'roll')

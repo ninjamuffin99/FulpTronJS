@@ -13,7 +13,7 @@ parameters will be indicated in <> these brackets when required. If there's mult
 - `fulpShame` just shouts SHAAAME
 - `fulpServer` sends some info about the server, like amount of memebers
 - `fulpUptime` sends uptime in seconds lol
-- `fulpAddRole <role>` gives you a certain role. The role parameter is case sensitive!
+- `fulpAddRole <role>` gives you a certain role. The role parameter is case sensitive! example: `fulpAddRole Artist` would give you the artist role
 - `fulpRemoveRole <role>` removes one of your roles. Again the role parameter is case sensitive
 - `fulpASL <age> <sex> <location>` fulp is a fukken creep
 - `fulpPlaying <anything lol>` sets FulpTron's discord playing status to whatever you input
