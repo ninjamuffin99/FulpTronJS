@@ -328,7 +328,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		Server Region: ${message.guild.region}
 		
 		FulpTron joined this server at: ${message.guild.joinedAt}
-		The Owner is: ${message.guild.owner}`);
+		The Owner is: ${message.guild.owner.user.username}`);
 	}
 
 	if (command == 'kick')
