@@ -121,6 +121,8 @@ client.on('ready', () =>
 	for (const serverStuff of client.guilds)
 	{
 		console.log(serverStuff.name);
+		console.log(serverStuff.memberCount);
+		console.log(serverStuff.available);
 	}
 });
 
