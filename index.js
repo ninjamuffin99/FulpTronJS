@@ -118,6 +118,10 @@ client.on('ready', () =>
 	.'.''''       ''''''''''''''''''''''''''''''''''''''  ''''''''''            ''''''''''.......'''''''`);
 	console.info("FULPTRON IS ONLINE");
 	console.info(`FulpTron is on ${client.guilds.size} servers!`);
+	for (let servers of client.guilds)
+	{
+		console.log(server.name);
+	}
 });
 
 client.on('guildMemberAdd', async member =>
