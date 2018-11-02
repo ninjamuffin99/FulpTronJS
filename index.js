@@ -118,9 +118,9 @@ client.on('ready', () =>
 	.'.''''       ''''''''''''''''''''''''''''''''''''''  ''''''''''            ''''''''''.......'''''''`);
 	console.info("FULPTRON IS ONLINE");
 	console.info(`FulpTron is on ${client.guilds.size} servers!`);
-	for (let servers of client.guilds)
+	for (const serverStuff of client.guilds)
 	{
-		console.log(server.name);
+		console.log(serverStuff.name);
 	}
 });
 
