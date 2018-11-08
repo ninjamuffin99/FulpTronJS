@@ -289,7 +289,7 @@ ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
 		if (!message.member.voiceChannel) return message.channel.send('You are not in a voice channel!');
 		if (!serverQueue) return message.channel.send('There is nothing playing.');
 		if (!args[0]) return message.channel.send(`The current volume is: **${serverQueue.volume}**`);
-		if (args[0] > 200) return message.channel.send('no');
+		if (args[0] > 200) return message.channel.send('pls do not use FulpTron for evil (max volume is 200)');
 		serverQueue.volume = args[0];
 		serverQueue.connection.dispatcher.setVolumeLogarithmic(args[0] / 100);
 		return message.channel.send(`I set the volume to: **${args[0]}**`);
