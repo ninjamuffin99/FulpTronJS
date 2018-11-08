@@ -40,13 +40,15 @@ const youtube = new YouTube(process.env.GOOGLE_API_KEY);
 
 const queue = new Map();
 
-const fulpPics = ["tomAlienHominid.jpg", "tomBar.jpg", 
-"tomFulpExcited.jpg", "tomfulphentai.png", "tomfulppaint.jpg", "tomFulpReading.jpg", "tomFulpSquat.jpg",
+const fulpPics = ["tomAlienHominid.jpg", "tomBar.jpg", "tomFulpExcited.jpg", "tomfulphentai.jpg", "tomfulppaint.jpg", "tomFulpReading.jpg", "tomFulpSquat.jpg",
 "tomHackerman.jpg", "tomLoliPops.jpg", "tomMiddleFInger.jpg", "tomMiddleFInger2.jpg", "tomPicoDau.jpg",
-"tomPicoDay2.jpg", "tomRide.jpg", "turtleTom.jpg", "tomFulpBeer.jpeg", "tomOldSchool.jpg", "tomOldSchool2.jpg",
-"tomFrodoBoys.jpg", "tomBeardo.jpg", "fulpbowl.jpg", "fulpfrank.jpg", "fulppaint.jpg", "darkFulp.png", "fulpink.jpg", "TOMFULP.jpg"];
+"tomPicoDay2.jpg", "tomRide.jpg", "turtletom.jpg", "tomFulpBeer.jpeg", "tomOldSchool.jpg", "tomOldSchool2.jpg",
+"tomFrodoBoys.jpg", "tomBeardo.jpg", "fulpbowl.jpg", "fulpfrank.jpg", "fulppaint.jpg", "darkFulp.png", "fulpink.jpg", "tomAnime.png",
+"TOMFULP.jpg", "tomgood.jpg", "tomold.jpg", "fulpBeard.png", "fulphelp.jpg", "fulpsketchy.png", "tombox.png", "SentimentalSnivelingAmericanpainthorse-size_restricted.gif", "fulpGuns.png"];
 
 let shoomOCound = 2;
+
+
 
 // when the client is ready, run this code
 // this event will trigger whenever your bot:
@@ -115,6 +117,18 @@ client.on('ready', () =>
 	.'.''''       ''''''''''''''''''''''''''''''''''''''  ''''''''''            ''''''''''.......'''''''`);
 	console.info("FULPTRON IS ONLINE");
 	console.info(`FulpTron is on ${client.guilds.size} servers!`);
+	console.info(client.guilds.map(g => g.name).join("\n"));
+});
+
+client.on('guildMemberAdd', async member =>
+{
+	// code specific to the Flash Holes server
+	if (member.guild.id == 283807027720093697)
+	{
+		let curRole = member.guild.roles.find("name", "Flash Hole");
+			
+		member.addRole(curRole);
+	}
 });
 
 client.on('message', async message => 
@@ -150,7 +164,7 @@ client.on('message', async message =>
 	}*/
 
 	if(message.content.toLowerCase() === "monster mashing"){
-		message.reply("Did someone say M0NSTER MASHING!?\n\nhttps://www.newgrounds.com/portal/view/707498");
+		message.reply("Did someone say M0NSTER MASHING!?\nhttps://www.newgrounds.com/portal/view/707498");
 	}
 
 	//IF IT DOESNT START WITH "FULP" then IT DONT REGISTER PAST THIS POINT
@@ -170,6 +184,10 @@ client.on('message', async message =>
 	if (command == 'shame')
 	{
 		message.channel.send('**SHAAAAAME**');
+	}
+
+	if(command == 'die'){
+		message.channel.send(`(＾A＾)  ̿ ̿'̿'\̵͇̿̿\з`);
 	}
 
 	if (command == 'help')
@@ -270,6 +288,7 @@ ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
 		if (!message.member.voiceChannel) return message.channel.send('You are not in a voice channel!');
 		if (!serverQueue) return message.channel.send('There is nothing playing.');
 		if (!args[0]) return message.channel.send(`The current volume is: **${serverQueue.volume}**`);
+		if (args[0] > 200) return message.channel.send('pls do not use FulpTron for evil (max volume is 200)');
 		serverQueue.volume = args[0];
 		serverQueue.connection.dispatcher.setVolumeLogarithmic(args[0] / 100);
 		return message.channel.send(`I set the volume to: **${args[0]}**`);
@@ -305,7 +324,12 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 	// IF YOU WANT TO USE EZ VARIABLES AND SHIT
 	if (command == 'server') 
 	{
-		message.channel.send(`This server's name is: ${message.guild.name}\nTotal members: ${message.guild.memberCount}\nServer Region: ${message.guild.region}`);
+		message.channel.send(`This server's name is: ${message.guild.name}
+Total members: ${message.guild.memberCount}
+Server Region: ${message.guild.region}
+		
+FulpTron joined this server at: ${message.guild.joinedAt}
+The Owner is: ${message.guild.owner.user.username}`);
 	}
 
 	if (command == 'kick')
@@ -487,6 +511,8 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		let text = args.slice(0).join(" ");
 		message.delete();
 		message.channel.send(text);
+		
+		console.log(message.author.username + " says: " + text);
 	}
 
 	if (command == 'roll')
@@ -596,7 +622,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 
 				for (i = 0; i < ngArray.length; i++)
 				{
-					if (ngArray[i] != "" && ngArray[i] != " " && ngArray[i] != "View Profile" && ngArray[i] != `${usr} `)
+					if (ngArray[i] != "" && ngArray[i] != " " && ngArray[i] != "View Profile" && ngArray[i] != `${usr} ` && ngArray[i] != "\n")
 					{
 						listOfShit += ngArray[i + 1];
 						listOfShit += ` ${ngArray[i]}\n`;
@@ -646,6 +672,8 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 	}
  	*/
 });
+
+
 
 function clean(text)
 {
