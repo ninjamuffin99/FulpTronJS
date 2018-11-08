@@ -615,23 +615,51 @@ The Owner is: ${message.guild.owner.user.username}`);
 			.then(($) => {
 				let ngInfo = $('.user-header').text();
 				let ngArray = ngInfo.split("\n");
-				
-				// NOTE This needs  alot of cleaning up. Currently the ngArray just slices out the first few bits, and the embed doesn't account
-				// for if the user doesn't have a certain submission type, so currrently the embed is commented out
-				let listOfShit = "";
 
-				for (i = 0; i < ngArray.length; i++)
+				let ngInfo2 = $('.stats-general').text();
+				let ngArray2 = ngInfo2.split("\n");
+
+				infoClean(ngArray);
+				infoClean(ngArray2);
+
+				function infoClean(curList)
 				{
-					if (ngArray[i] != "" && ngArray[i] != " " && ngArray[i] != "View Profile" && ngArray[i] != `${usr} ` && ngArray[i] != "\n")
+					// NOTE This needs  alot of cleaning up. Currently the ngArray just slices out the first few bits, and the embed doesn't account
+					// for if the user doesn't have a certain submission type, so currrently the embed is commented out
+					let listOfShit = "";
+					let secondArray = curList;
+
+					for (i = 0; i < curList.length; i++)
 					{
-						listOfShit += ngArray[i + 1];
-						listOfShit += ` ${ngArray[i]}\n`;
-						i += 1;
+						while(curList[i].startsWith("\t"))
+						{
+							curList[i] = curList[i].slice(1)
+						}
+
+						while (curList[i].endsWith("\t"))
+						{
+							curList[i] = curList[i].slice(0, curList[i].length - 2)
+						}
+
+						if (curList[i] != "" && curList[i] != " " && curList[i] != "View Profile" && curList[i] != `${usr} ` && curList[i] != "\n")
+						{
+							listOfShit += curList[i + 1];
+							listOfShit += ` ${curList[i]}\n`;
+
+							secondArray.push(curList[i + 1]);
+							secondArray.push(curList[i]);
+
+							i += 1;
+							
+						}
 					}
-				}
 				
-				embed.addField(`Submission stats`, `${listOfShit}`, true);
-				embed.addField(`General Stats`, $('.stats-general').text(), true)
+					console.log("CLEANED ARRAY");
+					console.log(secondArray);
+
+					embed.addField(`Submission stats`, `${listOfShit}`, true);
+
+				}
 
 				message.channel.send({embed});
 				// message.channel.send($('.stats-general').text());
