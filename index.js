@@ -623,7 +623,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 				for (i = 0; i < ngArray.length; i++)
 				{
-					if (ngArray[i] != "" && ngArray[i] != " " && ngArray[i] != "View Profile" && ngArray[i] != `${usr} `)
+					if (ngArray[i] != "" && ngArray[i] != " " && ngArray[i] != "View Profile" && ngArray[i] != `${usr} ` && ngArray[i] != "\n")
 					{
 						listOfShit += ngArray[i + 1];
 						listOfShit += ` ${ngArray[i]}\n`;
