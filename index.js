@@ -386,6 +386,42 @@ The Owner is: ${message.guild.owner.user.username}`);
 		message.reply("Current uptime is : " + uptime);
 	}
 
+	if (command == "picarto")
+	{
+		let username = args[0];
+		let url = `https://api.picarto.tv/v1/channel/name/${username}`;
+
+		const https = require('https');
+
+		https.get(url, (resp) => 
+		{
+			let data = '';
+
+			// A chunk of data has been recieved.
+			resp.on('data', (chunk) => {
+			  data += chunk;
+			});
+
+			resp.on('end', () => {
+				console.log(JSON.parse(data));
+				JSON.parse(data, (key, value) =>
+				{
+					if (key == "online")
+					{
+						if (value)
+						{
+							message.channel.send(`${username} is streaming!`)
+						}
+						else
+							message.channel.send(`${username} is not streaming :(`)
+					}
+				});
+
+			  });
+		});
+
+	}
+
 	//Cam you do it
 	if (command == "addrole"){
 		let role = args.slice(0).join(" ");
@@ -631,6 +667,16 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 					for (i = 0; i < curList.length; i++)
 					{
+
+						let lengthListBS = curList[i].split("\t");
+						console.log("LIST");
+						console.log(lengthListBS);
+
+						for (t = 0; t < lengthListBS.length; t++)
+						{
+
+						}
+/*
 						while(curList[i].startsWith("\t"))
 						{
 							curList[i] = curList[i].slice(1)
@@ -640,7 +686,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 						{
 							curList[i] = curList[i].slice(0, curList[i].length - 2)
 						}
-
+*/
 						if (curList[i] != "" && curList[i] != " " && curList[i] != "View Profile" && curList[i] != `${usr} ` && curList[i] != "\n")
 						{
 							listOfShit += curList[i + 1];
