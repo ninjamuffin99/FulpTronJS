@@ -664,26 +664,6 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 					for (i = 0; i < curList.length; i++)
 					{
-
-						let lengthListBS = curList[i].split("\t");
-						console.log("LIST");
-						console.log(lengthListBS);
-
-						for (t = 0; t < lengthListBS.length; t++)
-						{
-
-						}
-/*
-						while(curList[i].startsWith("\t"))
-						{
-							curList[i] = curList[i].slice(1)
-						}
-
-						while (curList[i].endsWith("\t"))
-						{
-							curList[i] = curList[i].slice(0, curList[i].length - 2)
-						}
-*/
 						if (curList[i] != "" && curList[i] != " " && curList[i] != "View Profile" && curList[i] != `${usr} ` && curList[i] != "\n")
 						{
 							listOfShit += curList[i + 1];
