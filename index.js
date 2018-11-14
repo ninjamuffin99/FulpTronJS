@@ -620,6 +620,8 @@ The Owner is: ${message.guild.owner.user.username}`);
 	if (command == "ngscrape")
 	{
 
+		return message.channel.send("woops this command is busted right now sorry lolol");
+
 		let usr = args[0];
 
 		if (usr === undefined)
