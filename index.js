@@ -41,7 +41,7 @@ const fulpPics = ["tomAlienHominid.jpg", "tomBar.jpg", "tomFulpExcited.jpg", "to
 "tomHackerman.jpg", "tomLoliPops.jpg", "tomMiddleFInger.jpg", "tomMiddleFInger2.jpg", "tomPicoDau.jpg",
 "tomPicoDay2.jpg", "tomRide.jpg", "turtletom.jpg", "tomFulpBeer.jpeg", "tomOldSchool.jpg", "tomOldSchool2.jpg",
 "tomFrodoBoys.jpg", "tomBeardo.jpg", "fulpbowl.jpg", "fulpfrank.jpg", "fulppaint.jpg", "darkFulp.png", "fulpink.jpg", "tomAnime.png",
-"TOMFULP.jpg", "tomgood.jpg", "tomold.jpg", "fulpBeard.png", "fulphelp.jpg", "fulpsketchy.png", "tombox.png", "SentimentalSnivelingAmericanpainthorse-size_restricted.gif", "fulpGuns.png"];
+"TOMFULP.jpg", "tomgood.jpg", "tomold.jpg", "fulpBeard.png", "fulphelp.jpg", "fulpsketchy.png", "tombox.png", "fulpAwesome.gif", "fulpGuns.png", "krinkleFulp.jpg"];
 
 let shoomOCound = 2;
 
