@@ -443,7 +443,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 				let messageSending = theQuiz.category + "\n" + unescapeHTML(theQuiz.question);
 
 				let answerArray = theQuiz.incorrect_answers;
-				let correctAnswerPos = Math.floor(Math.random() * (theQuiz.incorrect_answers.length + 1);
+				let correctAnswerPos = Math.floor(Math.random() * (theQuiz.incorrect_answers.length + 1));
 				console.log("Answer is " + correctAnswerPos);
 				answerArray.splice(correctAnswerPos, 0, theQuiz.correct_answer)
 
