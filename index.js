@@ -443,7 +443,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 				let messageSending = theQuiz.category + "\n" + unescapeHTML(theQuiz.question);
 
 				let answerArray = theQuiz.incorrect_answers;
-				let correctAnswerPos = Math.floor(Math.random() * 4);
+				let correctAnswerPos = Math.floor(Math.random() * (theQuiz.incorrect_answers.length + 1));
 				console.log("Answer is " + correctAnswerPos);
 				answerArray.splice(correctAnswerPos, 0, theQuiz.correct_answer)
 
@@ -460,7 +460,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 						errors: ['time'],
 					  })
 					  .then((collected) => {
-						  message.reply(`You got the right answer i think, ${(correctAnswerPos + 1) + ". " + theQuiz.correct_answer}`);
+						  message.reply(`You got the right answer i think, ${theQuiz.correct_answer}`);
 						})
 						.catch(() => {
 						  message.channel.send(`Ran outta time, the correct answer was ${(correctAnswerPos + 1) + ". " + theQuiz.correct_answer}`);
@@ -749,6 +749,34 @@ The Owner is: ${message.guild.owner.user.username}`);
 			  message.channel.send(`an error occured because <@${ownerID}> is a fukken dumbass` );
 			});
 		
+	}
+
+	if (command == "nglogin")
+	{
+		var options = {
+			method: 'POST',
+			uri: 'http://www.newgrounds.io/gateway_v3.php',
+			body: {
+				"app_id": "test",
+				"debug": true,
+				"call": {
+					"component": "Gateway.getDatetime",
+					"parameters": {},
+					"echo": "Hello World!"
+				}
+			},
+			json: true // Automatically stringifies the body to JSON
+		};
+		
+		rp(options)
+			.then(function (parsedBody) {
+
+				console.log(JSON.parse(parsedBody))
+				// POST succeeded...
+			})
+			.catch(function (err) {
+				// POST failed...
+			});
 	}
 
 	if (command == "testerror" && message.channel.author.id == ownerID)
