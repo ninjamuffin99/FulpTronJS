@@ -22,16 +22,16 @@ const ytdl = require('ytdl-core');
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-// const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY} = require('./config.json')
+const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY} = require('./config.json')
 
-
+/*
 const prefix = process.env.prefix;
 const ownerID = process.env.ownerID;
 const token = process.env.token;
 const NGappID = process.env.NGappID;
 const NGencKey = process.env.NGencKey;
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY
-
+*/
 // Music bot shit
 const YouTube = require(`simple-youtube-api`);
 const youtube = new YouTube(GOOGLE_API_KEY);
@@ -293,7 +293,7 @@ ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
 	} else if (command === 'np' || command === 'nowplaying') {
 		if (!serverQueue) return message.channel.send('There is nothing playing.');
 		return message.channel.send(`🎶 Now playing: **${serverQueue.songs[0].title}**`);
-	} else if (command === 'queue') {
+	} else if (command === 'queue' || command === 'q') {
 		if (!serverQueue) return message.channel.send('There is nothing playing.');
 		return message.channel.send(`
 __**Song queue:**__
@@ -452,7 +452,22 @@ The Owner is: ${message.guild.owner.user.username}`);
 					messageSending += "\n" + (a + 1) + ". " + answerArray[a];
 				}
 
-				message.channel.send(messageSending)
+				message.channel.send(messageSending).then(() =>
+				{
+					message.channel.awaitMessages(mess => mess.content.startsWith(correctAnswerPos + 1), {
+						max: 1,
+						time: 20000,
+						errors: ['time'],
+					  })
+					  .then((collected) => {
+						  message.channel.send(`You got the right answer i think, ${(correctAnswerPos + 1) + ". " + theQuiz.correct_answer}`);
+						})
+						.catch(() => {
+						  message.channel.send(`Ran outta time, the correct answer was ${(correctAnswerPos + 1) + ". " + theQuiz.correct_answer}`);
+						});
+				});
+
+// message.channel.awaitMessages(message2 => message2.content > 0 && message2.content < 11, {
 
 			  });
 		});
