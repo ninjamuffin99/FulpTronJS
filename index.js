@@ -6,6 +6,7 @@ const cheerio = require('cheerio');
 const Discord = require('discord.js');
 // create a new Discord client
 const client = new Discord.Client();
+const https = require('https');
 const {Util} = require('discord.js');
 //command set up
 client.commands = new Discord.Collection();
@@ -388,8 +389,6 @@ The Owner is: ${message.guild.owner.user.username}`);
 		let username = args[0];
 		let url = `https://api.picarto.tv/v1/channel/name/${username}`;
 
-		const https = require('https');
-
 		https.get(url, (resp) => 
 		{
 			let data = '';
@@ -413,6 +412,32 @@ The Owner is: ${message.guild.owner.user.username}`);
 							message.channel.send(`${username} is not streaming :(`)
 					}
 				});
+
+			  });
+		});
+
+	}
+
+
+	if (command == "quiz")
+	{
+		// https://opentdb.com/api.php?amount=1
+
+		let url = `https://opentdb.com/api.php?amount=1`;
+
+
+
+		https.get(url, (resp) => 
+		{
+			let data = '';
+
+			// A chunk of data has been recieved.
+			resp.on('data', (chunk) => {
+			  data += chunk;
+			});
+
+			resp.on('end', () => {
+				console.log(JSON.parse(data));
 
 			  });
 		});
