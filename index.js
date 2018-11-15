@@ -443,7 +443,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 				let messageSending = theQuiz.category + "\n" + unescapeHTML(theQuiz.question);
 
 				let answerArray = theQuiz.incorrect_answers;
-				let correctAnswerPos = Math.floor(Math.random() * 4);
+				let correctAnswerPos = Math.floor(Math.random() * (theQuiz.incorrect_answers.length + 1);
 				console.log("Answer is " + correctAnswerPos);
 				answerArray.splice(correctAnswerPos, 0, theQuiz.correct_answer)
 
@@ -460,7 +460,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 						errors: ['time'],
 					  })
 					  .then((collected) => {
-						  message.reply(`You got the right answer i think, ${(correctAnswerPos + 1) + ". " + theQuiz.correct_answer}`);
+						  message.reply(`You got the right answer i think, ${theQuiz.correct_answer}`);
 						})
 						.catch(() => {
 						  message.channel.send(`Ran outta time, the correct answer was ${(correctAnswerPos + 1) + ". " + theQuiz.correct_answer}`);
