@@ -22,19 +22,19 @@ const ytdl = require('ytdl-core');
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-// const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY} = require('./config.json')
+const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY} = require('./config.json')
 
-
+/*
 const prefix = process.env.prefix;
 const ownerID = process.env.ownerID;
 const token = process.env.token;
 const NGappID = process.env.NGappID;
 const NGencKey = process.env.NGencKey;
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY
-
+*/
 // Music bot shit
 const YouTube = require(`simple-youtube-api`);
-const youtube = new YouTube(process.env.GOOGLE_API_KEY);
+const youtube = new YouTube(GOOGLE_API_KEY);
 
 const queue = new Map();
 
@@ -437,7 +437,22 @@ The Owner is: ${message.guild.owner.user.username}`);
 			});
 
 			resp.on('end', () => {
-				console.log(JSON.parse(data));
+				let theQuiz = JSON.parse(data).results[0];
+				console.log(JSON.parse(data).results[0])
+
+				let messageSending = theQuiz.category + "\n" + unescapeHTML(theQuiz.question);
+
+				let answerArray = theQuiz.incorrect_answers;
+				let correctAnswerPos = Math.floor(Math.random() * 4);
+				console.log("Answer is " + correctAnswerPos);
+				answerArray.splice(correctAnswerPos, 0, theQuiz.correct_answer)
+
+				for (let a = 0; a < answerArray.length; a++)
+				{
+					messageSending += "\n" + (a + 1) + ". " + answerArray[a];
+				}
+
+				message.channel.send(messageSending)
 
 			  });
 		});
@@ -823,7 +838,38 @@ function play(guild, song) {
 
 	serverQueue.textChannel.send(`🎶 Start playing: **${song.title}**`);
 }
+var htmlEntities = {
+    nbsp: ' ',
+    cent: '¢',
+    pound: '£',
+    yen: '¥',
+    euro: '€',
+    copy: '©',
+    reg: '®',
+    lt: '<',
+    gt: '>',
+    quot: '"',
+    amp: '&',
+    apos: '\''
+};
 
+function unescapeHTML(str) {
+    return str.replace(/\&([^;]+);/g, function (entity, entityCode) {
+        var match;
+
+        if (entityCode in htmlEntities) {
+            return htmlEntities[entityCode];
+            /*eslint no-cond-assign: 0*/
+        } else if (match = entityCode.match(/^#x([\da-fA-F]+)$/)) {
+            return String.fromCharCode(parseInt(match[1], 16));
+            /*eslint no-cond-assign: 0*/
+        } else if (match = entityCode.match(/^#(\d+)$/)) {
+            return String.fromCharCode(~~match[1]);
+        } else {
+            return entity;
+        }
+    });
+};
 process.on('unhandledRejection', error => console.error(`Uncaught Promise Rejection:\n${error}`));
 
 // login to Discord with your app's token
