@@ -21,11 +21,12 @@ parameters will be indicated in <> these brackets when required. If there's mult
 - `fulpSay <anything>` make fulptron say funny things ahah epic
 - `fulpRoll <min number> <max number>` pretty much the same shit as every other bot with a dice command lol. If you dont input any number it rolls a D20
 - `fulpPic` gets a random Tom Fulp pic from my collection
+- 'fulpQuiz' Asks a multiple choice question (shoutout to BrenBot for the inspiration lololol)
 - `fulpSHOOM` **SHOOOOOOOOOOOOOOOOOOOOOOOOOOOM**
 - `fulpNGFollow <newgrounds user>` gives a shoutout to whatever Newgrounds user you input!
 - `fulpNGScrape <Newgrounds user>` sends you some info about whatever Newgrounds user you input, into a nifty little Rich Embed.
 - `fulpSource` drops a link to the sourcecode on Github
-- `fulpEval` literally a command that lets you hack into my PC, no jokes. However only I can use it heheheh
+- `fulpEval` command to execute any piece of javascript, on the official FulpTron, only I can use it heheheh
 
 ### VARIOUS MUSIC COMMANDS!!
 I got a bunch of music code from this bot lol I pretty much stole all that shit so go check it out: https://github.com/Dev-Yukine/Music-Bot/
