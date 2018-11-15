@@ -460,7 +460,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 						errors: ['time'],
 					  })
 					  .then((collected) => {
-						  message.channel.send(`You got the right answer i think, ${(correctAnswerPos + 1) + ". " + theQuiz.correct_answer}`);
+						  message.reply(`You got the right answer i think, ${(correctAnswerPos + 1) + ". " + theQuiz.correct_answer}`);
 						})
 						.catch(() => {
 						  message.channel.send(`Ran outta time, the correct answer was ${(correctAnswerPos + 1) + ". " + theQuiz.correct_answer}`);
