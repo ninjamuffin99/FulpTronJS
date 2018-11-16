@@ -7,6 +7,7 @@ const Discord = require('discord.js');
 // create a new Discord client
 const client = new Discord.Client();
 const https = require('https');
+const request = require('request');
 const {Util} = require('discord.js');
 //command set up
 client.commands = new Discord.Collection();
@@ -22,16 +23,16 @@ const ytdl = require('ytdl-core');
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-// const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY} = require('./config.json')
+const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY} = require('./config.json')
 
-
+/*
 const prefix = process.env.prefix;
 const ownerID = process.env.ownerID;
 const token = process.env.token;
 const NGappID = process.env.NGappID;
 const NGencKey = process.env.NGencKey;
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY
-
+*/
 // Music bot shit
 const YouTube = require(`simple-youtube-api`);
 const youtube = new YouTube(GOOGLE_API_KEY);
@@ -749,6 +750,32 @@ The Owner is: ${message.guild.owner.user.username}`);
 			  message.channel.send(`an error occured because <@${ownerID}> is a fukken dumbass` );
 			});
 		
+	}
+
+	if (command == "nglogin")
+	{
+
+		
+		var inputData = {
+			"app_id": NGappID,
+			"debug": true,
+			"call": {
+				"component": "Gateway.getDatetime",
+				"parameters": {},
+				"echo": "Hello World!"
+			}
+		};
+	
+		request.post(
+			'https://www.newgrounds.io/gateway_v3.php',
+			{ form: {input: JSON.stringify(inputData)} },
+			function (error, response, body) {
+				console.log("BODY")
+				console.log(body);
+				console.log("\nRESPONSE")
+				console.log(response);
+			}
+		);
 	}
 
 	if (command == "testerror" && message.channel.author.id == ownerID)
