@@ -834,7 +834,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 				console.log(listOfPeople.length);
 
 				embed.addField("Distance", field1);
-				embed.addField(" ", field2);
+				embed.addField(" - ", field2);
 
 				message.channel.send({embed});
 
