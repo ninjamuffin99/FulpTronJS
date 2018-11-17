@@ -23,15 +23,16 @@ const ytdl = require('ytdl-core');
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-// const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY} = require('./config.json')
+const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY} = require('./config.json')
 
-
+/*
 const prefix = process.env.prefix;
 const ownerID = process.env.ownerID;
 const token = process.env.token;
 const NGappID = process.env.NGappID;
 const NGencKey = process.env.NGencKey;
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY
+*/
 
 // Music bot shit
 const YouTube = require(`simple-youtube-api`);
@@ -45,7 +46,7 @@ const fulpPics = ["tomAlienHominid.jpg", "tomBar.jpg", "tomFulpExcited.jpg", "to
 "tomFrodoBoys.jpg", "tomBeardo.jpg", "fulpbowl.jpg", "fulpfrank.jpg", "fulppaint.jpg", "darkFulp.png", "fulpink.jpg", "tomAnime.png",
 "TOMFULP.jpg", "tomgood.jpg", "tomold.jpg", "fulpBeard.png", "fulphelp.jpg", "fulpsketchy.png", "tombox.png", "fulpAwesome.gif", "fulpGuns.png", "krinkleFulp.jpg",
 "fulpGang.jpd", "fulpIGFAward.jpg", "fulpIGFAward07.jpg", "fulpSpooked.jpg", "fulpSalty.jpg", "fulpHappy.jpg", "fulpNintendo.jpg", "fulpJump.jpg", "fulpJump2.jpg",
-"fulpJump2.jpg", "fulpJump3.jpg", "fulpSip.png", "fulpCheers.jpg"];
+"fulpJump2.jpg", "fulpJump3.jpg", "fulpSip.png", "fulpCheers.jpg", "fulpPodium.jpg"];
 
 let shoomOCound = 2;
 
@@ -762,9 +763,8 @@ The Owner is: ${message.guild.owner.user.username}`);
 			"app_id": NGappID,
 			"debug": true,
 			"call": {
-				"component": "Gateway.getDatetime",
+				"component": "App.startSession",
 				"parameters": {},
-				"echo": "Hello World!"
 			}
 		};
 	
@@ -773,9 +773,10 @@ The Owner is: ${message.guild.owner.user.username}`);
 			{ form: {input: JSON.stringify(inputData)} },
 			function (error, response, body) {
 				console.log("BODY")
-				console.log(body);
-				console.log("\nRESPONSE")
-				console.log(response);
+				//console.log(body);
+				let parsedResp = JSON.parse(response.body);
+				console.log(JSON.parse(response.body));
+				message.author.send(parsedResp.result.data.session.passport_url)
 			}
 		);
 	}
