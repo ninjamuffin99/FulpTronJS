@@ -814,7 +814,8 @@ The Owner is: ${message.guild.owner.user.username}`);
 				.setTitle(`Monster Mashing Hall Of Shame`, )
 				.setTimestamp()
 				.setColor(0xF30DFF)
-				.setThumbnail("https://i.imgur.com/PMJb6SI.png");
+				.setThumbnail("https://i.imgur.com/PMJb6SI.png")
+				.setImage("https://i.imgur.com/RCNTpi4.jpg");
 
 				let field1 = [];
 				let field2 = [];
