@@ -793,7 +793,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 				"parameters": 
 				{
 					"id": 8004,
-					"limit": 20,
+					"limit": 10,
 					"period": "A"
 				},
 			}
@@ -816,11 +816,14 @@ The Owner is: ${message.guild.owner.user.username}`);
 				.setColor(0xF30DFF)
 				.setThumbnail("mm.png");
 
-
-				embed.addField("Distance", parsedResp.result.data.scores.map(s => {
+				let listOfPeople = parsedResp.result.data.scores.map(s => {
 					scorePos += 1;
 					return `${scorePos}. [${s.user.name}](https://www.${s.user.name}.newgrounds.com) --- ${s.formatted_value}`;
-				}).join("\n"));
+				}).join("\n");
+
+				console.log(listOfPeople.length);
+
+				embed.addField("Distance", listOfPeople);
 
 				message.channel.send({embed});
 
