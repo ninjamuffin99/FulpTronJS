@@ -776,7 +776,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 				//console.log(body);
 				let parsedResp = JSON.parse(response.body);
 				console.log(JSON.parse(response.body));
-				message.author.send(parsedResp.result.data.session.passport_url)
+				message.author.send(`FulpTron will NOT have access to your Newgrounds password!!!\nFeel free to check the source code using the fulpSource command\nClick this link to sign into Newgrounds: ${parsedResp.result.data.session.passport_url}`)
 			}
 		);
 	}
