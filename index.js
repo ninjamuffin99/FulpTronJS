@@ -23,16 +23,16 @@ const ytdl = require('ytdl-core');
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-// const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY} = require('./config.json')
+const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json')
 
-
+/*
 const prefix = process.env.prefix;
 const ownerID = process.env.ownerID;
 const token = process.env.token;
 const NGappID = process.env.NGappID;
 const NGencKey = process.env.NGencKey;
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY
-
+*/
 
 // Music bot shit
 const YouTube = require(`simple-youtube-api`);
@@ -779,6 +779,43 @@ The Owner is: ${message.guild.owner.user.username}`);
 				message.author.send(`FulpTron will NOT have access to your Newgrounds password!!!\nFeel free to check the source code using the fulpSource command\nClick this link to sign into Newgrounds: ${parsedResp.result.data.session.passport_url}`)
 			}
 		);
+	}
+
+	if (command == "mmscores")
+	{
+
+		var inputData = {
+			"app_id": MMappID,
+			"debug": false,
+			"call": {
+				"component": "ScoreBoard.getScores",
+				"parameters": 
+				{
+					"id": 8004,
+					"limit": 20,
+					"period": "A"
+				},
+			}
+		};
+	
+		request.post(
+			'https://www.newgrounds.io/gateway_v3.php',
+			{ form: {input: JSON.stringify(inputData)} },
+			function (error, response, body) {
+				console.log("RESPONSE")
+				let parsedResp = JSON.parse(response.body);
+				console.log(parsedResp);
+				
+				let scorePos = 0;
+
+				message.channel.send("MONSTER MASHING SCOREBOARD:\n" + parsedResp.result.data.scores.map(s => {
+					scorePos += 1;
+					return scorePos + ". " + s.user.name + "---" + s.formatted_value;
+				}).join("\n"));
+
+				}
+		);
+
 	}
 
 	if (command == "testerror" && message.channel.author.id == ownerID)
