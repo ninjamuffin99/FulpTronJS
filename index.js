@@ -31,7 +31,8 @@ const ownerID = process.env.ownerID;
 const token = process.env.token;
 const NGappID = process.env.NGappID;
 const NGencKey = process.env.NGencKey;
-const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+const MMappID = process.env.MMappID;
 
 
 // Music bot shit
