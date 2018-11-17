@@ -23,16 +23,16 @@ const ytdl = require('ytdl-core');
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY} = require('./config.json')
+// const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY} = require('./config.json')
 
-/*
+
 const prefix = process.env.prefix;
 const ownerID = process.env.ownerID;
 const token = process.env.token;
 const NGappID = process.env.NGappID;
 const NGencKey = process.env.NGencKey;
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY
-*/
+
 
 // Music bot shit
 const YouTube = require(`simple-youtube-api`);
