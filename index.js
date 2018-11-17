@@ -809,10 +809,20 @@ The Owner is: ${message.guild.owner.user.username}`);
 				
 				let scorePos = 0;
 
-				message.channel.send("MONSTER MASHING SCOREBOARD\n" + parsedResp.result.data.scores.map(s => {
+				let embed = new Discord.RichEmbed()
+				.setURL(`https://www.newgrounds.com/portal/view/707498`)
+				.setTitle(`Monster Mashing Newgrounds Leaderboards`, )
+				.setTimestamp()
+				.setColor(0xF30DFF)
+				.setThumbnail("mm.png");
+
+
+				embed.addField("Distance", parsedResp.result.data.scores.map(s => {
 					scorePos += 1;
-					return scorePos + ". " + s.user.name + " --- " + s.formatted_value;
+					return `${scorePos}. [${s.user.name}](https://www.${s.user.name}.newgrounds.com) --- ${s.formatted_value}`;
 				}).join("\n"));
+
+				message.channel.send({embed});
 
 				}
 		);
