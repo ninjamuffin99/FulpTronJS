@@ -23,16 +23,16 @@ const ytdl = require('ytdl-core');
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json')
+// const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json')
 
-/*
+
 const prefix = process.env.prefix;
 const ownerID = process.env.ownerID;
 const token = process.env.token;
 const NGappID = process.env.NGappID;
 const NGencKey = process.env.NGencKey;
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY
-*/
+
 
 // Music bot shit
 const YouTube = require(`simple-youtube-api`);
@@ -808,9 +808,9 @@ The Owner is: ${message.guild.owner.user.username}`);
 				
 				let scorePos = 0;
 
-				message.channel.send("MONSTER MASHING SCOREBOARD:\n" + parsedResp.result.data.scores.map(s => {
+				message.channel.send("MONSTER MASHING SCOREBOARD\n" + parsedResp.result.data.scores.map(s => {
 					scorePos += 1;
-					return scorePos + ". " + s.user.name + "---" + s.formatted_value;
+					return scorePos + ". " + s.user.name + " --- " + s.formatted_value;
 				}).join("\n"));
 
 				}
