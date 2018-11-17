@@ -793,7 +793,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 				"parameters": 
 				{
 					"id": 8004,
-					"limit": 10,
+					"limit": 20,
 					"period": "A"
 				},
 			}
@@ -811,19 +811,30 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 				let embed = new Discord.RichEmbed()
 				.setURL(`https://www.newgrounds.com/portal/view/707498`)
-				.setTitle(`Monster Mashing Newgrounds Leaderboards`, )
+				.setTitle(`Monster Mashing Hall Of Shame`, )
 				.setTimestamp()
 				.setColor(0xF30DFF)
 				.setThumbnail("https://i.imgur.com/PMJb6SI.png");
 
+				let field1 = [];
+				let field2 = [];
+
 				let listOfPeople = parsedResp.result.data.scores.map(s => {
 					scorePos += 1;
+					if (scorePos <= 10)
+					{
+						field1.push(`${scorePos}. [${s.user.name}](https://www.${s.user.name}.newgrounds.com) --- ${s.formatted_value}`);
+					}
+					else
+						field2.push(`${scorePos}. [${s.user.name}](https://www.${s.user.name}.newgrounds.com) --- ${s.formatted_value}`);
+
 					return `${scorePos}. [${s.user.name}](https://www.${s.user.name}.newgrounds.com) --- ${s.formatted_value}`;
 				});
 
 				console.log(listOfPeople.length);
 
-				embed.addField("Distance", listOfPeople);
+				embed.addField("Distance", field1);
+				embed.addField(" ", field2);
 
 				message.channel.send({embed});
 
