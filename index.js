@@ -10,8 +10,6 @@ const {Util} = require('discord.js');
 //command set up
 client.commands = new Discord.Collection();
 
-const commandFiles = fs.readdirSync('./commands');
-
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
@@ -36,7 +34,7 @@ const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY
 
 // Music bot shit
 const YouTube = require(`simple-youtube-api`);
-const youtube = new YouTube(process.env.GOOGLE_API_KEY);
+const youtube = new YouTube(GOOGLE_API_KEY);
 
 const queue = new Map();
 
