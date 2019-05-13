@@ -1,5 +1,6 @@
 ﻿const fs = require('fs');
 const rp = require('request-promise');
+const path = require('path');
 const cheerio = require('cheerio');
 
 // require the discord.js module
@@ -38,13 +39,8 @@ const youtube = new YouTube(GOOGLE_API_KEY);
 
 const queue = new Map();
 
-const fulpPics = ["tomAlienHominid.jpg", "tomBar.jpg", "tomFulpExcited.jpg", "tomfulphentai.jpg", "tomfulppaint.jpg", "tomFulpReading.jpg", "tomFulpSquat.jpg",
-"tomHackerman.jpg", "tomLoliPops.jpg", "tomMiddleFInger.jpg", "tomMiddleFInger2.jpg", "tomPicoDau.jpg",
-"tomPicoDay2.jpg", "tomRide.jpg", "turtletom.jpg", "tomFulpBeer.jpeg", "tomOldSchool.jpg", "tomOldSchool2.jpg",
-"tomFrodoBoys.jpg", "tomBeardo.jpg", "fulpbowl.jpg", "fulpfrank.jpg", "fulppaint.jpg", "darkFulp.png", "fulpink.jpg", "tomAnime.png",
-"TOMFULP.jpg", "tomgood.jpg", "tomold.jpg", "fulpBeard.png", "fulphelp.jpg", "fulpsketchy.png", "tombox.png", "fulpAwesome.gif", "fulpGuns.png", "krinkleFulp.jpg",
-"fulpGang.jpd", "fulpIGFAward.jpg", "fulpIGFAward07.jpg", "fulpSpooked.jpg", "fulpSalty.jpg", "fulpHappy.jpg", "fulpNintendo.jpg", "fulpJump.jpg", "fulpJump2.jpg",
-"fulpJump2.jpg", "fulpJump3.jpg", "fulpSip.png", "fulpCheers.jpg", "fulpPodium.jpg"];
+// gets filled later
+const fulpPics = [];
 
 let shoomOCound = 2;
 
@@ -56,6 +52,8 @@ let shoomOCound = 2;
 // - reconnects after disconnecting
 client.on('ready', () => 
 {
+	getImages();
+
 	console.log('Ready!');
 	console.log(`....................................................................................................
 	.............................................'''''''''''............................................
@@ -596,9 +594,11 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 		let min = 0;
 		let max = fulpPics.length - 1;
-		let curPic = Math.floor(Math.random() * (max - min + 1)) + min;
+		let curPic = randomFromArray();
+		console.log("THE PIC");
+		console.log(curPic);
 
-		message.channel.send(fulpPics[curPic], {file: "pics/" + fulpPics[curPic]});
+		message.channel.send(curPic, {file: "pics/" + curPic});
 	}
 
 	if (command == "watching")
@@ -987,6 +987,36 @@ function unescapeHTML(str) {
         }
     });
 };
+
+function getImages()
+{
+	let dumbShit = "";
+	fs.readdir(__dirname + '/pics', function(err, files)
+	{
+		if (err)
+		{
+			console.log(err);
+		}
+		else
+		{
+			files.forEach(function(f)
+			{
+				fulpPics.push(f);
+			});
+		}
+	});
+}
+
+
+function randomFromArray()
+{
+	let thePic = Math.floor(Math.random() * fulpPics.length);
+	console.log(fulpPics[thePic]);
+	return fulpPics[thePic];
+}
+
+
+
 process.on('unhandledRejection', error => console.error(`Uncaught Promise Rejection:\n${error}`));
 
 // login to Discord with your app's token
