@@ -16,10 +16,6 @@ const sql = new SQLite('./scores.sqlite');
 //command set up
 client.commands = new Discord.Collection();
 
-for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	client.commands.set(command.name, command);
-}
 //extra shit
 const ytdl = require('ytdl-core');
 
