@@ -6,7 +6,13 @@ const cheerio = require('cheerio');
 const Discord = require('discord.js');
 // create a new Discord client
 const client = new Discord.Client();
+const https = require('https');
+const request = require('request');
 const {Util} = require('discord.js');
+
+const SQLite = require("better-sqlite3");
+const sql = new SQLite('./scores.sqlite');
+
 //command set up
 client.commands = new Discord.Collection();
 
@@ -19,18 +25,16 @@ const ytdl = require('ytdl-core');
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY} = require('./config.json')
+const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json')
 
-/* loads the secret variables that are set on the heroku site
-	when pushing to master, make sure that this stuff is uncommented!
+/*
 const prefix = process.env.prefix;
 const ownerID = process.env.ownerID;
 const token = process.env.token;
 const NGappID = process.env.NGappID;
 const NGencKey = process.env.NGencKey;
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY
- */
-// the google one is just find and replaced heheh
+*/
 
 // Music bot shit
 const YouTube = require(`simple-youtube-api`);
@@ -38,13 +42,17 @@ const youtube = new YouTube(GOOGLE_API_KEY);
 
 const queue = new Map();
 
-const fulpPics = ["tomAlienHominid.jpg", "tomBar.jpg", 
-"tomFulpExcited.jpg", "tomfulphentai.png", "tomfulppaint.jpg", "tomFulpReading.jpg", "tomFulpSquat.jpg",
+const fulpPics = ["tomAlienHominid.jpg", "tomBar.jpg", "tomFulpExcited.jpg", "tomfulphentai.jpg", "tomfulppaint.jpg", "tomFulpReading.jpg", "tomFulpSquat.jpg",
 "tomHackerman.jpg", "tomLoliPops.jpg", "tomMiddleFInger.jpg", "tomMiddleFInger2.jpg", "tomPicoDau.jpg",
-"tomPicoDay2.jpg", "tomRide.jpg", "turtleTom.jpg", "tomFulpBeer.jpeg", "tomOldSchool.jpg", "tomOldSchool2.jpg",
-"tomFrodoBoys.jpg", "tomBeardo.jpg", "fulpbowl.jpg", "fulpfrank.jpg", "fulppaint.jpg", "darkFulp.png", "fulpink.jpg", "TOMFULP.jpg"];
+"tomPicoDay2.jpg", "tomRide.jpg", "turtletom.jpg", "tomFulpBeer.jpeg", "tomOldSchool.jpg", "tomOldSchool2.jpg",
+"tomFrodoBoys.jpg", "tomBeardo.jpg", "fulpbowl.jpg", "fulpfrank.jpg", "fulppaint.jpg", "darkFulp.png", "fulpink.jpg", "tomAnime.png",
+"TOMFULP.jpg", "tomgood.jpg", "tomold.jpg", "fulpBeard.png", "fulphelp.jpg", "fulpsketchy.png", "tombox.png", "fulpAwesome.gif", "fulpGuns.png", "krinkleFulp.jpg",
+"fulpGang.jpd", "fulpIGFAward.jpg", "fulpIGFAward07.jpg", "fulpSpooked.jpg", "fulpSalty.jpg", "fulpHappy.jpg", "fulpNintendo.jpg", "fulpJump.jpg", "fulpJump2.jpg",
+"fulpJump2.jpg", "fulpJump3.jpg", "fulpSip.png", "fulpCheers.jpg", "fulpPodium.jpg"];
 
 let shoomOCound = 2;
+
+
 
 // when the client is ready, run this code
 // this event will trigger whenever your bot:
@@ -113,6 +121,33 @@ client.on('ready', () =>
 	.'.''''       ''''''''''''''''''''''''''''''''''''''  ''''''''''            ''''''''''.......'''''''`);
 	console.info("FULPTRON IS ONLINE");
 	console.info(`FulpTron is on ${client.guilds.size} servers!`);
+	console.info(client.guilds.map(g => g.name).join("\n"));
+
+	const table = sql.prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'scores';").get();
+	if (!table['count(*)'])
+	{
+		// If the table isn't there, create it and setup the database correctly.
+		sql.prepare("CREATE TABLE scores (id TEXT PRIMARY KEY, user TEXT, guild TEXT, points INTEGER, level INTEGER);").run();
+		// Ensure that the "id" row is always unique and indexed.
+		sql.prepare("CREATE UNIQUE INDEX idx_scores_id ON scores (id);").run();
+		sql.pragma("synchronous = 1");
+		sql.pragma("journal_mode = wal");
+	  }
+	 
+	  // And then we have two prepared statements to get and set the score data.
+	  client.getScore = sql.prepare("SELECT * FROM scores WHERE user = ? AND guild = ?");
+	  client.setScore = sql.prepare("INSERT OR REPLACE INTO scores (id, user, guild, points, level) VALUES (@id, @user, @guild, @points, @level);");
+});
+
+client.on('guildMemberAdd', async member =>
+{
+	// code specific to the Flash Holes server
+	if (member.guild.id == 283807027720093697)
+	{
+		let curRole = member.guild.roles.find("name", "Flash Hole");
+			
+		member.addRole(curRole);
+	}
 });
 
 client.on('message', async message => 
@@ -148,7 +183,7 @@ client.on('message', async message =>
 	}*/
 
 	if(message.content.toLowerCase() === "monster mashing"){
-		message.reply("Did someone say M0NSTER MASHING!?\n\nhttps://www.newgrounds.com/portal/view/707498");
+		message.reply("Did someone say M0NSTER MASHING!?\nhttps://www.newgrounds.com/portal/view/707498");
 	}
 
 	//IF IT DOESNT START WITH "FULP" then IT DONT REGISTER PAST THIS POINT
@@ -168,6 +203,10 @@ client.on('message', async message =>
 	if (command == 'shame')
 	{
 		message.channel.send('**SHAAAAAME**');
+	}
+
+	if(command == 'die'){
+		message.channel.send(`(＾A＾)  ̿ ̿'̿'\̵͇̿̿\з`);
 	}
 
 	if (command == 'help')
@@ -268,13 +307,14 @@ ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
 		if (!message.member.voiceChannel) return message.channel.send('You are not in a voice channel!');
 		if (!serverQueue) return message.channel.send('There is nothing playing.');
 		if (!args[0]) return message.channel.send(`The current volume is: **${serverQueue.volume}**`);
+		if (args[0] > 200) return message.channel.send('pls do not use FulpTron for evil (max volume is 200)');
 		serverQueue.volume = args[0];
 		serverQueue.connection.dispatcher.setVolumeLogarithmic(args[0] / 100);
 		return message.channel.send(`I set the volume to: **${args[0]}**`);
 	} else if (command === 'np' || command === 'nowplaying') {
 		if (!serverQueue) return message.channel.send('There is nothing playing.');
 		return message.channel.send(`🎶 Now playing: **${serverQueue.songs[0].title}**`);
-	} else if (command === 'queue') {
+	} else if (command === 'queue' || command === 'q') {
 		if (!serverQueue) return message.channel.send('There is nothing playing.');
 		return message.channel.send(`
 __**Song queue:**__
@@ -303,7 +343,12 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 	// IF YOU WANT TO USE EZ VARIABLES AND SHIT
 	if (command == 'server') 
 	{
-		message.channel.send(`This server's name is: ${message.guild.name}\nTotal members: ${message.guild.memberCount}\nServer Region: ${message.guild.region}`);
+		message.channel.send(`This server's name is: ${message.guild.name}
+Total members: ${message.guild.memberCount}
+Server Region: ${message.guild.region}
+		
+FulpTron joined this server at: ${message.guild.joinedAt}
+The Owner is: ${message.guild.owner.user.username}`);
 	}
 
 	if (command == 'kick')
@@ -358,6 +403,118 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		let sec = Math.floor(seconds);
 		let uptime = `${hours} hours, ${minutes} minutes and ${sec} seconds`;
 		message.reply("Current uptime is : " + uptime);
+	}
+
+	if (command == "points")
+	{
+		let score = client.getScore.get(message.author.id, message.guild.id);
+		if (!score)
+		{
+			score = {id: `${message.guild.id}-${message.author.id}`, user: message.author.id, guild: message.guild.id, points: 0, level: 1 };
+		}
+		score.points++;
+		
+		const curLevel = Math.floor(0.1 * Math.sqrt(score.points));
+		if(score.level < curLevel) 
+		{
+		  score.level++;
+		  message.reply(`You've leveled up to level **${curLevel}**! Ain't that dandy?`);
+		}
+
+		console.log(`level status: ${curLevel} / ${score.level}`);
+
+		client.setScore.run(score);
+		console.log(score);
+	}
+
+	if (command == "picarto")
+	{
+		let username = args[0];
+		let url = `https://api.picarto.tv/v1/channel/name/${username}`;
+
+		https.get(url, (resp) => 
+		{
+			let data = '';
+
+			// A chunk of data has been recieved.
+			resp.on('data', (chunk) => {
+			  data += chunk;
+			});
+
+			resp.on('end', () => {
+				console.log(JSON.parse(data));
+				JSON.parse(data, (key, value) =>
+				{
+					if (key == "online")
+					{
+						if (value)
+						{
+							message.channel.send(`${username} is streaming!`)
+						}
+						else
+							message.channel.send(`${username} is not streaming :(`)
+					}
+				});
+
+			  });
+		});
+
+	}
+
+
+	if (command == "quiz")
+	{
+		// https://opentdb.com/api.php?amount=1
+
+		let url = `https://opentdb.com/api.php?amount=1`;
+
+
+
+		https.get(url, (resp) => 
+		{
+			let data = '';
+
+			// A chunk of data has been recieved.
+			resp.on('data', (chunk) => {
+			  data += chunk;
+			});
+
+			resp.on('end', () => {
+				let theQuiz = JSON.parse(data).results[0];
+				console.log(JSON.parse(data).results[0])
+
+				let messageSending = theQuiz.category + "\n" + unescapeHTML(theQuiz.question);
+
+				let answerArray = theQuiz.incorrect_answers;
+				let correctAnswerPos = Math.floor(Math.random() * (theQuiz.incorrect_answers.length + 1));
+				console.log("Answer is " + correctAnswerPos);
+				answerArray.splice(correctAnswerPos, 0, theQuiz.correct_answer)
+
+				for (let a = 0; a < answerArray.length; a++)
+				{
+					messageSending += "\n" + (a + 1) + ". " + answerArray[a];
+				}
+
+				message.channel.send(messageSending).then(() =>
+				{
+					message.channel.awaitMessages(mess => mess.content.startsWith(correctAnswerPos + 1), {
+						max: 1,
+						time: 20000,
+						errors: ['time'],
+					  })
+					  .then((collected) => {
+						  message.reply(`You got the right answer i think, ${theQuiz.correct_answer}`);
+						})
+						.catch(() => {
+						  message.channel.send(`Ran outta time, the correct answer was ${(correctAnswerPos + 1) + ". " + theQuiz.correct_answer}`);
+						});
+				});
+
+// message.channel.awaitMessages(message2 => message2.content > 0 && message2.content < 11, {
+
+			  });
+		});
+
 	}
 
 	//Cam you do it
@@ -485,6 +642,8 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		let text = args.slice(0).join(" ");
 		message.delete();
 		message.channel.send(text);
+		
+		console.log(message.author.username + " says: " + text);
 	}
 
 	if (command == 'roll')
@@ -559,6 +718,8 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 	if (command == "ngscrape")
 	{
 
+		return message.channel.send("woops this command is busted right now sorry lolol");
+
 		let usr = args[0];
 
 		if (usr === undefined)
@@ -587,23 +748,41 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 			.then(($) => {
 				let ngInfo = $('.user-header').text();
 				let ngArray = ngInfo.split("\n");
-				
-				// NOTE This needs  alot of cleaning up. Currently the ngArray just slices out the first few bits, and the embed doesn't account
-				// for if the user doesn't have a certain submission type, so currrently the embed is commented out
-				let listOfShit = "";
 
-				for (i = 0; i < ngArray.length; i++)
+				let ngInfo2 = $('.stats-general').text();
+				let ngArray2 = ngInfo2.split("\n");
+
+				infoClean(ngArray);
+				infoClean(ngArray2);
+
+				function infoClean(curList)
 				{
-					if (ngArray[i] != "" && ngArray[i] != " " && ngArray[i] != "View Profile" && ngArray[i] != `${usr} `)
+					// NOTE This needs  alot of cleaning up. Currently the ngArray just slices out the first few bits, and the embed doesn't account
+					// for if the user doesn't have a certain submission type, so currrently the embed is commented out
+					let listOfShit = "";
+					let secondArray = curList;
+
+					for (i = 0; i < curList.length; i++)
 					{
-						listOfShit += ngArray[i + 1];
-						listOfShit += ` ${ngArray[i]}\n`;
-						i += 1;
+						if (curList[i] != "" && curList[i] != " " && curList[i] != "View Profile" && curList[i] != `${usr} ` && curList[i] != "\n")
+						{
+							listOfShit += curList[i + 1];
+							listOfShit += ` ${curList[i]}\n`;
+
+							secondArray.push(curList[i + 1]);
+							secondArray.push(curList[i]);
+
+							i += 1;
+							
+						}
 					}
-				}
 				
-				embed.addField(`Submission stats`, `${listOfShit}`, true);
-				embed.addField(`General Stats`, $('.stats-general').text(), true)
+					console.log("CLEANED ARRAY");
+					console.log(secondArray);
+
+					embed.addField(`Submission stats`, `${listOfShit}`, true);
+
+				}
 
 				message.channel.send({embed});
 				// message.channel.send($('.stats-general').text());
@@ -613,6 +792,69 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 			  message.channel.send(`an error occured because <@${ownerID}> is a fukken dumbass` );
 			});
 		
+	}
+
+	if (command == "nglogin")
+	{
+
+		
+		var inputData = {
+			"app_id": NGappID,
+			"debug": true,
+			"call": {
+				"component": "App.startSession",
+				"parameters": {},
+			}
+		};
+	
+		request.post(
+			'https://www.newgrounds.io/gateway_v3.php',
+			{ form: {input: JSON.stringify(inputData)} },
+			function (error, response, body) {
+				console.log("BODY")
+				//console.log(body);
+				let parsedResp = JSON.parse(response.body);
+				console.log(JSON.parse(response.body));
+				message.author.send(`FulpTron will NOT have access to your Newgrounds password!!!\nFeel free to check the source code using the fulpSource command\nClick this link to sign into Newgrounds: ${parsedResp.result.data.session.passport_url}`)
+			}
+		);
+	}
+
+	if (command == "mmscores")
+	{
+
+		var inputData = {
+			"app_id": MMappID,
+			"debug": false,
+			"call": {
+				"component": "ScoreBoard.getScores",
+				"parameters": 
+				{
+					"id": 8004,
+					"limit": 20,
+					"period": "A"
+				},
+			}
+		};
+	
+		request.post(
+			'https://www.newgrounds.io/gateway_v3.php',
+			{ form: {input: JSON.stringify(inputData)} },
+			function (error, response, body) {
+				console.log("RESPONSE")
+				let parsedResp = JSON.parse(response.body);
+				console.log(parsedResp);
+				
+				let scorePos = 0;
+
+				message.channel.send("MONSTER MASHING SCOREBOARD:\n" + parsedResp.result.data.scores.map(s => {
+					scorePos += 1;
+					return scorePos + ". " + s.user.name + "---" + s.formatted_value;
+				}).join("\n"));
+
+				}
+		);
+
 	}
 
 	if (command == "testerror" && message.channel.author.id == ownerID)
@@ -644,6 +886,8 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 	}
  	*/
 });
+
+
 
 function clean(text)
 {
@@ -715,7 +959,38 @@ function play(guild, song) {
 
 	serverQueue.textChannel.send(`🎶 Start playing: **${song.title}**`);
 }
+var htmlEntities = {
+    nbsp: ' ',
+    cent: '¢',
+    pound: '£',
+    yen: '¥',
+    euro: '€',
+    copy: '©',
+    reg: '®',
+    lt: '<',
+    gt: '>',
+    quot: '"',
+    amp: '&',
+    apos: '\''
+};
 
+function unescapeHTML(str) {
+    return str.replace(/\&([^;]+);/g, function (entity, entityCode) {
+        var match;
+
+        if (entityCode in htmlEntities) {
+            return htmlEntities[entityCode];
+            /*eslint no-cond-assign: 0*/
+        } else if (match = entityCode.match(/^#x([\da-fA-F]+)$/)) {
+            return String.fromCharCode(parseInt(match[1], 16));
+            /*eslint no-cond-assign: 0*/
+        } else if (match = entityCode.match(/^#(\d+)$/)) {
+            return String.fromCharCode(~~match[1]);
+        } else {
+            return entity;
+        }
+    });
+};
 process.on('unhandledRejection', error => console.error(`Uncaught Promise Rejection:\n${error}`));
 
 // login to Discord with your app's token
