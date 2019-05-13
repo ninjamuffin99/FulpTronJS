@@ -990,7 +990,6 @@ function unescapeHTML(str) {
 
 function getImages()
 {
-	let dumbShit = "";
 	fs.readdir(__dirname + '/pics', function(err, files)
 	{
 		if (err)
