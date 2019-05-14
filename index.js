@@ -52,7 +52,7 @@ let shoomOCound = 2;
 // - reconnects after disconnecting
 client.on('ready', () => 
 {
-	getImages();
+	getImages('fulp');
 
 	console.log('Ready!');
 	console.log(`....................................................................................................
@@ -988,9 +988,9 @@ function unescapeHTML(str) {
     });
 };
 
-function getImages()
+function getImages(personFolder)
 {
-	fs.readdir(__dirname + '/pics', function(err, files)
+	fs.readdir(__dirname + '/pics/' + personFolder, function(err, files)
 	{
 		if (err)
 		{
