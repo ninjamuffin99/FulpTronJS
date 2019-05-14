@@ -17,8 +17,6 @@ const sql = new SQLite('./scores.sqlite');
 const GoogleSpreadsheet = require('google-spreadsheet');
 const {promisify} = require('util');
 
-const gCreds = require('./fulpsSecret.json');
-
 //command set up
 client.commands = new Discord.Collection();
 
@@ -28,6 +26,7 @@ const ytdl = require('ytdl-core');
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
 const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json')
+const gCreds = require('./config.json');
 
 /*
 const prefix = process.env.prefix;
