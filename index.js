@@ -14,6 +14,11 @@ const {Util} = require('discord.js');
 const SQLite = require("better-sqlite3");
 const sql = new SQLite('./scores.sqlite');
 
+const GoogleSpreadsheet = require('google-spreadsheet');
+const {promisify} = require('util');
+
+const gCreds = require('./fulpsSecret.json');
+
 //command set up
 client.commands = new Discord.Collection();
 
@@ -589,7 +594,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 	{
 		if (args[0] == "luis")
 		{
-			return message.channel.send("luis.jpg", {file: "pics/" + "luis.jpg"});
+			return message.channel.send("luis.jpg", {file: "pics/luis/" + "luis.jpg"});
 		}
 
 		let min = 0;
@@ -598,7 +603,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 		console.log("THE PIC");
 		console.log(curPic);
 
-		message.channel.send(curPic, {file: "pics/" + curPic});
+		message.channel.send(curPic, {file: "pics/fulp/" + curPic});
 	}
 
 	if (command == "watching")
@@ -792,8 +797,13 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 	if (command == "nglogin")
 	{
+		const doc = new GoogleSpreadsheet('10tGovoaOyTl1wBB0DUIu8Txa8Atk_5cTMnxF00Blt5Y');
+		await promisify(doc.useServiceAccountAuth)(gCreds);
+		const info = await promisify(doc.getInfo)();
 
-		
+		const sheet = info.worksheets[0];
+		console.log(`Title: ${sheet.title}, Rows: ${sheet.rowCount}`);
+
 		var inputData = {
 			"app_id": NGappID,
 			"debug": true,

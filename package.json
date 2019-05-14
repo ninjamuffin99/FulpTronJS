@@ -9,6 +9,7 @@
     "cheerio": "^1.0.0-rc.2",
     "discord.js": "^11.3.2",
     "ffmpeg-binaries": "^3.2.2-3",
+    "google-spreadsheet": "^2.0.7",
     "node-gyp": "^3.8.0",
     "node-opus": "^0.3.0",
     "rebuild": "^0.1.2",
