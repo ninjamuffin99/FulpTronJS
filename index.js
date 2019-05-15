@@ -27,7 +27,7 @@ const ytdl = require('ytdl-core');
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
 // const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json')
 
-const gCreds = require('./config.json');
+const gCreds = require('./fulpGdrive.json');
 
 const prefix = process.env.prefix;
 const ownerID = process.env.ownerID;
