@@ -1,5 +1,6 @@
 ﻿const fs = require('fs');
 const rp = require('request-promise');
+const path = require('path');
 const cheerio = require('cheerio');
 
 // require the discord.js module
@@ -13,15 +14,12 @@ const {Util} = require('discord.js');
 const SQLite = require("better-sqlite3");
 const sql = new SQLite('./scores.sqlite');
 
+const GoogleSpreadsheet = require('google-spreadsheet');
+const {promisify} = require('util');
+
 //command set up
 client.commands = new Discord.Collection();
 
-const commandFiles = fs.readdirSync('./commands');
-
-for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	client.commands.set(command.name, command);
-}
 //extra shit
 const ytdl = require('ytdl-core');
 
@@ -29,6 +27,7 @@ const ytdl = require('ytdl-core');
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
 // const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json')
 
+const gCreds = require('./config.json');
 
 const prefix = process.env.prefix;
 const ownerID = process.env.ownerID;
@@ -38,6 +37,9 @@ const NGencKey = process.env.NGencKey;
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 const MMappID = process.env.MMappID;
 
+gCreds.private_key_id = process.env.private_key_id;
+gCreds.private_key = process.env.private_key;
+
 
 // Music bot shit
 const YouTube = require(`simple-youtube-api`);
@@ -45,13 +47,8 @@ const youtube = new YouTube(GOOGLE_API_KEY);
 
 const queue = new Map();
 
-const fulpPics = ["tomAlienHominid.jpg", "tomBar.jpg", "tomFulpExcited.jpg", "tomfulphentai.jpg", "tomfulppaint.jpg", "tomFulpReading.jpg", "tomFulpSquat.jpg",
-"tomHackerman.jpg", "tomLoliPops.jpg", "tomMiddleFInger.jpg", "tomMiddleFInger2.jpg", "tomPicoDau.jpg",
-"tomPicoDay2.jpg", "tomRide.jpg", "turtletom.jpg", "tomFulpBeer.jpeg", "tomOldSchool.jpg", "tomOldSchool2.jpg",
-"tomFrodoBoys.jpg", "tomBeardo.jpg", "fulpbowl.jpg", "fulpfrank.jpg", "fulppaint.jpg", "darkFulp.png", "fulpink.jpg", "tomAnime.png",
-"TOMFULP.jpg", "tomgood.jpg", "tomold.jpg", "fulpBeard.png", "fulphelp.jpg", "fulpsketchy.png", "tombox.png", "fulpAwesome.gif", "fulpGuns.png", "krinkleFulp.jpg",
-"fulpGang.jpd", "fulpIGFAward.jpg", "fulpIGFAward07.jpg", "fulpSpooked.jpg", "fulpSalty.jpg", "fulpHappy.jpg", "fulpNintendo.jpg", "fulpJump.jpg", "fulpJump2.jpg",
-"fulpJump2.jpg", "fulpJump3.jpg", "fulpSip.png", "fulpCheers.jpg", "fulpPodium.jpg"];
+// gets filled later
+const fulpPics = [];
 
 let shoomOCound = 2;
 
@@ -63,6 +60,8 @@ let shoomOCound = 2;
 // - reconnects after disconnecting
 client.on('ready', () => 
 {
+	getImages('fulp');
+
 	console.log('Ready!');
 	console.log(`....................................................................................................
 	.............................................'''''''''''............................................
@@ -598,14 +597,16 @@ The Owner is: ${message.guild.owner.user.username}`);
 	{
 		if (args[0] == "luis")
 		{
-			return message.channel.send("luis.jpg", {file: "pics/" + "luis.jpg"});
+			return message.channel.send("luis.jpg", {file: "pics/luis/" + "luis.jpg"});
 		}
 
 		let min = 0;
 		let max = fulpPics.length - 1;
-		let curPic = Math.floor(Math.random() * (max - min + 1)) + min;
+		let curPic = randomFromArray();
+		console.log("THE PIC");
+		console.log(curPic);
 
-		message.channel.send(fulpPics[curPic], {file: "pics/" + fulpPics[curPic]});
+		message.channel.send(curPic, {file: "pics/fulp/" + curPic});
 	}
 
 	if (command == "watching")
@@ -799,8 +800,13 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 	if (command == "nglogin")
 	{
+		const doc = new GoogleSpreadsheet('10tGovoaOyTl1wBB0DUIu8Txa8Atk_5cTMnxF00Blt5Y');
+		await promisify(doc.useServiceAccountAuth)(gCreds);
+		const info = await promisify(doc.getInfo)();
 
-		
+		const sheet = info.worksheets[0];
+		console.log(`Title: ${sheet.title}, Rows: ${sheet.rowCount}`);
+
 		var inputData = {
 			"app_id": NGappID,
 			"debug": true,
@@ -1018,6 +1024,35 @@ function unescapeHTML(str) {
         }
     });
 };
+
+function getImages(personFolder)
+{
+	fs.readdir(__dirname + '/pics/' + personFolder, function(err, files)
+	{
+		if (err)
+		{
+			console.log(err);
+		}
+		else
+		{
+			files.forEach(function(f)
+			{
+				fulpPics.push(f);
+			});
+		}
+	});
+}
+
+
+function randomFromArray()
+{
+	let thePic = Math.floor(Math.random() * fulpPics.length);
+	console.log(fulpPics[thePic]);
+	return fulpPics[thePic];
+}
+
+
+
 process.on('unhandledRejection', error => console.error(`Uncaught Promise Rejection:\n${error}`));
 
 // login to Discord with your app's token
