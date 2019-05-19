@@ -160,12 +160,16 @@ client.on('message', async message =>
 	{
 		if (message.attachments.size > 0 || message.content.startsWith("https://www.newgrounds.com/art/view"))
 		{
-			message.react(message.guild.emojis.find('name', "0stars"))
-			.then(react => message.react(message.guild.emojis.find('name', "1star")))
-			.then(react => message.react(message.guild.emojis.find('name', "2stars")))
-			.then(react => 	message.react(message.guild.emojis.find('name', "3stars")))
-			.then(react => message.react(message.guild.emojis.find('name', "4stars")))
-			.then(react => message.react(message.guild.emojis.find('name', "5stars")));
+			let picoSuffix = "";
+			if (Math.random() > 0.5)
+				picoSuffix = "pico"
+
+			message.react(message.guild.emojis.find('name', "0stars" + picoSuffix))
+			.then(react => message.react(message.guild.emojis.find('name', "1star" + picoSuffix)))
+			.then(react => message.react(message.guild.emojis.find('name', "2stars" + picoSuffix)))
+			.then(react => 	message.react(message.guild.emojis.find('name', "3stars" + picoSuffix)))
+			.then(react => message.react(message.guild.emojis.find('name', "4stars" + picoSuffix)))
+			.then(react => message.react(message.guild.emojis.find('name', "5stars" + picoSuffix)));
 		}
 			
 	}
