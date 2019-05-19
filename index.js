@@ -156,7 +156,7 @@ client.on('message', async message =>
 {
 
 	//RATING EMOTES ON NG SERVER
-	if (message.guild.id == 578313756015329281 && message.channel.id == 578313839641231372)
+	if (message.guild.id == 578313756015329281 && (message.channel.id == 578313839641231372 || message.channel.id == 578313930456170497))
 	{
 		if (message.attachments.size > 0 || message.content.startsWith("https://www.newgrounds.com/art/view"))
 		{
