@@ -161,9 +161,7 @@ client.on('message', async message =>
 		if (message.attachments.size > 0 || message.content.startsWith("https://www.newgrounds.com/art/view"))
 		{
 			message.react(message.guild.emojis.find('name', "0stars"))
-			.then(function(react)
-			{
-				message.react(message.guild.emojis.find('name', "1star"))})
+			.then(react => message.react(message.guild.emojis.find('name', "1star")))
 			.then(react => message.react(message.guild.emojis.find('name', "2stars")))
 			.then(react => 	message.react(message.guild.emojis.find('name', "3stars")))
 			.then(react => message.react(message.guild.emojis.find('name', "4stars")))
