@@ -25,10 +25,10 @@ const ytdl = require('ytdl-core');
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-// const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json')
+const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json')
 
 const gCreds = require('./fulpGdrive.json');
-
+/*
 const prefix = process.env.prefix;
 const ownerID = process.env.ownerID;
 const token = process.env.token;
@@ -39,7 +39,7 @@ const MMappID = process.env.MMappID;
 
 gCreds.private_key_id = process.env.private_key_id;
 gCreds.private_key = process.env.private_key;
-
+*/
 
 // Music bot shit
 const YouTube = require(`simple-youtube-api`);
@@ -154,6 +154,25 @@ client.on('guildMemberAdd', async member =>
 
 client.on('message', async message => 
 {
+
+	//RATING EMOTES ON NG SERVER
+	if (message.guild.id == 408180906453499904 && message.channel.id == 480169216121503744)
+	{
+		if (message.attachments.size > 0 || message.content.startsWith("https://www.newgrounds.com/art/view"))
+		{
+			message.react(message.guild.emojis.find('name', "0stars"))
+			.then(function(react)
+			{
+				message.react(message.guild.emojis.find('name', "1star"))})
+			.then(react => message.react(message.guild.emojis.find('name', "2stars")))
+			.then(react => 	message.react(message.guild.emojis.find('name', "3stars")))
+			.then(react => message.react(message.guild.emojis.find('name', "4stars")))
+			.then(react => message.react(message.guild.emojis.find('name', "5stars")));
+		}
+			
+	}
+
+
 	if (message.content.toLowerCase() === "are we talking about tom fulp?" || message.content.toLowerCase() === "are we talking about tom fulp?" )
 	{
 		// message.reply basically the same as message.channel.send, but @'s the person who sent it
