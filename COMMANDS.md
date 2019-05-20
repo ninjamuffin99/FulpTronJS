@@ -21,6 +21,7 @@ parameters will be indicated in <> these brackets when required. If there's mult
 - `fulpSay <anything>` make fulptron say funny things ahah epic
 - `fulpRoll <min number> <max number>` pretty much the same shit as every other bot with a dice command lol. If you dont input any number it rolls a D20
 - `fulpPic` gets a random Tom Fulp pic from my collection
+- `fulpDogl` gets a random [Dogl](https://doggenhausen.newgrounds.com) pic from my collection (using `fulpPic dogl` also works)
 - 'fulpQuiz' Asks a multiple choice question (shoutout to BrenBot for the inspiration lololol)
 - `fulpSHOOM` **SHOOOOOOOOOOOOOOOOOOOOOOOOOOOM**
 - `fulpNGFollow <newgrounds user>` gives a shoutout to whatever Newgrounds user you input!
