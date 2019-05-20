@@ -620,7 +620,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 		message.reply(`Hello ${message.author.username}, I see you're a ${age} year old ${sex} from ${location}. Wanna date?`);
 	}
 
-	if (command == 'dogl')
+	if (command == 'dogl' || command == 'dogg')
 	{
 		
 
