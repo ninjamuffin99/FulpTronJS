@@ -60,8 +60,7 @@ let shoomOCound = 2;
 // - reconnects after disconnecting
 client.on('ready', () => 
 {
-	getImages('fulp');
-	getImages('dogl');
+	getImages('fulp').then(whatever => getImages('dogl'));
 
 	console.log('Ready!');
 	console.log(`....................................................................................................
@@ -135,7 +134,9 @@ client.on('ready', () =>
 		sql.prepare("CREATE UNIQUE INDEX idx_scores_id ON scores (id);").run();
 		sql.pragma("synchronous = 1");
 		sql.pragma("journal_mode = wal");
-	  }
+		}
+		
+		
 	 
 	  // And then we have two prepared statements to get and set the score data.
 	  client.getScore = sql.prepare("SELECT * FROM scores WHERE user = ? AND guild = ?");
@@ -617,6 +618,8 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 	if (command == 'dogl')
 	{
+		
+
 		let curPic = randomFromArray(1);
 		console.log("THE PIC");
 		console.log(curPic);
@@ -1090,8 +1093,6 @@ function randomFromArray(arr)
 	console.log(fulpPics[arr][thePic]);
 	return fulpPics[arr][thePic];
 }
-
-
 
 process.on('unhandledRejection', error => console.error(`Uncaught Promise Rejection:\n${error}`));
 
