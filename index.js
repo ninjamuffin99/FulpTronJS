@@ -52,7 +52,11 @@ const fulpPics = [];
 
 let shoomOCound = 2;
 
-
+async function prepPics()
+{
+	await getImages('fulp');
+	await getImages('dogl');
+}
 
 // when the client is ready, run this code
 // this event will trigger whenever your bot:
@@ -60,7 +64,7 @@ let shoomOCound = 2;
 // - reconnects after disconnecting
 client.on('ready', () => 
 {
-	getImages('fulp').then(whatever => getImages('dogl'));
+	prepPics();
 
 	console.log('Ready!');
 	console.log(`....................................................................................................
