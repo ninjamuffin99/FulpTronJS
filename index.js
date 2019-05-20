@@ -631,6 +631,15 @@ The Owner is: ${message.guild.owner.user.username}`);
 			return message.channel.send("luis.jpg", {file: "pics/luis/" + "luis.jpg"});
 		}
 
+		if (args[0] == 'dogl')
+		{
+			let curPic = randomFromArray(1);
+			console.log("THE PIC");
+			console.log(curPic);
+
+			return message.channel.send(curPic, {file: "pics/dogl/" + curPic});
+		}
+
 		let curPic = randomFromArray(0);
 		console.log("THE PIC");
 		console.log(curPic);
