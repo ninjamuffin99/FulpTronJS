@@ -61,6 +61,7 @@ let shoomOCound = 2;
 client.on('ready', () => 
 {
 	getImages('fulp');
+	getImages('dogl');
 
 	console.log('Ready!');
 	console.log(`....................................................................................................
@@ -614,6 +615,15 @@ The Owner is: ${message.guild.owner.user.username}`);
 		message.reply(`Hello ${message.author.username}, I see you're a ${age} year old ${sex} from ${location}. Wanna date?`);
 	}
 
+	if (command == 'dogl')
+	{
+		let curPic = randomFromArray(1);
+		console.log("THE PIC");
+		console.log(curPic);
+
+		message.channel.send(curPic, {file: "pics/dogl/" + curPic});
+	}
+
 	if (command == `pic`)
 	{
 		if (args[0] == "luis")
@@ -621,9 +631,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 			return message.channel.send("luis.jpg", {file: "pics/luis/" + "luis.jpg"});
 		}
 
-		let min = 0;
-		let max = fulpPics.length - 1;
-		let curPic = randomFromArray();
+		let curPic = randomFromArray(0);
 		console.log("THE PIC");
 		console.log(curPic);
 
@@ -1049,27 +1057,29 @@ function unescapeHTML(str) {
 function getImages(personFolder)
 {
 	fs.readdir(__dirname + '/pics/' + personFolder, function(err, files)
-	{
+	{		
 		if (err)
 		{
 			console.log(err);
 		}
 		else
 		{
+			fulpPics.push([]);
+
 			files.forEach(function(f)
 			{
-				fulpPics.push(f);
+				fulpPics[fulpPics.length - 1].push(f);
 			});
 		}
 	});
 }
 
 
-function randomFromArray()
+function randomFromArray(arr)
 {
-	let thePic = Math.floor(Math.random() * fulpPics.length);
-	console.log(fulpPics[thePic]);
-	return fulpPics[thePic];
+	let thePic = Math.floor(Math.random() * fulpPics[arr].length);
+	console.log(fulpPics[arr][thePic]);
+	return fulpPics[arr][thePic];
 }
 
 
