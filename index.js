@@ -398,9 +398,9 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 	if (command == 'prune' || command == 'purge')
 	{
-		if (!message.member.roles.exists("name", "MOD"))
+		if (!message.member.hasPermission('MANAGE_MESSAGES'))
 		{
-			return message.channel.send("You need to be a mod to do that!");
+			return message.channel.send("You need to have the permission 'Manage Messages' enabled for one of your roles!");
 		}
 
 		const amount = parseInt(args[0]) + 1;
