@@ -271,7 +271,7 @@ client.on('message', async message =>
 		{
 			return message.channel.send('I cannot speak in this voice channel with my current permissions :(');
 		}
-		if (!message.author.permissions.has('SPEAK'))
+		if (!message.member.permissions.has('SPEAK'))
 		{
 			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
 		}
