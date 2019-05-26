@@ -842,7 +842,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 			})
 			.catch((err) => {
 			  console.log(err);
-			  message.channel.send(`an error occured because <@${ownerID}> is a fukken dumbass` );
+			  message.channel.send(`an error occured.. did you enter in an actual Newgrounds user??` );
 			});
 		
 	}
