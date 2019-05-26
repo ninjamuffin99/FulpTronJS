@@ -25,7 +25,7 @@ parameters will be indicated in <> these brackets when required. If there's mult
 - 'fulpQuiz' Asks a multiple choice question (shoutout to BrenBot for the inspiration lololol)
 - `fulpSHOOM` **SHOOOOOOOOOOOOOOOOOOOOOOOOOOOM**
 - `fulpNGFollow <newgrounds user>` gives a shoutout to whatever Newgrounds user you input!
-- `fulpNGScrape <Newgrounds user>` sends you some info about whatever Newgrounds user you input, into a nifty little Rich Embed.
+- `fulpStats <Newgrounds user>` sends you some info about whatever Newgrounds user you input, into a nifty little Rich Embed (fulpNGScrape, and fulpScrape also work).
 - `fulpSource` drops a link to the sourcecode on Github
 - `fulpEval` command to execute any piece of javascript, on the official FulpTron, only I can use it heheheh
 

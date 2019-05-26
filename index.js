@@ -767,7 +767,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 	// cheerio.js scraping help and info:
 	// https://codeburst.io/an-introduction-to-web-scraping-with-node-js-1045b55c63f7
 	// also check out the cheerio.js github and website
-	if (command == "ngscrape")
+	if (command == "ngscrape" || command == 'scrape' || command == 'stats')
 	{
 
 		//return message.channel.send("woops this command is busted right now sorry lolol");
