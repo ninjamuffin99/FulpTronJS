@@ -828,8 +828,6 @@ The Owner is: ${message.guild.owner.user.username}`);
 					listOfShit[listOfShit.length - 1] = listOfShit[listOfShit.length - 1].replace("Medals", " Medals");
 					listOfShit[listOfShit.length - 1] = listOfShit[listOfShit.length - 1].replace("Supporter", " Supporter");
 					let trophMedSupps = listOfShit[listOfShit.length - 1].split(" ");
-					console.log("TROPHY SHIT");
-					console.log(trophMedSupps);
 					listOfShit.pop();
 
 					trophMedSupps.forEach(function(shit)
@@ -850,7 +848,6 @@ The Owner is: ${message.guild.owner.user.username}`);
 						
 					});
 						
-					console.log("BULLSHIT");
 					for (var i=0; i < listOfShit.length; i++)
 					{
 						let dumb = listOfShit[i].trim();
@@ -861,11 +858,6 @@ The Owner is: ${message.guild.owner.user.username}`);
 							secondArray.push(dumb);
 					}
 
-					//secondArray.trim();
-					//secondArray.replace('/t', "");
-				
-					console.log("CLEANED ARRAY");
-					console.log(secondArray);
 					let splitShit = secondArray.join('\n');
 
 					embed.addField(`Submission stats`, `${splitShit}`, true);
