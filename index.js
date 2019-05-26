@@ -25,9 +25,10 @@ const ytdl = require('ytdl-core');
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json')
+const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json');
 
-const gCreds = require('./fulpGdrive.json');
+//gCreds = require('./fulpGdrive.json');
+const gCreds = require('./config.json');
 /*
 const prefix = process.env.prefix;
 const ownerID = process.env.ownerID;
@@ -40,6 +41,8 @@ const MMappID = process.env.MMappID;
 gCreds.private_key_id = process.env.private_key_id;
 gCreds.private_key = process.env.private_key;
 */
+
+
 
 // Music bot shit
 const YouTube = require(`simple-youtube-api`);
@@ -767,7 +770,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 	if (command == "ngscrape")
 	{
 
-		return message.channel.send("woops this command is busted right now sorry lolol");
+		//return message.channel.send("woops this command is busted right now sorry lolol");
 
 		let usr = args[0];
 
@@ -808,28 +811,29 @@ The Owner is: ${message.guild.owner.user.username}`);
 				{
 					// NOTE This needs  alot of cleaning up. Currently the ngArray just slices out the first few bits, and the embed doesn't account
 					// for if the user doesn't have a certain submission type, so currrently the embed is commented out
-					let listOfShit = "";
-					let secondArray = curList;
+					let listOfShit = curList;
+					let secondArray = [];
 
-					for (i = 0; i < curList.length; i++)
+					console.log("BULLSHIT");
+					for (var i=0; i < listOfShit.length; i++)
 					{
-						if (curList[i] != "" && curList[i] != " " && curList[i] != "View Profile" && curList[i] != `${usr} ` && curList[i] != "\n")
-						{
-							listOfShit += curList[i + 1];
-							listOfShit += ` ${curList[i]}\n`;
-
-							secondArray.push(curList[i + 1]);
-							secondArray.push(curList[i]);
-
-							i += 1;
-							
-						}
+						let dumb = listOfShit[i].trim();
+						dumb = dumb.replace(/\t/g, "");
+						dumb = dumb.replace(/:/g, ": ");
+						dumb = dumb.replace("Medals", " Medals");
+						dumb = dumb.replace("Supporter", " Supporter");
+						if (dumb.length > 0)
+							secondArray.push(dumb);
 					}
+
+					//secondArray.trim();
+					//secondArray.replace('/t', "");
 				
 					console.log("CLEANED ARRAY");
 					console.log(secondArray);
+					let splitShit = secondArray.join('\n');
 
-					embed.addField(`Submission stats`, `${listOfShit}`, true);
+					embed.addField(`Submission stats`, `${splitShit}`, true);
 
 				}
 
@@ -851,6 +855,12 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 		const sheet = info.worksheets[0];
 		console.log(`Title: ${sheet.title}, Rows: ${sheet.rowCount}`);
+
+		const Rows = await promisify(sheet.getRows)({
+				offset: 1
+		});
+
+		console.log(Rows);
 
 		var inputData = {
 			"app_id": NGappID,
