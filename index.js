@@ -952,12 +952,12 @@ The Owner is: ${message.guild.owner.user.username}`);
 					scorePos += 1;
 					if (scorePos <= 10)
 					{
-						field1.push(`${scorePos}. [${s.user.name}](https://www.${s.user.name}.newgrounds.com) --- ${s.formatted_value}`);
+						field1.push(`${scorePos}. [${s.user.name}](https://${s.user.name}.newgrounds.com) --- ${s.formatted_value}`);
 					}
 					else
-						field2.push(`${scorePos}. [${s.user.name}](https://www.${s.user.name}.newgrounds.com) --- ${s.formatted_value}`);
+						field2.push(`${scorePos}. [${s.user.name}](https://${s.user.name}.newgrounds.com) --- ${s.formatted_value}`);
 
-					return `${scorePos}. [${s.user.name}](https://www.${s.user.name}.newgrounds.com) --- ${s.formatted_value}`;
+					return `${scorePos}. [${s.user.name}](https://${s.user.name}.newgrounds.com) --- ${s.formatted_value}`;
 				});
 
 				console.log(listOfPeople.length);
