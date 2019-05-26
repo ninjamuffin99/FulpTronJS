@@ -16,7 +16,7 @@ const erlpack = (function findErlpack() {
 const WebSocket = (function findWebSocket() {
   if (browser) return window.WebSocket; // eslint-disable-line no-undef
   try {
-    return require('uws');
+    return require('@discordjs/uws');
   } catch (e) {
     return require('ws');
   }
@@ -59,7 +59,7 @@ class WebSocketConnection extends EventEmitter {
 
     /**
      * The current status of the client
-     * @type {number}
+     * @type {Status}
      */
     this.status = Constants.Status.IDLE;
 
@@ -212,7 +212,7 @@ class WebSocketConnection extends EventEmitter {
    */
   _send(data) {
     if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
-      this.debug(`Tried to send packet ${data} but no WebSocket is available!`);
+      this.debug(`Tried to send packet ${JSON.stringify(data)} but no WebSocket is available!`);
       return;
     }
     this.ws.send(this.pack(data));
@@ -225,7 +225,7 @@ class WebSocketConnection extends EventEmitter {
    */
   send(data) {
     if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
-      this.debug(`Tried to send packet ${data} but no WebSocket is available!`);
+      this.debug(`Tried to send packet ${JSON.stringify(data)} but no WebSocket is available!`);
       return;
     }
     this.ratelimit.queue.push(data);
