@@ -27,9 +27,9 @@ const ytdl = require('ytdl-core');
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
 //const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json');
 
-let gCreds = require('./fulpGdrive.json');
-//let gCreds = require('./config.json');
-
+//let gCreds = require('./fulpGdrive.json');
+let gCreds = require('./config.json');
+/*
 const prefix = process.env.prefix;
 const ownerID = process.env.ownerID;
 const token = process.env.token;
@@ -40,7 +40,7 @@ const MMappID = process.env.MMappID;
 
 gCreds.private_key_id = process.env.private_key_id;
 gCreds.private_key = process.env.private_key;
-
+*/
 
 
 
@@ -814,11 +814,46 @@ The Owner is: ${message.guild.owner.user.username}`);
 					let listOfShit = curList;
 					let secondArray = [];
 
+					// CLEANS THE ARRAY
+					for (var i=0; i < listOfShit.length; i++)
+					{
+						listOfShit[i] = listOfShit[i].trim();
+						listOfShit[i] = listOfShit[i].replace(/\t/g, "");
+					}
+					listOfShit = listOfShit.filter(function(value, index, arr)
+					{
+						return value != "";
+					});
+
+					listOfShit[listOfShit.length - 1] = listOfShit[listOfShit.length - 1].replace("Medals", " Medals");
+					listOfShit[listOfShit.length - 1] = listOfShit[listOfShit.length - 1].replace("Supporter", " Supporter");
+					let trophMedSupps = listOfShit[listOfShit.length - 1].split(" ");
+					console.log("TROPHY SHIT");
+					console.log(trophMedSupps);
+					listOfShit.pop();
+
+					trophMedSupps.forEach(function(shit)
+					{
+						/*
+						if (shit.toLowerCase().trim().startsWith("supporter"))
+						{
+							console.log("CLEANED SUPP SHIT LAOSADKOASD");
+							shit.concat(trophMedSupps[trophMedSupps.length - 2]);
+							shit.concat(trophMedSupps[trophMedSupps.length - 1]);
+							trophMedSupps.pop();
+							trophMedSupps.pop();
+							listOfShit.pop();
+							listOfShit.pop();
+						}
+						*/
+						listOfShit.push(shit)
+						
+					});
+						
 					console.log("BULLSHIT");
 					for (var i=0; i < listOfShit.length; i++)
 					{
 						let dumb = listOfShit[i].trim();
-						dumb = dumb.replace(/\t/g, "");
 						dumb = dumb.replace(/:/g, ": ");
 						dumb = dumb.replace("Medals", " Medals");
 						dumb = dumb.replace("Supporter", " Supporter");
