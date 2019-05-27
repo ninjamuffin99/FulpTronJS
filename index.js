@@ -35,8 +35,10 @@ const NGencKey = process.env.NGencKey;
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 const MMappID = process.env.MMappID;
 
-gCreds.private_key_id = process.env.private_key_id.replace(/\\n/g, '\n');
+gCreds.private_key_id = process.env.private_key_id;
 gCreds.private_key = process.env.private_key;
+
+gCreds = gCreds.replace(/\\n/g, '\n');
 
 console.log(gCreds);
 
