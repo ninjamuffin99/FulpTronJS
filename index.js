@@ -232,7 +232,7 @@ client.on('message', async message =>
 	 
 	if (command == 'play' || command == 'join') 
 	{
-		return message.channel.send("WOOPS if you are reading this fulpPlay is BUSTED right now. Ur boy ninjamuffin already knows this and is tryin to fix it");
+		//return message.channel.send("WOOPS if you are reading this fulpPlay is BUSTED right now. Ur boy ninjamuffin already knows this and is tryin to fix it");
 
 		const searchString = args.slice(0).join(" ");
 		const url = args[0] ? args[0].replace(/<(.+)>/g, '$1') : '';
