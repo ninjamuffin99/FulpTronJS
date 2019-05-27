@@ -39,9 +39,9 @@ const MMappID = process.env.MMappID;
 gCreds.private_key_id = process.env.private_key_id;
 gCreds.private_key = process.env.private_key;
 
-//gCreds.private_key_id = gCreds.private_key_id.replace(new RegExp('\\n', "g"), '\n');
+gCreds.private_key = gCreds.private_key.replace(new RegExp('\\n', "g"), '\n');
 
-console.log(gCreds);
+console.log(gCreds.private_key);
 
 
 // Music bot shit
