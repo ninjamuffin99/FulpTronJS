@@ -539,7 +539,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 	//Cam you do it
 	if (command == "addrole"){
 		let role = args.slice(0).join(" ");
-		if (['BOTS', 'gay!!', 'MOD', 'Jeff', 'Admin', 'Tom Fulp', 'Developer', 'DBZ', 'OG Ando', 'NG', 'Timeout', 'BrenBot', 'Contributor', 'james'].indexOf(role) > -1)
+		if (['BOTS', 'gay!!', 'MOD', 'Jeff', 'Admin', 'Tom Fulp', 'Developer', 'DBZ', 'OG Ando', 'NG', 'Timeout', 'BrenBot', 'Contributor', 'james', 'Supporter'].indexOf(role) > -1)
 			return message.reply('Hey stop that!');
 		let curRole = message.guild.roles.find("name", role);
 
