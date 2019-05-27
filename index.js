@@ -18,7 +18,7 @@ const {promisify} = require('util');
 client.commands = new Discord.Collection();
 
 //extra shit
-const ytdl = require('ytdl-core');
+const ytdl = require('ytdl-core-discord');
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
@@ -1023,6 +1023,7 @@ async function handleVideo(video, message, voiceChannel, playlist = false) {
 			var connection = await voiceChannel.join();
 			queueConstruct.connection = connection;
 			play(message.guild, queueConstruct.songs[0]);
+			console.log(queueConstruct.songs)
 		} catch (error) {
 			console.error(`I could not join the voice channel: ${error}`);
 			queue.delete(message.guild.id);
@@ -1037,7 +1038,7 @@ async function handleVideo(video, message, voiceChannel, playlist = false) {
 	return undefined;
 }
 
-function play(guild, song) {
+async function play(guild, song) {
 	const serverQueue = queue.get(guild.id);
 
 	if (!song) {
@@ -1047,17 +1048,17 @@ function play(guild, song) {
 	}
 	console.log(serverQueue.songs);
 
-	const dispatcher = serverQueue.connection.playStream(ytdl(song.url))
+	const dispatcher = serverQueue.connection.playOpusStream(await ytdl(song.url, { filter: 'audioonly'}, { type: 'opus'}))
 		.on('end', reason => {
 			if (reason === 'Stream is not generating quickly enough.') console.log('Song ended.');
 			else console.log(reason);
 			serverQueue.songs.shift();
 			play(guild, serverQueue.songs[0]);
 		})
-		.on('error', error => console.error(error));
+		.on('error', error => console.error("SHITS BUSTED"));
 	// dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 	dispatcher.setVolumeLogarithmic(0.30);
-
+	
 	serverQueue.textChannel.send(`🎶 Start playing: **${song.title}**`);
 }
 var htmlEntities = {
