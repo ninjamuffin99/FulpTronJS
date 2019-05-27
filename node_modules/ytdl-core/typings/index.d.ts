@@ -4,16 +4,17 @@ declare module 'ytdl-core' {
 
   namespace ytdl {
     type downloadOptions = {
-      quality?: 'lowest' | 'highest' | string | number;
+      quality?: 'lowest' | 'highest' | 'highestaudio' | 'lowestaudio' | 'highestvideo' | 'lowestvideo' | string | number;
       filter?: 'video' | 'videoonly' | 'audio' | 'audioonly' | ((format: videoFormat) => boolean);
       format?: videoFormat;
       range?: {
         start?: number;
         end?: number;
       };
+      begin?: string | number | Date;
+      liveBuffer?: number;
       requestOptions?: {};
       highWaterMark?: number;
-      retries?: number;
       lang?: string;
     }
 
@@ -40,6 +41,9 @@ declare module 'ytdl-core' {
       bitrate: string;
       audioEncoding: 'mp3' | 'vorbis' | 'aac' | 'opus' | 'flac';
       audioBitrate: number;
+      live: boolean;
+      isHLS: boolean;
+      isDashMPD: boolean;
     }
 
     type videoInfo = {
@@ -60,7 +64,6 @@ declare module 'ytdl-core' {
       ldpj?: string;
       videostats_playback_base_url?: string;
       innertube_context_client_version?: string;
-      player_response?: string;
       t?: string;
       fade_in_start_milliseconds: string;
       timestamp: string;
@@ -80,10 +83,24 @@ declare module 'ytdl-core' {
       fflags: string;
       ssl: string;
       pltype: string;
+      media: {
+        image?: string;
+        category: string;
+        category_url: string;
+        game?: string;
+        game_url?: string;
+        year?: number;
+        song?: string;
+        artist?: string;
+        artist_url?: string;
+        writers?: string;
+        licensed_by?: string;
+      },
       author: {
         id: string;
         name: string;
         avatar: string;
+        verified: boolean;
         user: string;
         channel_url: string;
         user_url: string;
@@ -111,7 +128,6 @@ declare module 'ytdl-core' {
       allow_html5_ads: string;
       core_dbp: string;
       ad_device: string;
-      view_count: string;
       itct: string;
       root_ve_type: string;
       excluded_ads: string;
@@ -147,7 +163,6 @@ declare module 'ytdl-core' {
       iurlmaxres: string;
       ad_preroll: string;
       tmi: string;
-      keywords: string[];
       trueview: string;
       host_language: string;
       innertube_api_key: string;
@@ -166,11 +181,42 @@ declare module 'ytdl-core' {
       video_id: string;
       dbp: string;
       ad_flags: string;
+      html5player: string;
       formats: videoFormat[];
       published: number;
       description: string;
-      related_videos: relatedVideo[]
+      related_videos: relatedVideo[];
       video_url: string;
+      no_embed_allowed?: boolean;
+      age_restricted: boolean;
+      player_response: {
+        playabilityStatus: {
+          status: string;
+        };
+        streamingData: {
+          expiresInSeconds: string;
+          formats: {}[];
+          adaptiveFormats: {}[];
+        };
+        videoDetails: {
+          videoId: string;
+          title: string;
+          lengthSeconds: number;
+          keywords: string[];
+          channelId: string;
+          isCrawlable: boolean;
+          thumbnail: {
+            thumbnails: {
+              url: string;
+              width: number;
+              height: number
+            }[];
+          };
+          viewCount: number;
+          author: string;
+          isLiveContent: boolean;
+        }
+      };
     }
 
     type relatedVideo = {
@@ -192,6 +238,8 @@ declare module 'ytdl-core' {
       thumbnail_ids?: string;
     }
 
+    function getBasicInfo(url: string, callback?: (err: Error, info: videoInfo) => void): Promise<videoInfo>;
+    function getBasicInfo(url: string, options?: downloadOptions, callback?: (err: Error, info: videoInfo) => void): Promise<videoInfo>;
     function getInfo(url: string, callback?: (err: Error, info: videoInfo) => void): Promise<videoInfo>;
     function getInfo(url: string, options?: downloadOptions, callback?: (err: Error, info: videoInfo) => void): Promise<videoInfo>;
     function downloadFromInfo(info: videoInfo, options?: downloadOptions): Readable;

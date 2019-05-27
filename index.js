@@ -1017,6 +1017,7 @@ async function handleVideo(video, message, voiceChannel, playlist = false) {
 		queue.set(message.guild.id, queueConstruct);
 
 		queueConstruct.songs.push(song);
+		console.log(queueConstruct);
 
 		try {
 			var connection = await voiceChannel.join();

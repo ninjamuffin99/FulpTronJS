@@ -5,7 +5,6 @@
   "main": "index.js",
   "dependencies": {
     "bandcamp-scraper": "^1.2.4",
-    "better-sqlite3": "^5.3.0",
     "cheerio": "^1.0.0-rc.2",
     "discord.js": "^11.5.0",
     "ffmpeg-binaries": "^3.2.2-3",
@@ -16,7 +15,7 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
     "simple-youtube-api": "^5.0.2",
-    "ytdl-core": "^0.20.4"
+    "ytdl-core": "^0.29.2"
   },
   "devDependencies": {},
   "scripts": {
