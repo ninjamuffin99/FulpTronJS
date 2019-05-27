@@ -37,9 +37,7 @@ const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 const MMappID = process.env.MMappID;
 
 gCreds.private_key_id = process.env.private_key_id;
-gCreds.private_key = process.env.private_key;
-
-gCreds.private_key = gCreds.private_key.replace(new RegExp('\\n', "g"), '\n');
+gCreds.private_key = process.env.private_key.replace(/\\n/g, '\n');
 
 console.log(gCreds.private_key);
 
