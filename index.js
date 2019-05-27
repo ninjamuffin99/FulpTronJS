@@ -967,7 +967,8 @@ The Owner is: ${message.guild.owner.user.username}`);
 						await promisify(sheet.addRow)(ngUser);
 						
 						console.log(JSON.parse(response.body));
-						message.author.send(`FulpTron will NOT have access to your Newgrounds password!!!\nFeel free to check the source code using the fulpSource command\nClick this link to sign into Newgrounds: ${parsedResp.result.data.session.passport_url}`)
+						message.reply('link sent. Confirm it and then type fulpNGLogin here again!');
+						message.author.send(`FulpTron will NOT have access to your Newgrounds password!!!\nFeel free to check the source code using the fulpSource command\nClick this link to sign into Newgrounds: ${parsedResp.result.data.session.passport_url}\nAnd then type in fulpNGLogin again to get the roles!`)
 						}
 					);
 		}
