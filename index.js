@@ -880,8 +880,6 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 		Rows.forEach(async function(row, index)
 		{
-			userInDatabase += 1;
-
 			if (row.discord == message.author.id)
 			{
 				userInDatabase = true;
