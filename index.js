@@ -22,11 +22,11 @@ const ytdl = require('ytdl-core-discord');
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-//const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json');
+const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json');
 
-let gCreds = require('./fulpGdrive.json');
-//let gCreds = require('./config.json');
-
+//let gCreds = require('./fulpGdrive.json');
+let gCreds = require('./config.json');
+/*
 const prefix = process.env.prefix;
 const ownerID = process.env.ownerID;
 const token = process.env.token;
@@ -37,7 +37,7 @@ const MMappID = process.env.MMappID;
 
 gCreds.private_key_id = process.env.private_key_id;
 gCreds.private_key = process.env.private_key;
-
+*/
 
 
 
@@ -874,29 +874,106 @@ The Owner is: ${message.guild.owner.user.username}`);
 				offset: 1
 		});
 
-		console.log(Rows);
+		let signedIn = false;
+		let userInDatabase = false;
 
-		var inputData = {
-			"app_id": NGappID,
-			"debug": true,
-			"call": {
-				"component": "App.startSession",
-				"parameters": {},
+
+		Rows.forEach(async function(row, index)
+		{
+			userInDatabase += 1;
+
+			if (row.discord == message.author.id)
+			{
+				userInDatabase = true;
+				console.log("FOUND USER...");
+				console.log(row.session);
+				var inputData = {
+					"app_id": NGappID,
+					"debug": true,
+					"session_id": row.session,
+					"call": {
+						"component": "App.checkSession",
+						"parameters": {},
+						}
+					};
+			
+				request.post(
+					'https://www.newgrounds.io/gateway_v3.php',
+					{ form: {input: JSON.stringify(inputData)} },
+					function (error, response, body) 
+					{
+						//console.log("BODY")
+						//console.log(body);
+						let parsedResp = JSON.parse(response.body);
+						
+						console.log(JSON.parse(response.body));
+						row.expired = parsedResp.result.data.session.expired;
+						signedIn = !row.expired;
+						if (signedIn)
+						{
+							row.newgrounds = parsedResp.result.data.session.user.name;
+							row.supporter = parsedResp.result.data.session.user.supporter;
+
+							message.reply("successfully signed into the Newgrounds API!");
+
+							if (row.supporter)
+							{
+								message.member.addRole(message.guild.roles.find('name', 'Supporter'));
+							}
+						}
+
+						row.save();
+					}
+				);
 			}
-		};
-	
-		request.post(
-			'https://www.newgrounds.io/gateway_v3.php',
-			{ form: {input: JSON.stringify(inputData)} },
-			function (error, response, body) {
-				console.log("BODY")
-				//console.log(body);
-				let parsedResp = JSON.parse(response.body);
-				console.log(JSON.parse(response.body));
-				message.author.send(`FulpTron will NOT have access to your Newgrounds password!!!\nFeel free to check the source code using the fulpSource command\nClick this link to sign into Newgrounds: ${parsedResp.result.data.session.passport_url}`)
+			else
+			{
+				console.log("NOT USER");
 			}
-		);
+
+			console.log('SIGNED IN: ' + signedIn)
+
+			console.log(`Discord ID: ${row.discord}`);
+			console.log(`Session ID: ${row.session}`);
+			console.log(`Newgrounds Username ${row.newgrounds}`);
+			console.log(`Is Supporter: ${row.supporter}`);
+			console.log("----------");
+		});
+
+		console.log('USERS IN DATABASE: ' + userInDatabase)
+
+		if (!userInDatabase)
+		{
+			var inputData = {
+				"app_id": NGappID,
+				"debug": true,
+				"call": {
+					"component": "App.startSession",
+					"parameters": {},
+					}
+				};
+		
+				request.post(
+					'https://www.newgrounds.io/gateway_v3.php',
+					{ form: {input: JSON.stringify(inputData)} },
+					async function (error, response, body) {
+						//console.log("BODY")
+						//console.log(body);
+						let parsedResp = JSON.parse(response.body);
+						
+						const ngUser = {
+							discord: message.author.id,
+							session: parsedResp.result.data.session.id
+						};
+						await promisify(sheet.addRow)(ngUser);
+						
+						console.log(JSON.parse(response.body));
+						message.author.send(`FulpTron will NOT have access to your Newgrounds password!!!\nFeel free to check the source code using the fulpSource command\nClick this link to sign into Newgrounds: ${parsedResp.result.data.session.passport_url}`)
+						}
+					);
+		}
 	}
+	
 
 	if (command == "mmscores")
 	{
@@ -1077,6 +1154,7 @@ var htmlEntities = {
     amp: '&',
     apos: '\''
 };
+
 
 function unescapeHTML(str) {
     return str.replace(/\&([^;]+);/g, function (entity, entityCode) {
