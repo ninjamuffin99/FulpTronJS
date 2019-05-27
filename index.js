@@ -22,11 +22,11 @@ const ytdl = require('ytdl-core-discord');
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json');
+//const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json');
 
-//let gCreds = require('./fulpGdrive.json');
-let gCreds = require('./config.json');
-/*
+let gCreds = require('./fulpGdrive.json');
+//let gCreds = require('./config.json');
+
 const prefix = process.env.prefix;
 const ownerID = process.env.ownerID;
 const token = process.env.token;
@@ -37,7 +37,7 @@ const MMappID = process.env.MMappID;
 
 gCreds.private_key_id = process.env.private_key_id;
 gCreds.private_key = process.env.private_key;
-*/
+
 
 
 
