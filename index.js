@@ -538,12 +538,12 @@ The Owner is: ${message.guild.owner.user.username}`);
 	if (command == 'roles')
 	{
 		let roleList = message.guild.roles.map(r => {
-			if (["Admins", 'Moderators', "@everyone"].indexOf(r.name) > -1)
+			if (["Admins", 'Moderators', "@everyone", 'BrenBot', 'Mr. Fulp', 'Contributor'].indexOf(r.name) > -1)
 				return "";
 			else
 				return r.name;
-		}).join(", ");
-		message.channel.send("Roles on " + message.guild.name + ": " + roleList)
+		}).join("--");
+		message.channel.send("Roles on " + message.guild.name + "\n " + roleList)
 	}
 
 	//Cam you do it
