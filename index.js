@@ -688,11 +688,9 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 	if (command == 'roll')
 	{
-		let min = parseInt(args[0]);
-		let max = parseInt(args[1]);
+		let min = 1;
+		let max = parseInt(args[0]);
 
-		if (isNaN(min))
-			min = 0;
 		if (isNaN(max))
 			max = 20;
 		
