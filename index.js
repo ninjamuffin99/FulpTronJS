@@ -571,8 +571,8 @@ The Owner is: ${message.guild.owner.user.username}`);
 	if (command == "removerole")
 	{
 		let role = args.slice(0).join(" ");
-		if (['NG'].indexOf(role) > -1)
-			return message.reply('Hey stop that!');
+		if (['Blammed'].indexOf(role) > -1)
+			return message.reply('lol dummy');
 		let curRole = message.guild.roles.find('name', role);
 
 		if (!message.guild.roles.exists("name", role))
