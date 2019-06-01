@@ -23,11 +23,11 @@ const ytdl = require('ytdl-core-discord');
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
 
-//const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json');
+const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json');
 
-let gCreds = require('./fulpGdrive.json');
-//let gCreds = require('./config.json');
-
+//let gCreds = require('./fulpGdrive.json');
+let gCreds = require('./config.json');
+/*
 const prefix = process.env.prefix;
 const ownerID = process.env.ownerID;
 const token = process.env.token;
@@ -38,7 +38,7 @@ const MMappID = process.env.MMappID;
 
 gCreds.private_key_id = process.env.private_key_id;
 gCreds.private_key = process.env.private_key.replace(/\\n/g, '\n');
-
+*/
 
 // Music bot shit
 const YouTube = require(`simple-youtube-api`);
@@ -759,6 +759,44 @@ The Owner is: ${message.guild.owner.user.username}`);
 			{
 				message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
 			}
+	}
+
+	if (command == 'ngplay')
+	{
+		const url = args[0] ? args[0].replace(/<(.+)>/g, '$1') : '';
+		const { voiceChannel } = message.member;
+
+		if (!voiceChannel) {
+			return message.reply('please join a voice channel first!');
+		}
+
+		const permissions = voiceChannel.permissionsFor(message.client.user);
+		if (!permissions.has('CONNECT'))
+		{
+			return message.channel.send("I can't join that voice channel with my current roles :(");
+		}
+		if (!permissions.has('SPEAK'))
+		{
+			return message.channel.send('I cannot speak in this voice channel with my current permissions :(');
+		}
+		if (!message.member.permissions.has('SPEAK'))
+		{
+			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
+		}
+
+		const options = {
+			uri: url,
+			transform: function (body) {
+			  return cheerio.load(body);
+			}
+		};
+		voiceChannel.join().then(vc => {
+			const dispatcher = vc.playOpusStream("https:\/\/audio.ngfiles.com\/844000\/844486_Sad-Gamer-Time.mp3")
+			.on('end', () => {
+				console.log('Music ended!');
+			});
+		});
+		
 	}
 
 	// cheerio.js scraping help and info:
