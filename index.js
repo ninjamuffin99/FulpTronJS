@@ -922,6 +922,8 @@ The Owner is: ${message.guild.owner.user.username}`);
 							row.newgrounds = parsedResp.result.data.session.user.name;
 							row.supporter = parsedResp.result.data.session.user.supporter;
 
+							message.member.setNickname(parsedResp.result.data.session.user.name);
+
 							message.reply("successfully signed into the Newgrounds API!");
 							message.member.addRole(message.guild.roles.find('name', 'Newgrounder'));
 
