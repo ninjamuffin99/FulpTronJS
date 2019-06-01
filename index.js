@@ -226,6 +226,11 @@ client.on('message', async message =>
 		message.channel.send("https://github.com/ninjamuffin99/FulpTronJS/blob/master/COMMANDS.md");
 	}
 
+	if (command == 'emotetest')
+	{
+		message.channel.guild.createEmoji('./pics/luis/luis.jpg', 'luis', [message.guild.roles.find('name', 'Newgrounder')])
+	}
+
 	const serverQueue = queue.get(message.guild.id);
 		console.log(serverQueue);
 	 
