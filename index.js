@@ -643,6 +643,13 @@ The Owner is: ${message.guild.owner.user.username}`);
 		message.channel.send(curPic, {file: "pics/dogl/" + curPic});
 	}
 
+	if (command == 'chut' || command == 'delete' || command == 'delet' || command == 'gun')
+	{
+		let picNum = Math.round(Math.random());
+
+		message.channel.send('deleteThis.png', {file: "pics/chutney/delete" + picNum + ".png"});
+	}
+
 	if (command == `pic`)
 	{
 		if (args[0] == "luis")
