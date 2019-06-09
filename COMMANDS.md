@@ -29,6 +29,7 @@ parameters will be indicated in <> these brackets when required. If there's mult
 - `fulpStats <Newgrounds user>` sends you some info about whatever Newgrounds user you input, into a nifty little Rich Embed (fulpNGScrape, and fulpScrape also work).
 - `fulpSource` drops a link to the sourcecode on Github
 - `fulpEval` command to execute any piece of javascript, on the official FulpTron, only I can use it heheheh
+- `fulpScreenshare` generates a link to screenshare in current voice channel.
 
 ### VARIOUS MUSIC COMMANDS!!
 I got a bunch of music code from this bot lol I pretty much stole all that shit so go check it out: https://github.com/Dev-Yukine/Music-Bot/
