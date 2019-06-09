@@ -645,7 +645,16 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 	if (command == 'chut' || command == 'delete' || command == 'delet' || command == 'gun')
 	{
-		let picNum = Math.round(Math.random());
+		let picNum = Math.floor(Math.random() * 20);
+
+		if (picNum > 1)
+		{
+			picNum = 0;
+		}
+		else
+		{
+			picNum = 1;
+		}
 
 		message.channel.send('deleteThis.png', {file: "pics/chutney/delete" + picNum + ".png"});
 	}
