@@ -231,6 +231,17 @@ client.on('message', async message =>
 		message.channel.guild.createEmoji('./pics/luis/luis.jpg', 'luis', [message.guild.roles.find('name', 'Newgrounder')])
 	}
 
+	if (command == 'screenshare')
+	{
+		const { voiceChannel } = message.member;
+
+		if (!voiceChannel) {
+			return message.reply('please join a voice channel first!');
+		}
+
+		return message.channel.send('http://www.discordapp.com/channels/' + message.guild.id + '/' + voiceChannel.id)
+	}
+
 	const serverQueue = queue.get(message.guild.id);
 		console.log(serverQueue);
 	 
