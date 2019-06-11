@@ -55,6 +55,7 @@ async function prepPics()
 {
 	await getImages('fulp');
 	await getImages('dogl');
+	await getImages('delete');
 }
 
 // when the client is ready, run this code
@@ -654,20 +655,13 @@ The Owner is: ${message.guild.owner.user.username}`);
 		message.channel.send(curPic, {file: "pics/dogl/" + curPic});
 	}
 
-	if (command == 'chut' || command == 'delete' || command == 'delet' || command == 'gun')
+	if ( command == 'delete' || command == 'delet' || command == 'gun')
 	{
-		let picNum = Math.floor(Math.random() * 20);
+		let curPic = randomFromArray(2);
+		console.log("THE PIC");
+		console.log(curPic);
 
-		if (picNum > 1)
-		{
-			picNum = 0;
-		}
-		else
-		{
-			picNum = 1;
-		}
-
-		message.channel.send('deleteThis.png', {file: "pics/chutney/delete" + picNum + ".png"});
+		message.channel.send(curPic, {file: "pics/delete/" + curPic});
 	}
 
 	if (command == `pic`)
