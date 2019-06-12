@@ -140,6 +140,17 @@ client.on('guildMemberAdd', async member =>
 			
 		member.addRole(curRole);
 	}
+
+	//G
+	if (member.guild.id == 578313756015329281)
+	{
+		return member.guild.channels.find('id', '578313756015329283').send(member.nickname + " Just do what comes natural -T");
+
+		let curRole = member.guild.roles.find("name", "Flash Hole");
+			
+		member.addRole(curRole);
+	}
+
 });
 
 client.on('message', async message => 
