@@ -144,13 +144,9 @@ client.on('guildMemberAdd', async member =>
 	//G
 	if (member.guild.id == 578313756015329281)
 	{
-		let infoPart = '\nYou can use the command `fulpNGLogin` to sign into the Newgrounds API, and `fulpAddRole <role>` to give yourself other roles(`fulpRoles` to see all roles, and `fulpHelp` for more info)'
+		let infoPart = '*\nYou can use the command `fulpNGLogin` to sign into the Newgrounds API, and `fulpAddRole <role>` to give yourself other roles(`fulpRoles` to see all roles, and `fulpHelp` for more info)'
 
-		return member.guild.channels.find('id', '578313756015329283').send(member.user.username + " Just do what comes natural -T" + infoPart);
-
-		let curRole = member.guild.roles.find("name", "Flash Hole");
-			
-		member.addRole(curRole);
+		return member.guild.channels.find('id', '578313756015329283').send("*" + member.user.username + " Just do what comes natural -T" + infoPart);
 	}
 
 });
