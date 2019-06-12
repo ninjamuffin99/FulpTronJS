@@ -131,6 +131,8 @@ client.on('ready', () =>
 
 });
 
+let ngRef = ['Cock joke. username is here', 'username, just do what comes natural -T', 'le username has arrived'];
+
 client.on('guildMemberAdd', async member =>
 {
 	// code specific to the Flash Holes server
@@ -146,7 +148,10 @@ client.on('guildMemberAdd', async member =>
 	{
 		let infoPart = '*\nYou can use the command `fulpNGLogin` to sign into the Newgrounds API, and `fulpAddRole <role>` to give yourself other roles(`fulpRoles` to see all roles, and `fulpHelp` for more info)'
 
-		return member.guild.channels.find('id', '578313756015329283').send("*" + member.user.username + " Just do what comes natural -T" + infoPart);
+		let intro = ngRef[Math.floor(Math.random() * ngRef.length)];
+		intro = intro.replace('username',  member.user.username);
+
+		return member.guild.channels.find('id', '578313756015329283').send("*" + intro + infoPart);
 	}
 
 });
