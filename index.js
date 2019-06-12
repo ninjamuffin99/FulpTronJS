@@ -132,7 +132,7 @@ client.on('ready', () =>
 });
 
 let ngRef = ['Cock joke. username is here', 'username, just do what comes natural -T', 'le username has arrived', 'username, do you remember what a tardigrade is?',
-			'Angels sang out in an immaculate chorus, down from the heavends defended username'];
+			'Angels sang out in an immaculate chorus, down from the heavends defended username', 'username was balmmed for this post'];
 
 client.on('guildMemberAdd', async member =>
 {
