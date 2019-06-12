@@ -566,6 +566,9 @@ The Owner is: ${message.guild.owner.user.username}`);
 	//Cam you do it
 	if (command == "addrole"){
 		let role = args.slice(0).join(" ");
+		if (role.endsWith('Collab'))
+			return message.reply('Message the collab organizer if you would like to participate in this collab!');
+
 		if (['Admins', "Moderators", 'BrenBot', 'Contributor', 'james'].indexOf(role) > -1)
 			return message.reply('Hey stop that!');
 		if (["Newgrounder", 'Supporter'].indexOf(role) > -1)
