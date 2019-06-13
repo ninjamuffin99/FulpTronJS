@@ -571,7 +571,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 	if (command == 'roles')
 	{
 		let roleList = message.guild.roles.map(r => {
-			if (["Admins", 'Moderators', "@everyone", 'BrenBot', 'Mr. Fulp', 'Contributor'].indexOf(r.name) > -1)
+			if (["Admins", 'Moderators', "@everyone", 'BrenBot', 'Mr. Fulp', 'Contributor', 'Nitro Booster'].indexOf(r.name) > -1 || r.name.endsWith('Collab'))
 				return "";
 			else
 				return r.name;
