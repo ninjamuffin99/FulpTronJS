@@ -54,11 +54,11 @@ let shoomOCound = 2;
 async function prepPics()
 {
 	await getImages('fulp');
-	await print('Fulp shit');
+	await console.log('Fulp shit');
 	await getImages('dogl');
-	await print('dogl shit');
+	await console.log('dogl shit');
 	await getImages('delete');
-	await print('delete shit');
+	await console.log('delete shit');
 }
 
 // when the client is ready, run this code
