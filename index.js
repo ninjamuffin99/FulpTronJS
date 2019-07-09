@@ -54,7 +54,11 @@ let shoomOCound = 2;
 async function prepPics()
 {
 	await getImages('fulp');
+	await console.log('Fulp shit');
 	await getImages('dogl');
+	await console.log('dogl shit');
+	await getImages('delete');
+	await console.log('delete shit');
 }
 
 // when the client is ready, run this code
@@ -130,6 +134,10 @@ client.on('ready', () =>
 
 });
 
+let ngRef = ['Cock joke. username is here', 'username, just do what comes natural -T', 'le username has arrived', 'username, do you remember what a tardigrade is?',
+			'Angels sang out in an immaculate chorus, down from the heavends decended username', 'username was blammed for this post', 'username has nice titties for a lil boy',
+		"Aw gee whiz I hope a username doesn't totally come out of nowhere and own me.", 'Cryptic metaphor -username', 'What the hell is private username doing in there?'];
+
 client.on('guildMemberAdd', async member =>
 {
 	// code specific to the Flash Holes server
@@ -139,15 +147,27 @@ client.on('guildMemberAdd', async member =>
 			
 		member.addRole(curRole);
 	}
+
+	//G
+	if (member.guild.id == 578313756015329281)
+	{
+		let infoPart = '*\nYou can use the command `fulpNGLogin` to sign into the Newgrounds API, and `fulpAddRole <role>` to give yourself other roles(`fulpRoles` to see all roles, and `fulpHelp` for more info)'
+
+		let intro = ngRef[Math.floor(Math.random() * ngRef.length)];
+		intro = intro.replace('username',  "**" + member.user.username + "**");
+
+		return member.guild.channels.find('id', '578313756015329283').send("*" + intro + infoPart);
+	}
+
 });
 
 client.on('message', async message => 
 {
 
 	//RATING EMOTES ON NG SERVER
-	if (message.guild.id == 578313756015329281 && (message.channel.id == 578313839641231372 || message.channel.id == 578313930456170497))
+	if (message.guild.id == 578313756015329281 && (message.channel.id == 578313839641231372 || message.channel.id == 578313930456170497 || message.channel.id == 578313914786250802 || message.channel.id == 578313897577021500 || message.channel.id == 583343626378280985))
 	{
-		if (message.attachments.size > 0 || message.content.startsWith("https://www.newgrounds.com/art/view"))
+		if (message.attachments.size > 0 || message.content.startsWith("https://www.newgrounds.com/art/view") || message.content.startsWith('https://www.newgrounds.com/audio/listen/') || message.content.startsWith('https://www.newgrounds.com/portal/view/'))
 		{
 			let picoSuffix = "";
 			if (Math.random() > 0.5)
@@ -224,6 +244,22 @@ client.on('message', async message =>
 	if (command == 'help')
 	{
 		message.channel.send("https://github.com/ninjamuffin99/FulpTronJS/blob/master/COMMANDS.md");
+	}
+
+	if (command == 'emotetest')
+	{
+		message.channel.guild.createEmoji('./pics/luis/luis.jpg', 'luis', [message.guild.roles.find('name', 'Newgrounder')])
+	}
+
+	if (command == 'screenshare')
+	{
+		const { voiceChannel } = message.member;
+
+		if (!voiceChannel) {
+			return message.reply('please join a voice channel first!');
+		}
+
+		return message.channel.send('http://www.discordapp.com/channels/' + message.guild.id + '/' + voiceChannel.id)
 	}
 
 	const serverQueue = queue.get(message.guild.id);
@@ -538,7 +574,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 	if (command == 'roles')
 	{
 		let roleList = message.guild.roles.map(r => {
-			if (["Admins", 'Moderators', "@everyone", 'BrenBot', 'Mr. Fulp', 'Contributor'].indexOf(r.name) > -1)
+			if (["Admins", 'Moderators', "@everyone", 'BrenBot', 'Mr. Fulp', 'Contributor', 'Nitro Booster'].indexOf(r.name) > -1 || r.name.endsWith('Collab'))
 				return "";
 			else
 				return r.name;
@@ -549,6 +585,9 @@ The Owner is: ${message.guild.owner.user.username}`);
 	//Cam you do it
 	if (command == "addrole"){
 		let role = args.slice(0).join(" ");
+		if (role.endsWith('Collab'))
+			return message.reply('Message the collab organizer if you would like to participate in this collab!');
+
 		if (['Admins', "Moderators", 'BrenBot', 'Contributor', 'james'].indexOf(role) > -1)
 			return message.reply('Hey stop that!');
 		if (["Newgrounder", 'Supporter'].indexOf(role) > -1)
@@ -622,6 +661,11 @@ The Owner is: ${message.guild.owner.user.username}`);
 		message.reply(`Hello ${message.author.username}, I see you're a ${age} year old ${sex} from ${location}. Wanna date?`);
 	}
 
+	if (command == 'cringe' || command == 'snap')
+	{
+		message.channel.send('brandyCringe.png', {file: "pics/brandy/brandyCringe.png"});
+	}
+
 	if (command == 'dogl' || command == 'dogg')
 	{
 		
@@ -631,6 +675,15 @@ The Owner is: ${message.guild.owner.user.username}`);
 		console.log(curPic);
 
 		message.channel.send(curPic, {file: "pics/dogl/" + curPic});
+	}
+
+	if ( command == 'delete' || command == 'delet' || command == 'gun')
+	{
+		let curPic = randomFromArray(2);
+		console.log("THE PIC");
+		console.log(curPic);
+
+		message.channel.send(curPic, {file: "pics/delete/" + curPic});
 	}
 
 	if (command == `pic`)
@@ -959,6 +1012,8 @@ The Owner is: ${message.guild.owner.user.username}`);
 						{
 							row.newgrounds = parsedResp.result.data.session.user.name;
 							row.supporter = parsedResp.result.data.session.user.supporter;
+
+							message.member.setNickname(parsedResp.result.data.session.user.name);
 
 							message.reply("successfully signed into the Newgrounds API!");
 							message.member.addRole(message.guild.roles.find('name', 'Newgrounder'));
