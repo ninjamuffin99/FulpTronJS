@@ -819,11 +819,12 @@ The Owner is: ${message.guild.owner.user.username}`);
 	if (command == 'ngplay')
 	{
 
+		/* UNCOMMENT FOR ACOCk
 		if (!message.member.voiceChannel.rolePermissions(message.member).has('SPEAK'))
 		{
 			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
 		}
-
+		*/
 		let songUrl = args[0];
 
 		if (songUrl == undefined)
@@ -1219,6 +1220,31 @@ async function handleVideo(video, message, voiceChannel, playlist = false) {
 	}
 	return undefined;
 }
+
+async function playNG(guild, song) {
+	const serverQueue = queue.get(guild.id);
+
+	if (!song) {
+		serverQueue.voiceChannel.leave();
+		queue.delete(guild.id);
+		return;
+	}
+	console.log(serverQueue.songs);
+
+	const dispatcher = serverQueue.connection.playStream()
+		.on('end', reason => {
+			if (reason === 'Stream is not generating quickly enough.') console.log('Song ended.');
+			else console.log(reason);
+			serverQueue.songs.shift();
+			playNG(guild, serverQueue.songs[0]);
+		})
+		.on('error', error => console.error("SHITS BUSTED"));
+	// dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+	dispatcher.setVolumeLogarithmic(0.30);
+	
+	serverQueue.textChannel.send(`🎶 Start playing: **${song.title}**`);
+}
+
 
 async function play(guild, song) {
 	const serverQueue = queue.get(guild.id);
