@@ -25,7 +25,7 @@ const ytdl = require('ytdl-core-discord');
 
 //const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json');
 
-//let gCreds = require('./fulpGdrive.json');
+let gCreds = require('./fulpGdrive.json'); //KEEP UNCOMMENTED
 //let gCreds = require('./config.json');
 
 const prefix = process.env.prefix;
@@ -36,8 +36,8 @@ const NGencKey = process.env.NGencKey;
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 const MMappID = process.env.MMappID;
 
-//gCreds.private_key_id = process.env.private_key_id;
-//gCreds.private_key = process.env.private_key.replace(/\\n/g, '\n');
+gCreds.private_key_id = process.env.private_key_id;
+gCreds.private_key = process.env.private_key.replace(/\\n/g, '\n');
 
 
 // Music bot shit
