@@ -819,6 +819,12 @@ The Owner is: ${message.guild.owner.user.username}`);
 	if (command == 'ngplay')
 	{
 
+
+		if (!message.member.permissions.has('SPEAK'))
+		{
+			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
+		}
+
 		let songUrl = args[0];
 
 		if (songUrl == undefined)
