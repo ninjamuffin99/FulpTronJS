@@ -4,5 +4,10 @@
   "repository": "https://github.com/ninjamuffin99/FulpTronJS/",
   "logo": "https://m.media-amazon.com/images/M/MV5BMTQxODM4MTYwMV5BMl5BanBnXkFtZTYwMDc4ODYy._V1_UY317_CR38,0,214,317_AL_.jpg",
   "keywords": ["node", "discord", "heroku", "newgrounds", "tomfulp"],
-  "image": "heroku/nodejs"
+  "image": "heroku/nodejs",
+  "buildpacks": [
+    {
+      "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
+    }
+  ]
 }
