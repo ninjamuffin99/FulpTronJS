@@ -571,6 +571,8 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 	}
 
+
+
 	if (command == 'roles')
 	{
 		let roleList = message.guild.roles.map(r => {
@@ -816,40 +818,35 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 	if (command == 'ngplay')
 	{
-		const url = args[0] ? args[0].replace(/<(.+)>/g, '$1') : '';
-		const { voiceChannel } = message.member;
 
-		if (!voiceChannel) {
-			return message.reply('please join a voice channel first!');
-		}
+		let songUrl = args[0];
 
-		const permissions = voiceChannel.permissionsFor(message.client.user);
-		if (!permissions.has('CONNECT'))
-		{
-			return message.channel.send("I can't join that voice channel with my current roles :(");
-		}
-		if (!permissions.has('SPEAK'))
-		{
-			return message.channel.send('I cannot speak in this voice channel with my current permissions :(');
-		}
-		if (!message.member.permissions.has('SPEAK'))
-		{
-			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
-		}
+		if (songUrl == undefined)
+			return message.channel.send("Please leave a link to a Newgrounds audio submission!")
 
-		const options = {
-			uri: url,
-			transform: function (body) {
-			  return cheerio.load(body);
-			}
-		};
-		voiceChannel.join().then(vc => {
-			const dispatcher = vc.playOpusStream("https:\/\/audio.ngfiles.com\/844000\/844486_Sad-Gamer-Time.mp3")
-			.on('end', () => {
-				console.log('Music ended!');
-			});
-		});
+		songUrl = songUrl.replace("listen", "feed");
+		console.log(songUrl);
+
 		
+
+		request.get(songUrl, {},
+		function (error, response, body) 
+		{
+			
+			let resp = JSON.parse(body);
+			console.log(resp);
+
+			var VC = message.member.voiceChannel;
+			if (!VC)
+				return message.reply("MESSAGE IF NOT IN A VOICE CHANNEL")
+			VC.join()
+			.then(connection => {
+				const dispatcher = connection.playStream(resp.stream_url);
+				dispatcher.on("end", end => {VC.leave()});
+			})
+			.catch(console.error);
+		
+		});
 	}
 
 	// cheerio.js scraping help and info:
@@ -1243,6 +1240,7 @@ async function play(guild, song) {
 	
 	serverQueue.textChannel.send(`🎶 Start playing: **${song.title}**`);
 }
+
 var htmlEntities = {
     nbsp: ' ',
     cent: '¢',
