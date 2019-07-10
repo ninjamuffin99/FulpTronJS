@@ -839,7 +839,18 @@ The Owner is: ${message.guild.owner.user.username}`);
 			let resp = JSON.parse(body);
 			console.log(resp);
 
+			const song = {
+				id: resp.id,
+				title: resp.title,
+				url: resp.stream_url
+			};
+
+			
+
 			var VC = message.member.voiceChannel;
+
+			handleVideo(song, message, VC);
+			/*
 			if (!VC)
 				return message.reply("MESSAGE IF NOT IN A VOICE CHANNEL")
 			VC.join()
@@ -848,7 +859,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 				dispatcher.on("end", end => {VC.leave()});
 			})
 			.catch(console.error);
-		
+			*/
 		});
 	}
 
@@ -1182,14 +1193,14 @@ function clean(text)
 async function handleVideo(video, message, voiceChannel, playlist = false) {
 	const serverQueue = queue.get(message.guild.id);
 	console.log(video);
-	//let isOnNG = video.startsWith("https://www.newgrounds.com/audio/");
-		
+	let isOnNG = video.url.startsWith("https://audio.ngfiles.com");
+	console.log(video.url);
 
 	const song = {
 		id: video.id,
 		title: Util.escapeMarkdown(video.title),
 		url: video.url,
-		onNG: false
+		onNG: isOnNG
 	};
 
 	console.log('constructed song');
@@ -1238,7 +1249,20 @@ async function play(guild, song) {
 	}
 	console.log(serverQueue.songs);
 
-	const dispatcher = serverQueue.connection.playOpusStream(await ytdl(song.url, { filter: 'audioonly'}, { type: 'opus'}))
+	if (song.onNG)
+	{
+		const dispatcher = serverQueue.connection.playStream(song.url)
+		.on('end', reason => {
+			if (reason === 'Stream is not generating quickly enough.') console.log('Song ended.');
+			else console.log(reason);
+			serverQueue.songs.shift();
+			play(guild, serverQueue.songs[0]);
+		})
+		.on('error', error => console.error("SHITS BUSTED"));
+	}
+	else
+	{
+		const dispatcher = serverQueue.connection.playOpusStream(await ytdl(song.url, { filter: 'audioonly'}, { type: 'opus'}))
 		.on('end', reason => {
 			if (reason === 'Stream is not generating quickly enough.') console.log('Song ended.');
 			else console.log(reason);
@@ -1248,6 +1272,9 @@ async function play(guild, song) {
 		.on('error', error => console.error("SHITS BUSTED"));
 	// dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 	dispatcher.setVolumeLogarithmic(0.30);
+
+	}
+	
 	
 	serverQueue.textChannel.send(`🎶 Start playing: **${song.title}**`);
 }
