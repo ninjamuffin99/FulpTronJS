@@ -301,7 +301,7 @@ client.on('message', async message =>
 			for (const video of Object.values(videos)) 
 			{
 				const video2 = await youtube.getVideoByID(video.id); // eslint-disable-line no-await-in-loop
-				await handleVideo(video2, message, voiceChannel, true); // eslint-disable-line no-await-in-loop
+				await handleVideo(`https://www.youtube.com/watch?v=${video2.id}`, message, voiceChannel, true); // eslint-disable-line no-await-in-loop
 			}
 			return message.channel.send(`✅ Playlist: **${playlist.title}** has been added to the queue!`);
 		} 
@@ -344,7 +344,7 @@ ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
 					return message.channel.send('🆘 I could not obtain any search results.');
 				}
 			}
-			return handleVideo(video, message, voiceChannel);
+			return handleVideo(`https://www.youtube.com/watch?v=${video.id}`, message, voiceChannel);
 		}
 	} else if (command === 'skip') {
 		if (!message.member.voiceChannel) return message.channel.send('You are not in a voice channel!');
@@ -1183,10 +1183,14 @@ function clean(text)
 async function handleVideo(video, message, voiceChannel, playlist = false) {
 	const serverQueue = queue.get(message.guild.id);
 	console.log(video);
+	var isOnNG = video.startsWith("https://www.newgrounds.com/audio/");
+		
+
 	const song = {
 		id: video.id,
 		title: Util.escapeMarkdown(video.title),
-		url: `https://www.youtube.com/watch?v=${video.id}`
+		url: video,
+		onNewgrounds: isOnNG
 	};
 	if (!serverQueue) {
 		const queueConstruct = {
