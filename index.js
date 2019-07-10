@@ -1182,13 +1182,14 @@ function clean(text)
 async function handleVideo(video, message, voiceChannel, playlist = false) {
 	const serverQueue = queue.get(message.guild.id);
 	console.log(video);
-	//let isOnNG = video.startsWith("https://www.newgrounds.com/audio/");
+	let isOnNG = video.startsWith("https://www.newgrounds.com/audio/");
 		
 
 	const song = {
 		id: video.id,
 		title: Util.escapeMarkdown(video.title),
-		url: video.url
+		url: video.url,
+		onNG: isOnNG
 	};
 
 	console.log('constructed song');
