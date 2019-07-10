@@ -23,20 +23,20 @@ const ytdl = require('ytdl-core-discord');
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
 
-//const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json');
+const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json');
 
-let gCreds = require('./fulpGdrive.json');
-//let gCreds = require('./config.json');
+//let gCreds = require('./fulpGdrive.json');
+let gCreds = require('./config.json');
 
-const prefix = process.env.prefix;
-const ownerID = process.env.ownerID;
-const token = process.env.token;
-const NGappID = process.env.NGappID;
-const NGencKey = process.env.NGencKey;
-const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
-const MMappID = process.env.MMappID;
-gCreds.private_key_id = process.env.private_key_id;
-gCreds.private_key = process.env.private_key.replace(/\\n/g, '\n');
+//const prefix = process.env.prefix;
+//const ownerID = process.env.ownerID;
+//const token = process.env.token;
+//const NGappID = process.env.NGappID;
+//const NGencKey = process.env.NGencKey;
+//const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+//const MMappID = process.env.MMappID;
+//gCreds.private_key_id = process.env.private_key_id;
+//gCreds.private_key = process.env.private_key.replace(/\\n/g, '\n');
 
 
 // Music bot shit
@@ -838,6 +838,9 @@ The Owner is: ${message.guild.owner.user.username}`);
 			
 			let resp = JSON.parse(body);
 			console.log(resp);
+
+			if (!resp.allow_external_api)
+				return message.reply(`Sorry! The author of ${resp.title} (probably ${resp.authors[0].name})has not allowed external API access, so it cannot be played. Message the author if you want this to be changed!`)
 
 			const song = {
 				id: resp.id,
