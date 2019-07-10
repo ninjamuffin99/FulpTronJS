@@ -23,21 +23,20 @@ const ytdl = require('ytdl-core-discord');
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
 
-//const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json');
+const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json');
 
-let gCreds = require('./fulpGdrive.json'); //KEEP UNCOMMENTED
-//let gCreds = require('./config.json');
+//let gCreds = require('./fulpGdrive.json');
+let gCreds = require('./config.json');
 
-const prefix = process.env.prefix;
-const ownerID = process.env.ownerID;
-const token = process.env.token;
-const NGappID = process.env.NGappID;
-const NGencKey = process.env.NGencKey;
-const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
-const MMappID = process.env.MMappID;
-
-gCreds.private_key_id = process.env.private_key_id;
-gCreds.private_key = process.env.private_key.replace(/\\n/g, '\n');
+//const prefix = process.env.prefix;
+//const ownerID = process.env.ownerID;
+//const token = process.env.token;
+//const NGappID = process.env.NGappID;
+//const NGencKey = process.env.NGencKey;
+//const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+//const MMappID = process.env.MMappID;
+//gCreds.private_key_id = process.env.private_key_id;
+//gCreds.private_key = process.env.private_key.replace(/\\n/g, '\n');
 
 
 // Music bot shit
@@ -301,7 +300,7 @@ client.on('message', async message =>
 			for (const video of Object.values(videos)) 
 			{
 				const video2 = await youtube.getVideoByID(video.id); // eslint-disable-line no-await-in-loop
-				await handleVideo(`https://www.youtube.com/watch?v=${video2.id}`, message, voiceChannel, true); // eslint-disable-line no-await-in-loop
+				await handleVideo(video2, message, voiceChannel, true); // eslint-disable-line no-await-in-loop
 			}
 			return message.channel.send(`✅ Playlist: **${playlist.title}** has been added to the queue!`);
 		} 
@@ -344,7 +343,7 @@ ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
 					return message.channel.send('🆘 I could not obtain any search results.');
 				}
 			}
-			return handleVideo(`https://www.youtube.com/watch?v=${video.id}`, message, voiceChannel);
+			return handleVideo(video, message, voiceChannel);
 		}
 	} else if (command === 'skip') {
 		if (!message.member.voiceChannel) return message.channel.send('You are not in a voice channel!');
@@ -1183,15 +1182,17 @@ function clean(text)
 async function handleVideo(video, message, voiceChannel, playlist = false) {
 	const serverQueue = queue.get(message.guild.id);
 	console.log(video);
-	var isOnNG = video.startsWith("https://www.newgrounds.com/audio/");
+	//let isOnNG = video.startsWith("https://www.newgrounds.com/audio/");
 		
 
 	const song = {
 		id: video.id,
 		title: Util.escapeMarkdown(video.title),
-		url: video,
-		onNewgrounds: isOnNG
+		url: video.url
 	};
+
+	console.log('constructed song');
+
 	if (!serverQueue) {
 		const queueConstruct = {
 			textChannel: message.channel,
@@ -1223,30 +1224,6 @@ async function handleVideo(video, message, voiceChannel, playlist = false) {
 		else return message.channel.send(`✅ **${song.title}** has been added to the queue!`);
 	}
 	return undefined;
-}
-
-async function playNG(guild, song) {
-	const serverQueue = queue.get(guild.id);
-
-	if (!song) {
-		serverQueue.voiceChannel.leave();
-		queue.delete(guild.id);
-		return;
-	}
-	console.log(serverQueue.songs);
-
-	const dispatcher = serverQueue.connection.playStream()
-		.on('end', reason => {
-			if (reason === 'Stream is not generating quickly enough.') console.log('Song ended.');
-			else console.log(reason);
-			serverQueue.songs.shift();
-			playNG(guild, serverQueue.songs[0]);
-		})
-		.on('error', error => console.error("SHITS BUSTED"));
-	// dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-	dispatcher.setVolumeLogarithmic(0.30);
-	
-	serverQueue.textChannel.send(`🎶 Start playing: **${song.title}**`);
 }
 
 
