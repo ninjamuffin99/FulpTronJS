@@ -9,6 +9,8 @@ The prefix is `fulp` so an example command would be `fulpPlaying` with no spaces
 parameters will be indicated in <> these brackets when required. If there's multiple they should be seperated by a single space (NOTE: the brackets do not need to be included in the message! Those are just to show when to seperate parameters)
 
 - `fulpHelp` will drop a link to this page!
+- `fulpDiscord` drops a link to this Newgrounds Discord: https://discord.gg/HzvnXfZ
+- `fulpInvite` posts a link for you to invite FulpTron to your server
 - `fulpPing` pings the host and returns the time in milliseconds
 - `fulpShame` just shouts SHAAAME
 - `fulpServer` sends some info about the server, like amount of memebers
@@ -37,6 +39,7 @@ I got a bunch of music code from this bot lol I pretty much stole all that shit 
 Also you need to be in a voice channel to use these
 
 - `fulpPlay <youtube link/playlist or search terms>` The bot allows you to search for music through discord! Or you can drop a link to an individual song or playlist
+- `fulpNGPlay <audio submisson/playlist from Newgrounds>` Allows you to add Newgrounds music to the queue (will eventually get it right in the `fulpPlay` command)
 - `fulpSkip` Skips the current song and goes to the next one in the queue
 - `fulpStop` Stops all the music and empties the queue
 - `fulpVolume <volume from 0-100>` Changes the volume for all users. 100 usually sounds yucky and distorted if you have the defauilt discord user audio set at 100% as well. Usually 25-50 sounds alright
