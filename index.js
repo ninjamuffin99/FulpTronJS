@@ -829,41 +829,39 @@ The Owner is: ${message.guild.owner.user.username}`);
 		if (songUrl == undefined)
 			return message.channel.send("Please leave a link to a Newgrounds audio submission!")
 
-		songUrl = songUrl.replace("listen", "feed");
-		console.log(songUrl);
-
-		request.get(songUrl, {},
-		function (error, response, body) 
+		if (songUrl.startsWith('https://www.newgrounds.com/playlists'))
 		{
-			
-			let resp = JSON.parse(body);
-			console.log(resp);
+			const options = {
+				uri: songUrl,
+				transform: function (body) {
+				  return cheerio.load(body);
+				}
+			  };
 
-			if (!resp.allow_external_api)
-				return message.reply(`Sorry! The author of ${resp.title} (probably ${resp.authors[0].name})has not allowed external API access, so it cannot be played. Message the author if you want this to be changed!`)
+			  rp(options)
+			  .then(($) => {
+				  let songList = $('.itemlist.alternating').find('li');
+				  
+				  for (let i = 0; i < songList.toArray().length; i++)
+				  {
+					let daSong = songList.toArray()[i].children[1].children[1].attribs.href;
+					daSong = daSong.slice(2, daSong.length);
+					daSong = "https://" + daSong;
+					  
+					console.log(daSong)
+					handleNGSongs(daSong, message, message.member.voiceChannel, true);
+				  }
 
-			const song = {
-				id: resp.id,
-				title: resp.title,
-				url: resp.stream_url
-			};
+				  console.log(songList);
 
-			
+			  });
+		}
+		else
+		{
+			handleNGSongs(songUrl, message, message.member.voiceChannel);
+		}
 
-			var VC = message.member.voiceChannel;
-
-			handleVideo(song, message, VC);
-			/*
-			if (!VC)
-				return message.reply("MESSAGE IF NOT IN A VOICE CHANNEL")
-			VC.join()
-			.then(connection => {
-				const dispatcher = connection.playStream(resp.stream_url);
-				dispatcher.on("end", end => {VC.leave()});
-			})
-			.catch(console.error);
-			*/
-		});
+		
 	}
 
 	// cheerio.js scraping help and info:
@@ -1183,14 +1181,36 @@ The Owner is: ${message.guild.owner.user.username}`);
  	*/
 });
 
-
-
 function clean(text)
 {
 	if (typeof(text) == "string")
 		return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
 	else
 		return text;
+}
+
+function handleNGSongs(songUrl, message, voicechannel, playlist=false)
+{
+	songUrl = songUrl.replace("listen", "feed");
+		console.log(songUrl);
+
+		request.get(songUrl, {},
+		function (error, response, body) 
+		{
+			let resp = JSON.parse(body);
+			console.log(resp);
+
+			if (!resp.allow_external_api)
+				return message.reply(`Sorry! The author of *${resp.title}* (NG user ${resp.authors[0].name}) has not allowed external API access, so it cannot be played. Message the author if you want this to be changed!`)
+
+			const song = {
+				id: resp.id,
+				title: resp.title,
+				url: resp.stream_url
+			};
+
+			handleVideo(song, message, message.member.voiceChannel, playlist);
+		});
 }
 
 async function handleVideo(video, message, voiceChannel, playlist = false) {
