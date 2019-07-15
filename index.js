@@ -166,20 +166,22 @@ client.on('message', async message =>
 	//RATING EMOTES ON NG SERVER
 	if (message.guild.id == 578313756015329281 && (message.channel.id == 578313839641231372 || message.channel.id == 578313930456170497 || message.channel.id == 578313914786250802 || message.channel.id == 578313897577021500 || message.channel.id == 583343626378280985))
 	{
-		if (message.attachments.size > 0 || message.content.startsWith("https://www.newgrounds.com/art/view") || message.content.startsWith('https://www.newgrounds.com/audio/listen/') || message.content.startsWith('https://www.newgrounds.com/portal/view/'))
+		if (!message.content.startsWith('[noreact]'))
 		{
-			let picoSuffix = "";
-			if (Math.random() > 0.5)
-				picoSuffix = "pico"
+			if (message.attachments.size > 0 || message.content.startsWith("https://www.newgrounds.com/art/view") || message.content.startsWith('https://www.newgrounds.com/audio/listen/') || message.content.startsWith('https://www.newgrounds.com/portal/view/'))
+			{
+				let picoSuffix = "";
+				if (Math.random() > 0.5)
+					picoSuffix = "pico"
 
-			message.react(message.guild.emojis.find('name', "0stars" + picoSuffix))
-			.then(react => message.react(message.guild.emojis.find('name', "1star" + picoSuffix)))
-			.then(react => message.react(message.guild.emojis.find('name', "2stars" + picoSuffix)))
-			.then(react => 	message.react(message.guild.emojis.find('name', "3stars" + picoSuffix)))
-			.then(react => message.react(message.guild.emojis.find('name', "4stars" + picoSuffix)))
-			.then(react => message.react(message.guild.emojis.find('name', "5stars" + picoSuffix)));
+				message.react(message.guild.emojis.find('name', "0stars" + picoSuffix))
+				.then(react => message.react(message.guild.emojis.find('name', "1star" + picoSuffix)))
+				.then(react => message.react(message.guild.emojis.find('name', "2stars" + picoSuffix)))
+				.then(react => 	message.react(message.guild.emojis.find('name', "3stars" + picoSuffix)))
+				.then(react => message.react(message.guild.emojis.find('name', "4stars" + picoSuffix)))
+				.then(react => message.react(message.guild.emojis.find('name', "5stars" + picoSuffix)));
+			}
 		}
-			
 	}
 
 
