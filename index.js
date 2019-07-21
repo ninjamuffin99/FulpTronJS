@@ -356,17 +356,33 @@ ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
 		}
 	} else if (command === 'skip') {
 		if (!message.member.voiceChannel) return message.channel.send('You are not in a voice channel!');
+		if (!message.member.voiceChannel.memberPermissions(message.member).has('SPEAK'))
+		{
+			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
+		}
+		
 		if (!serverQueue) return message.channel.send('There is nothing playing that I could skip for you.');
 		serverQueue.connection.dispatcher.end('Skip command has been used!');
 		return undefined;
 	} else if (command === 'stop') {
 		if (!message.member.voiceChannel) return message.channel.send('You are not in a voice channel!');
+		if (!message.member.voiceChannel.memberPermissions(message.member).has('SPEAK'))
+		{
+			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
+		}
+		
 		if (!serverQueue) return message.channel.send('There is nothing playing that I could stop for you.');
 		serverQueue.songs = [];
 		serverQueue.connection.dispatcher.end('Stop command has been used!');
 		return undefined;
 	} else if (command === 'volume') {
 		if (!message.member.voiceChannel) return message.channel.send('You are not in a voice channel!');
+
+		if (!message.member.voiceChannel.memberPermissions(message.member).has('SPEAK'))
+		{
+			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
+		}
+		
 		if (!serverQueue) return message.channel.send('There is nothing playing.');
 		if (!args[0]) return message.channel.send(`The current volume is: **${serverQueue.volume}**`);
 		if (args[0] > 200) return message.channel.send('pls do not use FulpTron for evil (max volume is 200)');
@@ -389,6 +405,11 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 			serverQueue.connection.dispatcher.pause();
 			return message.channel.send('⏸ Paused the music for you!');
 		}
+		if (!message.member.voiceChannel.memberPermissions(message.member).has('SPEAK'))
+		{
+			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
+		}
+		
 		return message.channel.send('There is nothing playing.');
 	} else if (command === 'resume') {
 		if (serverQueue && !serverQueue.playing) 
@@ -841,7 +862,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 		{
 			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
 		}
-		
+
 		let songUrl = args[0];
 
 		if (songUrl == undefined)
