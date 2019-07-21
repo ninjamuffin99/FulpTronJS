@@ -1298,7 +1298,7 @@ async function play(guild, song) {
 
 	if (song.onNG)
 	{
-		const dispatcher = serverQueue.connection.playStream(song.url, {volume: 0.5})
+		const dispatcher = serverQueue.connection.playStream(song.url, {volume: 0.2})
 		.on('end', reason => {
 			if (reason === 'Stream is not generating quickly enough.') console.log('Song ended.');
 			else console.log(reason + " is the reason the thing ended");
@@ -1309,7 +1309,7 @@ async function play(guild, song) {
 	}
 	else
 	{
-		const dispatcher = serverQueue.connection.playOpusStream(await ytdl(song.url, { filter: 'audioonly'}, { type: 'opus'}), {volume: 0.6})
+		const dispatcher = serverQueue.connection.playOpusStream(await ytdl(song.url, { filter: 'audioonly'}, { type: 'opus'}), {volume: 0.2})
 		.on('end', reason => {
 			if (reason === 'Stream is not generating quickly enough.') console.log('Song ended.');
 			else console.log(reason);
