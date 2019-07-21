@@ -283,7 +283,7 @@ client.on('message', async message =>
 
 		const permissions = voiceChannel.permissionsFor(message.client.user);
 
-		if (message.member.mute)
+		if (message.member.serverMute)
 		{
 			return message.channel.send('You are muted, so it is likely you should not be using me!');
 		}
@@ -837,7 +837,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 	{
 
 		
-		if (message.member.mute)
+		if (message.member.serverMute)
 		{
 			return message.channel.send('You are muted, so it is likely you should not be using me!');
 		}
