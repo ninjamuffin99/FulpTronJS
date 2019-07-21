@@ -285,7 +285,7 @@ client.on('message', async message =>
 
 		if (message.member.mute)
 		{
-			return message.channel.send('You are muted, so it is likely you should not be using me either!');
+			return message.channel.send('You are muted, so it is likely you should not be using me!');
 		}
 
 		if (!permissions.has('CONNECT'))
@@ -839,7 +839,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 		
 		if (message.member.mute)
 		{
-			return message.channel.send('You are muted, so it is likely you should not be using me either!');
+			return message.channel.send('You are muted, so it is likely you should not be using me!');
 		}
 		
 		let songUrl = args[0];
