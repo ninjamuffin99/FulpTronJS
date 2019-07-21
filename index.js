@@ -297,7 +297,7 @@ client.on('message', async message =>
 		{
 			return message.channel.send('I cannot speak in this voice channel with my current permissions :(');
 		}
-		if (!message.member.permissions.has('SPEAK'))
+		if (!message.member.voiceChannel.memberPermissions(message.member).has('SPEAK'))
 		{
 			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
 		}
@@ -837,12 +837,11 @@ The Owner is: ${message.guild.owner.user.username}`);
 	if (command == 'ngplay')
 	{
 
-		/*
-		if (!message.member.speaking)
+		if (!message.member.voiceChannel.memberPermissions(message.member).has('SPEAK'))
 		{
-			return message.channel.send('You are muted, so it is likely you should not be using me!');
+			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
 		}
-		*/
+		
 		let songUrl = args[0];
 
 		if (songUrl == undefined)
