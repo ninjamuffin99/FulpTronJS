@@ -282,6 +282,12 @@ client.on('message', async message =>
 		}
 
 		const permissions = voiceChannel.permissionsFor(message.client.user);
+
+		if (message.member.mute)
+		{
+			return message.channel.send('You are muted, so it is likely you should not be using me either!');
+		}
+
 		if (!permissions.has('CONNECT'))
 		{
 			return message.channel.send("I can't join that voice channel with my current roles :(");
@@ -830,12 +836,12 @@ The Owner is: ${message.guild.owner.user.username}`);
 	if (command == 'ngplay')
 	{
 
-		/* UNCOMMENT FOR ACOCk
-		if (!message.member.voiceChannel.rolePermissions(message.member).has('SPEAK'))
+		
+		if (message.member.mute)
 		{
-			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
+			return message.channel.send('You are muted, so it is likely you should not be using me either!');
 		}
-		*/
+		
 		let songUrl = args[0];
 
 		if (songUrl == undefined)
