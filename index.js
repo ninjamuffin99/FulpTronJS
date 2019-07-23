@@ -252,7 +252,7 @@ client.on('message', async message =>
 		message.channel.guild.createEmoji('./pics/luis/luis.jpg', 'luis', [message.guild.roles.find('name', 'Newgrounder')])
 	}
 
-	if (command == 'screenshare')
+	if (command == 'screenshare' || command =='share')
 	{
 		const { voiceChannel } = message.member;
 
