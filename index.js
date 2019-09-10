@@ -23,12 +23,13 @@ const ytdl = require('ytdl-core-discord');
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
 
-//const { prefix, token, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json');
+//const { prefix, token, clientID, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json');
 
 let gCreds = require('./fulpGdrive.json');
 //let gCreds = require('./config.json');
 
 const prefix = process.env.prefix;
+const clientID = process.env.clientID;
 const ownerID = process.env.ownerID;
 const token = process.env.token;
 const NGappID = process.env.NGappID;
@@ -220,7 +221,7 @@ client.on('message', async message =>
 	}
 
 	//IF IT DOESNT START WITH "FULP" then IT DONT REGISTER PAST THIS POINT
-	if (!message.content.toLowerCase().startsWith(prefix) || message.author.bot ) return;
+	if (!message.content.toLowerCase().startsWith(prefix) || message.author.id == clientID ) return;
 
 	const args = message.content.slice(prefix.length).split(/ +/);
 	const command = args.shift().toLowerCase();
@@ -436,7 +437,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 	if (command == 'invite')
 	{
-		message.channel.send("Use this link to invite FulpTron to a server that you have admin access on! https://discordapp.com/oauth2/authorize?client_id=381604281968623617&scope=bot&permissions=8");
+		message.channel.send(`Use this link to invite FulpTron to a server that you have admin access on! https://discordapp.com/oauth2/authorize?client_id=${clientID}&scope=bot&permissions=8`);
 	}
 
 	if (command == 'discord')

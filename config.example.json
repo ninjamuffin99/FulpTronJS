@@ -1,5 +1,6 @@
 {
-  "token": "insert token here",
+  "token": "insert your discord bot's token here",
+  "clientID": "insert your discord app's client ID here",
   "prefix": "fulp",
   "ownerID": "",
   "NGappID": "",
