@@ -437,7 +437,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 	if (command == 'invite')
 	{
-		message.channel.send(`Use this link to invite FulpTron to a server that you have admin access on! https://discordapp.com/oauth2/authorize?client_id=${clientID}&scope=bot&permissions=8`);
+		message.channel.send(`Use this link to invite FulpTron to a server that you have admin access on! https://discordapp.com/oauth2/authorize?client_id=381604281968623617&scope=bot&permissions=8`);
 	}
 
 	if (command == 'discord')
