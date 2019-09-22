@@ -1,7 +1,8 @@
-﻿const fs = require('fs');
+const fs = require('fs');
 const rp = require('request-promise');
 const path = require('path');
 const cheerio = require('cheerio');
+const nodemailer = require('nodemailer');
 
 // require the discord.js module
 const Discord = require('discord.js');
@@ -20,25 +21,27 @@ client.commands = new Discord.Collection();
 //extra shit
 const ytdl = require('ytdl-core-discord');
 
+// consts
+const nonDiscordUserMsg = 'you need to be using Discord to get this feature!';
+
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
 
-//const { prefix, token, clientID, ownerID, NGappID, NGencKey, GOOGLE_API_KEY, MMappID} = require('./config.json');
+let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.json');
 
 let gCreds = require('./fulpGdrive.json');
-//let gCreds = require('./config.json');
 
-const prefix = process.env.prefix;
-const clientID = process.env.clientID;
-const ownerID = process.env.ownerID;
-const token = process.env.token;
-const NGappID = process.env.NGappID;
-const NGencKey = process.env.NGencKey;
-const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
-const MMappID = process.env.MMappID;
-gCreds.private_key_id = process.env.private_key_id;
-gCreds.private_key = process.env.private_key.replace(/\\n/g, '\n');
-
+if (process.env.prefix) prefix = process.env.prefix;
+if (process.env.clientID) clientID = process.env.clientID;
+if (process.env.ownerID) ownerID = process.env.ownerID;
+if (process.env.token) token = process.env.token;
+if (process.env.NGappID) NGappID = process.env.NGappID;
+if (process.env.NGencKey) NGencKey = process.env.NGencKey;
+if (process.env.spreadsheetID) spreadsheetID = process.env.spreadsheetID;
+if (process.env.GOOGLE_API_KEY) GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+if (process.env.MMappID) MMappID = process.env.MMappID;
+if (process.env.private_key_id) gCreds.private_key_id = process.env.private_key_id;
+if (process.env.private_key) gCreds.private_key = process.env.private_key.replace(/\\n/g, '\n');
 
 // Music bot shit
 const YouTube = require(`simple-youtube-api`);
@@ -149,23 +152,30 @@ client.on('guildMemberAdd', async member =>
 	}
 
 	//G
-	if (member.guild.id == 578313756015329281)
+	let guildIndex = luckyGuilds.indexOf(member.guild.id);
+	if (guildIndex != -1)
 	{
 		let infoPart = '*\nYou can use the command `fulpNGLogin` to sign into the Newgrounds API, and `fulpAddRole <role>` to give yourself other roles(`fulpRoles` to see all roles, and `fulpHelp` for more info)'
 
 		let intro = ngRef[Math.floor(Math.random() * ngRef.length)];
 		intro = intro.replace('username',  "**" + member.user.username + "**");
 
-		return member.guild.channels.find('id', '578313756015329283').send("*" + intro + infoPart);
+		return member.guild.channels.find('id', `{luckyChannels[guildIndex][0]}`).send("*" + intro + infoPart);
 	}
 
 });
 
 client.on('message', async message => 
 {
+	// Don't respond to messages made by the bot itself
+	if (message.author.id == clientID) return;
+
+	let isInGuild = message.guild != null;
+	let isDiscordUser = !message.author.bot;
 
 	//RATING EMOTES ON NG SERVER
-	if (message.guild.id == 578313756015329281 && (message.channel.id == 578313839641231372 || message.channel.id == 578313930456170497 || message.channel.id == 578313914786250802 || message.channel.id == 578313897577021500 || message.channel.id == 583343626378280985))
+	let guildIndex = isInGuild ? luckyGuilds.indexOf(message.guild.id) : -1;
+	if (guildIndex != -1 && luckyChannels[guildIndex].includes(message.channel.id))
 	{
 		if (!message.content.startsWith('[noreact]'))
 		{
@@ -191,7 +201,7 @@ client.on('message', async message =>
 		// message.reply basically the same as message.channel.send, but @'s the person who sent it
 		message.reply("I **LOVE** talking about Tom Fulp!");
 	}
-	if (message.content.toLowerCase() === "can i get a rip in chat?")
+	else if (message.content.toLowerCase() === "can i get a rip in chat?")
 	{
 		// message.reply basically the same as message.channel.send, but @'s the person who sent it
 		message.reply("\nRIP\nRIP\nRIP");
@@ -216,12 +226,12 @@ client.on('message', async message =>
 		}
 	}*/
 
-	if(message.content.toLowerCase() === "monster mashing"){
+	else if(message.content.toLowerCase() === "monster mashing"){
 		message.reply("Did someone say M0NSTER MASHING!?\nhttps://www.newgrounds.com/portal/view/707498");
 	}
 
 	//IF IT DOESNT START WITH "FULP" then IT DONT REGISTER PAST THIS POINT
-	if (!message.content.toLowerCase().startsWith(prefix) || message.author.id == clientID ) return;
+	else if (!message.content.toLowerCase().startsWith(prefix)) return;
 
 	const args = message.content.slice(prefix.length).split(/ +/);
 	const command = args.shift().toLowerCase();
@@ -234,27 +244,34 @@ client.on('message', async message =>
 		message.channel.send(`Pong! Ping: ${pang}ms`);
 	}
 
-	if (command == 'shame')
+	else if (command == 'shame')
 	{
 		message.channel.send('**SHAAAAAME**');
 	}
 
-	if(command == 'die'){
+	else if(command == 'die'){
 		message.channel.send(`(＾A＾)  ̿ ̿'̿'\̵͇̿̿\з`);
 	}
 
-	if (command == 'help')
+	else if (command == 'help')
 	{
 		message.channel.send("https://github.com/ninjamuffin99/FulpTronJS/blob/master/COMMANDS.md");
 	}
 
-	if (command == 'emotetest')
+	else if (command == 'emotetest')
 	{
+		if (!isInGuild) return;
 		message.channel.guild.createEmoji('./pics/luis/luis.jpg', 'luis', [message.guild.roles.find('name', 'Newgrounder')])
 	}
 
-	if (command == 'screenshare' || command =='share')
+	else if (command == 'screenshare' || command =='share')
 	{
+		if (!isInGuild) return;
+		if (!isDiscordUser)
+		{
+			return message.reply(nonDiscordUserMsg);
+		}
+
 		const { voiceChannel } = message.member;
 
 		if (!voiceChannel) {
@@ -264,11 +281,16 @@ client.on('message', async message =>
 		return message.channel.send('http://www.discordapp.com/channels/' + message.guild.id + '/' + voiceChannel.id)
 	}
 
-	const serverQueue = queue.get(message.guild.id);
+	const serverQueue = isInGuild ? queue.get(message.guild.id) : null;
 		console.log(serverQueue);
 	 
 	if (command == 'play' || command == 'join') 
 	{
+		if (!isInGuild) return;
+		if (!isDiscordUser)
+		{
+			return message.reply(nonDiscordUserMsg);
+		}
 		//return message.channel.send("WOOPS if you are reading this fulpPlay is BUSTED right now. Ur boy ninjamuffin already knows this and is tryin to fix it");
 
 		const searchString = args.slice(0).join(" ");
@@ -356,6 +378,10 @@ ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
 			return handleVideo(video, message, voiceChannel);
 		}
 	} else if (command === 'skip') {
+		if (!isDiscordUser)
+		{
+			return message.reply(nonDiscordUserMsg);
+		}
 		if (!message.member.voiceChannel) return message.channel.send('You are not in a voice channel!');
 		if (!message.member.voiceChannel.memberPermissions(message.member).has('SPEAK'))
 		{
@@ -366,6 +392,10 @@ ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
 		serverQueue.connection.dispatcher.end('Skip command has been used!');
 		return undefined;
 	} else if (command === 'stop') {
+		if (!isDiscordUser)
+		{
+			return message.reply(nonDiscordUserMsg);
+		}
 		if (!message.member.voiceChannel) return message.channel.send('You are not in a voice channel!');
 		if (!message.member.voiceChannel.memberPermissions(message.member).has('SPEAK'))
 		{
@@ -377,6 +407,10 @@ ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
 		serverQueue.connection.dispatcher.end('Stop command has been used!');
 		return undefined;
 	} else if (command === 'volume') {
+		if (!isDiscordUser)
+		{
+			return message.reply(nonDiscordUserMsg);
+		}
 		if (!message.member.voiceChannel) return message.channel.send('You are not in a voice channel!');
 
 		if (!message.member.voiceChannel.memberPermissions(message.member).has('SPEAK'))
@@ -401,6 +435,10 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 **Now playing:** ${serverQueue.songs[0].title}
 		`);
 	} else if (command === 'pause') {
+		if (!isDiscordUser)
+		{
+			return message.reply(nonDiscordUserMsg);
+		}
 		if (serverQueue && serverQueue.playing) {
 			serverQueue.playing = false;
 			serverQueue.connection.dispatcher.pause();
@@ -413,6 +451,10 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		
 		return message.channel.send('There is nothing playing.');
 	} else if (command === 'resume') {
+		if (!isDiscordUser)
+		{
+			return message.reply(nonDiscordUserMsg);
+		}
 		if (serverQueue && !serverQueue.playing) 
 		{
 			serverQueue.playing = true;
@@ -425,8 +467,9 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 	 
 	// STUPID JS NOTE: MAKE SURE YOU USE ` BACKTICKS LIKE THIS, INSTEAD OF ' APOSTROPHES LIKE THIS
 	// IF YOU WANT TO USE EZ VARIABLES AND SHIT
-	if (command == 'server') 
+	else if (command == 'server') 
 	{
+		if (!isInGuild) return;
 		message.channel.send(`This server's name is: ${message.guild.name}
 Total members: ${message.guild.memberCount}
 Server Region: ${message.guild.region}
@@ -435,18 +478,22 @@ FulpTron joined this server at: ${message.guild.joinedAt}
 The Owner is: ${message.guild.owner.user.username}`);
 	}
 
-	if (command == 'invite')
+	else if (command == 'invite')
 	{
-		message.channel.send(`Use this link to invite FulpTron to a server that you have admin access on! https://discordapp.com/oauth2/authorize?client_id=381604281968623617&scope=bot&permissions=8`);
+		message.channel.send(`Use this link to invite FulpTron to a server that you have admin access on! https://discordapp.com/oauth2/authorize?client_id=${clientID}&scope=bot&permissions=8`);
 	}
 
-	if (command == 'discord')
+	else if (command == 'discord')
 	{
 		message.channel.send("https://discord.gg/HzvnXfZ");
 	}
 
-	if (command == 'kick')
+	else if (command == 'kick')
 	{
+		if (!isDiscordUser)
+		{
+			return message.reply(nonDiscordUserMsg);
+		}
 		if (!message.member.permissions.has("KICK_MEMBERS"))
 		{
 			return message.reply("you don't have permission to kick u doof!");
@@ -461,8 +508,12 @@ The Owner is: ${message.guild.owner.user.username}`);
 		message.channel.send(`You wanted to kick: ${taggedUser.username}`);
 	}
 
-	if (command == 'prune' || command == 'purge')
+	else if (command == 'prune' || command == 'purge')
 	{
+		if (!isDiscordUser)
+		{
+			return message.reply(nonDiscordUserMsg);
+		}
 		if (!message.member.hasPermission('MANAGE_MESSAGES'))
 		{
 			return message.channel.send("You need to have the permission 'Manage Messages' enabled for one of your roles!");
@@ -487,7 +538,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 		})
 	}
 
-	if (command == "uptime"){
+	else if (command == "uptime"){
 		//message.reply(`Current uptime is : ${client.uptime.toPrecision(2) * 0.001} seconds`)
 		let totalSeconds = (client.uptime / 1000);
 		let hours = Math.floor(totalSeconds / 3600);
@@ -499,8 +550,9 @@ The Owner is: ${message.guild.owner.user.username}`);
 		message.reply("Current uptime is : " + uptime);
 	}
 
-	if (command == "points")
+	else if (command == "points")
 	{
+		if (!isInGuild) return;
 		let score = client.getScore.get(message.author.id, message.guild.id);
 		if (!score)
 		{
@@ -521,7 +573,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 		console.log(score);
 	}
 
-	if (command == "picarto")
+	else if (command == "picarto")
 	{
 		let username = args[0];
 		let url = `https://api.picarto.tv/v1/channel/name/${username}`;
@@ -556,7 +608,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 	}
 
 
-	if (command == "quiz")
+	else if (command == "quiz")
 	{
 		// https://opentdb.com/api.php?amount=1
 
@@ -613,8 +665,9 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 
 
-	if (command == 'roles')
+	else if (command == 'roles')
 	{
+		if (!isInGuild) return;
 		let roleList = message.guild.roles.map(r => {
 			if (["Admins", 'Moderators', "@everyone", 'BrenBot', 'Mr. Fulp', 'Contributor', 'Nitro Booster'].indexOf(r.name) > -1 || r.name.endsWith('Collab'))
 				return "";
@@ -625,7 +678,13 @@ The Owner is: ${message.guild.owner.user.username}`);
 	}
 
 	//Cam you do it
-	if (command == "addrole"){
+	else if (command == "addrole"){
+		if (!isInGuild) return;
+		if (!isDiscordUser)
+		{
+			return message.reply(nonDiscordUserMsg);
+		}
+
 		let role = args.slice(0).join(" ");
 		if (role.endsWith('Collab'))
 			return message.reply('Message the collab organizer if you would like to participate in this collab!');
@@ -649,8 +708,14 @@ The Owner is: ${message.guild.owner.user.username}`);
 		message.reply(`just got the ${curRole.name} role!`);
 	}
 
-	if (command == "removerole")
+	else if (command == "removerole")
 	{
+		if (!isInGuild) return;
+		if (!isDiscordUser)
+		{
+			return message.reply(nonDiscordUserMsg);
+		}
+
 		let role = args.slice(0).join(" ");
 		if (['Blammed'].indexOf(role) > -1)
 			return message.reply('lol dummy');
@@ -670,6 +735,12 @@ The Owner is: ${message.guild.owner.user.username}`);
 	/* 
 	if (command == "timeout" && message.author.role("mod"))
 	{
+		if (!isInGuild) return;
+		if (!isDiscordUser)
+		{
+			return message.reply(nonDiscordUserMsg);
+		}
+
 		let usr = args[0];
 		
 		if (!message.guild.roles.exists("name", role))
@@ -685,7 +756,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 		//message.reply('just got the ${curRole.name} role!');
 	}
 	 */
-	if (command == 'args-info')
+	else if (command == 'args-info')
 	{
 		if (!args.length)
 		{
@@ -695,7 +766,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 		message.channel.send(`Command name: ${command}\nArgumenets: ${args}`);
 	}
 
-	if (command === "asl") 
+	else if (command === "asl") 
 	{
 		let age = args[0]; // Remember arrays are 0-based!.
 		let sex = args[1];
@@ -703,12 +774,12 @@ The Owner is: ${message.guild.owner.user.username}`);
 		message.reply(`Hello ${message.author.username}, I see you're a ${age} year old ${sex} from ${location}. Wanna date?`);
 	}
 
-	if (command == 'cringe' || command == 'snap')
+	else if (command == 'cringe' || command == 'snap')
 	{
 		message.channel.send('brandyCringe.png', {file: "pics/brandy/brandyCringe.png"});
 	}
 
-	if (command == 'dogl' || command == 'dogg')
+	else if (command == 'dogl' || command == 'dogg')
 	{
 		
 
@@ -719,7 +790,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 		message.channel.send(curPic, {file: "pics/dogl/" + curPic});
 	}
 
-	if ( command == 'delete' || command == 'delet' || command == 'gun')
+	else if ( command == 'delete' || command == 'delet' || command == 'gun')
 	{
 		let curPic = randomFromArray(2);
 		console.log("THE PIC");
@@ -751,13 +822,13 @@ The Owner is: ${message.guild.owner.user.username}`);
 		message.channel.send(curPic, {file: "pics/fulp/" + curPic});
 	}
 
-	if (command == "watching")
+	else if (command == "watching")
 	{
 		let text = args.slice(0).join(" ");
 		client.user.setActivity(text, { type: 'WATCHING'});
 	}
 
-	if (command == 'playing') 
+	else if (command == 'playing') 
 	{
 		let text = args.slice(0).join(" ");
 			client.user.setActivity(text, { type: 'PLAYING' })
@@ -765,7 +836,7 @@ The Owner is: ${message.guild.owner.user.username}`);
   			.catch(console.error);
 	}
 
-	if (command == "shoom" || command == "jojo")
+	else if (command == "shoom" || command == "jojo")
 	{
 		let shoomBeginning = "**SH";
 
@@ -783,7 +854,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 	}
 
-	if (command === 'say')
+	else if (command === 'say')
 	{
 		let text = args.slice(0).join(" ");
 		message.delete();
@@ -792,7 +863,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 		console.log(message.author.username + " says: " + text);
 	}
 
-	if (command == 'roll')
+	else if (command == 'roll')
 	{
 		let min = 1;
 		let max = parseInt(args[0]);
@@ -804,7 +875,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 	}
 
-	if (command == 'ngfollow')
+	else if (command == 'ngfollow')
 	{
 		let usr = args[0];
 		if (usr == undefined)
@@ -821,14 +892,14 @@ The Owner is: ${message.guild.owner.user.username}`);
 		}
 	}
 
-	if (command == 'loli')
+	else if (command == 'loli')
 	{
 		 message.channel.send({ files: ['https://cdn.discordapp.com/attachments/422660110830272514/446516094006460417/unknown.png']})
 		.then(message.channel.send('**inb4 BAN**'))
 		.then(message.channel.send({ files: ['https://cdn.discordapp.com/attachments/422660110830272514/446516105880535041/unknown.png']}));
 	}
 
-	if (command == 'source' || command == 'sourcecode' || command == 'github')
+	else if (command == 'source' || command == 'sourcecode' || command == 'github')
 	{
 		message.channel.send("Dig through my code on Github: \nhttps://github.com/ninjamuffin99/FulpTronJS");
 	}
@@ -836,7 +907,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 	// WARNING VERY DANGEROUS COMMAND THAT CAN RUIN THE BOT'S HOST IF IN THE WRONG HANDS
 	// BUT IM CODING IT IN FOR THE LOLS LMAOOO
 	// make sure you set 'ownerID' as your discord ID (the numbers and shit) to make sure that no goon besides the host uses it
-	if (command == 'eval')
+	else if (command == 'eval')
 	{
 			if (message.author.id !== ownerID) return;
 			try
@@ -856,8 +927,12 @@ The Owner is: ${message.guild.owner.user.username}`);
 			}
 	}
 
-	if (command == 'ngplay')
+	else if (command == 'ngplay')
 	{
+		if (!isDiscordUser)
+		{
+			return message.reply(nonDiscordUserMsg);
+		}
 
 		if (!message.member.voiceChannel.memberPermissions(message.member).has('SPEAK'))
 		{
@@ -902,7 +977,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 	// cheerio.js scraping help and info:
 	// https://codeburst.io/an-introduction-to-web-scraping-with-node-js-1045b55c63f7
 	// also check out the cheerio.js github and website
-	if (command == "ngscrape" || command == 'scrape' || command == 'stats')
+	else if (command == "ngscrape" || command == 'scrape' || command == 'stats')
 	{
 
 		//return message.channel.send("woops this command is busted right now sorry lolol");
@@ -1009,9 +1084,56 @@ The Owner is: ${message.guild.owner.user.username}`);
 		
 	}
 
-	if (command == "nglogin")
+	else if (command == "nglogout")
 	{
-		const doc = new GoogleSpreadsheet('10tGovoaOyTl1wBB0DUIu8Txa8Atk_5cTMnxF00Blt5Y');
+		if (!isInGuild) return;
+		const doc = new GoogleSpreadsheet(spreadsheetID);
+		await promisify(doc.useServiceAccountAuth)(gCreds);
+		const info = await promisify(doc.getInfo)();
+
+		const sheet = info.worksheets[0];
+		console.log(`Title: ${sheet.title}, Rows: ${sheet.rowCount}`);
+
+		const Rows = await promisify(sheet.getRows)({
+				offset: 1
+		});
+
+		let rowToDelete = null;
+
+
+		Rows.forEach(function(row, index)
+		{
+			if (row.discord == message.author.id)
+			{
+				rowToDelete = row;
+				console.log("FOUND USER...");
+				console.log(row.session);
+			}
+			else
+			{
+				console.log("NOT USER");
+			}
+
+			console.log(`SIGNED IN: ${row.expired}`);
+
+			console.log(`Discord ID: ${row.discord}`);
+			console.log(`Session ID: ${row.session}`);
+			console.log(`Newgrounds Username ${row.newgrounds}`);
+			console.log(`Is Supporter: ${row.supporter}`);
+			console.log("----------");
+		});
+
+		if (rowToDelete)
+		{
+			rowToDelete.del();
+			return message.reply("all your base are belong back to you.");
+		}
+	}
+
+	else if (command == "nglogin")
+	{
+		if (!isInGuild) return;
+		const doc = new GoogleSpreadsheet(spreadsheetID);
 		await promisify(doc.useServiceAccountAuth)(gCreds);
 		const info = await promisify(doc.getInfo)();
 
@@ -1054,20 +1176,43 @@ The Owner is: ${message.guild.owner.user.username}`);
 						
 						console.log(JSON.parse(response.body));
 						row.expired = parsedResp.result.data.session.expired;
-						signedIn = !row.expired;
+						signedIn = !row.expired && parsedResp.result.data.session.user;
 						if (signedIn)
 						{
 							row.newgrounds = parsedResp.result.data.session.user.name;
 							row.supporter = parsedResp.result.data.session.user.supporter;
 
-							message.member.setNickname(parsedResp.result.data.session.user.name);
-
-							message.reply("successfully signed into the Newgrounds API!");
-							message.member.addRole(message.guild.roles.find('name', 'Newgrounder'));
-
-							if (row.supporter)
+							if (isDiscordUser)
 							{
-								message.member.addRole(message.guild.roles.find('name', 'Supporter'));
+								message.member.setNickname(parsedResp.result.data.session.user.name);
+
+								message.reply("successfully signed into the Newgrounds API!");
+								let role = message.guild.roles.find('name', 'Newgrounder');
+								if (role)
+								{
+									message.member.addRole(role);
+								}
+								else
+								{
+									console.error('Newgrounder role does not exist on this guild');
+								}
+
+								if (row.supporter)
+								{
+									role = message.guild.roles.find('name', 'Supporter');
+									if (role)
+									{
+										message.member.addRole(role);
+									}
+									else
+									{
+										console.error('Supporter role does not exist on this guild');
+									}
+								}
+							}
+							else
+							{
+								message.reply("signed into the Newgrounds API, but without any Discord-specific features.");
 							}
 						}
 
@@ -1114,18 +1259,58 @@ The Owner is: ${message.guild.owner.user.username}`);
 							discord: message.author.id,
 							session: parsedResp.result.data.session.id
 						};
-						await promisify(sheet.addRow)(ngUser);
-						
-						console.log(JSON.parse(response.body));
-						message.reply('link sent. Confirm it and then type fulpNGLogin here again!');
-						message.author.send(`FulpTron will NOT have access to your Newgrounds password!!!\nFeel free to check the source code using the fulpSource command\nClick this link to sign into Newgrounds: ${parsedResp.result.data.session.passport_url}\nAnd then type in fulpNGLogin again to get the roles!`)
+
+						if (isDiscordUser)
+						{
+							await promisify(sheet.addRow)(ngUser);
+
+							console.log(parsedResp);
+							message.reply('link sent. Confirm it and then type fulpNGLogin here again!');
+							message.author.send(`FulpTron will NOT have access to your Newgrounds password!!!\nFeel free to check the source code using the fulpSource command\nClick this link to sign into Newgrounds: ${parsedResp.result.data.session.passport_url}\nAnd then type in fulpNGLogin again to get the roles!`);
 						}
-					);
+						else
+						{
+							if (args.length != 1)
+							{
+								message.reply("Looks like you're not a Discord user. To log in, use this same command, but also type your email. (Don't worry, I'll take good care of it!)");
+							}
+							else
+							{
+								try
+								{
+									let transporter = nodemailer.createTransport({
+										host: 'localhost',
+										port: 25,
+										tls: {
+											rejectUnauthorized: false
+										}
+									});
+
+									let info = await transporter.sendMail({
+										from: '"FulpTronJS" <noreply-fulptron@miscworks.net>',
+										to: `${args[0]}`,
+										subject: 'FulpTron login',
+										text: `Hi,\nLooks like you asked to link your Newgrounds account with a FulpTron-managed Discord server.\nFulpTron will NOT have access to your Newgrounds password!!!\nFeel free to check the source code using the fulpSource command\nClick this link to sign into Newgrounds: ${parsedResp.result.data.session.passport_url}\nAnd then type in fulpNGLogin again to get the roles!\n\nIf none of this rings a bell, disregard this email.`
+									});
+
+									await promisify(sheet.addRow)(ngUser);
+
+									message.delete();
+									message.reply("email se--I mean, what's an email? (Psst, type fulpNGLogin here again when you're done. If you get stuck, type fulpNGLogout.)");
+								}
+								catch (error)
+								{
+									message.reply("couldn't send an email. Check that it wasn't mistyped.");
+								}
+							}
+						}
+					}
+				);
 		}
 	}
 	
 
-	if (command == "mmscores")
+	else if (command == "mmscores")
 	{
 
 		var inputData = {
@@ -1186,7 +1371,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 	}
 
-	if (command == "testerror" && message.channel.author.id == ownerID)
+	else if (command == "testerror" && message.channel.author.id == ownerID)
 		message.channel.send(` <@${ownerID}> an error occured`);
 	/* 
 	if (command == "ngaura")
@@ -1409,7 +1594,7 @@ function randomFromArray(arr)
 	return fulpPics[arr][thePic];
 }
 
-process.on('unhandledRejection', error => console.error(`Uncaught Promise Rejection:\n${error}`));
+process.on('unhandledRejection', error => console.error(`Uncaught Promise Rejection:\n${error.stack}`));
 
 // login to Discord with your app's token
 client.login(token);

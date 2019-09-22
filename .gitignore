@@ -1,5 +1,6 @@
 /node_modules
 config.json
+fulpGdrive.json
 *.tlog
 *.sqlite
 *.sqlite-shm
