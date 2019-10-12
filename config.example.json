@@ -1,6 +1,8 @@
 {
   "token": "insert your discord bot's token here",
   "clientID": "insert your discord app's client ID here",
+  "luckyGuilds": [],
+  "luckyChannels": [],
   "prefix": "fulp",
   "ownerID": "",
   "NGappID": "",

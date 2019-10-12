@@ -1,4 +1,4 @@
-const fs = require('fs');
+﻿const fs = require('fs');
 const rp = require('request-promise');
 const path = require('path');
 const cheerio = require('cheerio');
@@ -29,8 +29,10 @@ const nonDiscordUserMsg = 'you need to be using Discord to get this feature!';
 
 let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.json');
 
-let gCreds = require('./fulpGdrive.json');
+//let gCreds = require('./fulpGdrive.json');
+let gCreds = require('./config.json');
 
+// THIS IS FOR HEROKU SHIT
 if (process.env.prefix) prefix = process.env.prefix;
 if (process.env.clientID) clientID = process.env.clientID;
 if (process.env.ownerID) ownerID = process.env.ownerID;
@@ -50,18 +52,21 @@ const youtube = new YouTube(GOOGLE_API_KEY);
 const queue = new Map();
 
 // gets filled later
+// TODO: make it get filled in order consistently, often it fills the dogl section and deleteThis shit out of order
+// see prepPics() like 5 lines lower to see the bullshit im trying to do lmao
 const fulpPics = [];
 
 let shoomOCound = 2;
 
-async function prepPics()
+function prepPics()
 {
-	await getImages('fulp');
-	await console.log('Fulp shit');
-	await getImages('dogl');
-	await console.log('dogl shit');
-	await getImages('delete');
-	await console.log('delete shit');
+	getImages('fulp');
+	console.log('Fulp shit');
+	getImages('dogl');
+	console.log('dogl shit');
+	getImages('delete');
+	console.log('delete shit');
+	
 }
 
 // when the client is ready, run this code
@@ -1568,22 +1573,13 @@ function unescapeHTML(str) {
 
 function getImages(personFolder)
 {
-	fs.readdir(__dirname + '/pics/' + personFolder, function(err, files)
-	{		
-		if (err)
-		{
-			console.log(err);
-		}
-		else
-		{
-			fulpPics.push([]);
-
-			files.forEach(function(f)
-			{
-				fulpPics[fulpPics.length - 1].push(f);
-			});
-		}
+	fulpPics.push([]);
+	files = fs.readdirSync(__dirname + '/pics/' + personFolder);
+	files.forEach(function(f)
+	{
+		fulpPics[fulpPics.length - 1].push(f);
 	});
+	console.log(fs.readdirSync(__dirname + '/pics/' + personFolder));
 }
 
 
