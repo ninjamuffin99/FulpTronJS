@@ -30,7 +30,7 @@ const nonDiscordUserMsg = 'you need to be using Discord to get this feature!';
 let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.example.json');
 
 //let gCreds = require('./fulpGdrive.json');
-let gCreds = require('./fulpGddrive.json');
+let gCreds = require('./fulpGdrive.json');
 
 // THIS IS FOR HEROKU SHIT
 if (process.env.prefix) prefix = process.env.prefix;
