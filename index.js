@@ -190,8 +190,6 @@ client.on('message', async message =>
 
 	//RATING EMOTES ON NG SERVER
 	let guildIndex = isInGuild ? luckyGuilds.indexOf(message.guild.id) : -1;
-	console.log(luckyChannels[guildIndex].includes(message.channel.id));
-	console.log('Guild ID' + message.guild.id);
 	if (guildIndex != -1)
 	{
 		if (!message.content.startsWith('[noreact]') && luckyChannels[guildIndex].includes(message.channel.id))
