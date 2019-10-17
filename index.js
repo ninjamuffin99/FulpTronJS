@@ -196,8 +196,8 @@ client.on('message', async message =>
 	{
 		if (!message.content.startsWith('[noreact]'))
 		{
-			// let regShitNG = new RegExp('/(https://www.newgrounds.com/(art|audio|portal)/(view|listen) | (.png | .jpeg | .jpg))/i')
-			if (message.attachments.size > 0 || message.content.startsWith("https://www.newgrounds.com/art/view") || message.content.startsWith('https://www.newgrounds.com/audio/listen/') || message.content.startsWith('https://www.newgrounds.com/portal/view/'))
+			let regShit = new RegExp('((\.png|\.jpg|\.jpeg)|newgrounds\.com\/(art|audio|portal)\/(view|listen))', 'gi');
+			if (message.attachments.size > 0 || regShit.test(message.content))
 			{
 				let picoSuffix = "";
 				if (Math.random() > 0.5)
