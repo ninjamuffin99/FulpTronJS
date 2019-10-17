@@ -30,7 +30,7 @@ const nonDiscordUserMsg = 'you need to be using Discord to get this feature!';
 let {prefix, token, clientID, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.example.json');
 
 let luckyGuilds = ["628006277984944167", "578313756015329281"];
-let luckyChannels = [[],[578313756015329283, 578313839641231372, 578313897577021500, 578313914786250802, 583343626378280985, 578313930456170497]];
+let luckyChannels = [[],['578313756015329283', '578313839641231372', '578313897577021500', '578313914786250802', '583343626378280985', '578313930456170497']];
 
 //let gCreds = require('./fulpGdrive.json');
 let gCreds = require('./fulpGdrive.json');
