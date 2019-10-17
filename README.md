@@ -9,7 +9,6 @@ A the full list can be found here: https://github.com/ninjamuffin99/FulpTronJS/b
 
 # ADDING FULPPICS
 FulpPics can be easily added by simply adding an image to the pics/fulp/ folder. If you have pic suggestions, you can either DM me the images on discord (ninja_muffin#9104) OR submit a pull request to this repository yourself. 
-
 ## CREDS
 Main shit by me, ninjamuffin99
 

@@ -158,6 +158,8 @@ client.on('guildMemberAdd', async member =>
 
 	//G
 	let guildIndex = luckyGuilds.indexOf(member.guild.id);
+
+	console.log(guildIndex);
 	if (guildIndex != -1)
 	{
 		let infoPart = '*\nYou can use the command `fulpNGLogin` to sign into the Newgrounds API, and `fulpAddRole <role>` to give yourself other roles(`fulpRoles` to see all roles, and `fulpHelp` for more info)'
@@ -172,6 +174,10 @@ client.on('guildMemberAdd', async member =>
 
 client.on('message', async message => 
 {
+
+	let guildIndex = luckyGuilds.indexOf(member.guild.id);
+	console.log('Guild index: ' + guildIndex);
+
 	// Don't respond to messages made by the bot itself
 	if (message.author.id == clientID) return;
 
