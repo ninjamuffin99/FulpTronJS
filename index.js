@@ -192,9 +192,9 @@ client.on('message', async message =>
 	let guildIndex = isInGuild ? luckyGuilds.indexOf(message.guild.id) : -1;
 	console.log(luckyChannels[guildIndex].includes(message.channel.id));
 	console.log('Guild ID' + message.guild.id);
-	if (guildIndex != -1 && luckyChannels[guildIndex].includes(message.channel.id))
+	if (guildIndex != -1)
 	{
-		if (!message.content.startsWith('[noreact]'))
+		if (!message.content.startsWith('[noreact]') && luckyChannels[guildIndex].includes(message.channel.id))
 		{
 			let regShit = new RegExp('((\.png|\.jpg|\.jpeg)|newgrounds\.com\/(art|audio|portal)\/(view|listen))', 'gi');
 			if (message.attachments.size > 0 || regShit.test(message.content))
