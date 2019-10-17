@@ -27,10 +27,8 @@ const nonDiscordUserMsg = 'you need to be using Discord to get this feature!';
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
 // let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.json');
-let {prefix, token, clientID, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.example.json');
+let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.example.json');
 
-let luckyGuilds = ["628006277984944167", "578313756015329281"];
-let luckyChannels = [[],['578313839641231372', '578313897577021500', '578313914786250802', '583343626378280985', '578313930456170497']];
 
 //let gCreds = require('./fulpGdrive.json');
 let gCreds = require('./fulpGdrive.json');
