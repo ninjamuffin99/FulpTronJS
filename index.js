@@ -29,7 +29,7 @@ const nonDiscordUserMsg = 'you need to be using Discord to get this feature!';
 // let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.json');
 let {prefix, token, clientID, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.example.json');
 
-let luckyGuilds = [628006277984944167, 578313756015329281];
+let luckyGuilds = ["628006277984944167", "578313756015329281"];
 let luckyChannels = [578313756015329283, 578313839641231372, 578313897577021500, 578313914786250802, 583343626378280985, 578313930456170497];
 
 //let gCreds = require('./fulpGdrive.json');
@@ -191,6 +191,7 @@ client.on('message', async message =>
 	//RATING EMOTES ON NG SERVER
 	let guildIndex = isInGuild ? luckyGuilds.indexOf(message.guild.id) : -1;
 	console.log('Guild index: ' + guildIndex);
+	console.log('Guild ID')
 	if (guildIndex != -1 && luckyChannels[guildIndex].includes(message.channel.id))
 	{
 		if (!message.content.startsWith('[noreact]'))
