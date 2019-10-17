@@ -30,7 +30,7 @@ const nonDiscordUserMsg = 'you need to be using Discord to get this feature!';
 let {prefix, token, clientID, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.example.json');
 
 let luckyGuilds = ["628006277984944167", "578313756015329281"];
-let luckyChannels = [578313756015329283, 578313839641231372, 578313897577021500, 578313914786250802, 583343626378280985, 578313930456170497];
+let luckyChannels = [[],[578313756015329283, 578313839641231372, 578313897577021500, 578313914786250802, 583343626378280985, 578313930456170497]];
 
 //let gCreds = require('./fulpGdrive.json');
 let gCreds = require('./fulpGdrive.json');
@@ -172,7 +172,7 @@ client.on('guildMemberAdd', async member =>
 		let intro = ngRef[Math.floor(Math.random() * ngRef.length)];
 		intro = intro.replace('username',  "**" + member.user.username + "**");
 
-		return member.guild.channels.find('id', `{luckyChannels[guildIndex][0]}`).send("*" + intro + infoPart);
+		return member.guild.channels.find('id', `${luckyChannels[guildIndex][0]}`).send("*" + intro + infoPart);
 	}
 
 });
@@ -190,7 +190,7 @@ client.on('message', async message =>
 
 	//RATING EMOTES ON NG SERVER
 	let guildIndex = isInGuild ? luckyGuilds.indexOf(message.guild.id) : -1;
-	console.log('Guild index: ' + guildIndex);
+	console.log(luckyChannels[guildIndex].includes(message.channel.id));
 	console.log('Guild ID' + message.guild.id);
 	if (guildIndex != -1 && luckyChannels[guildIndex].includes(message.channel.id))
 	{
