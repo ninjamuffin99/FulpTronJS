@@ -1588,7 +1588,6 @@ function getImages(personFolder)
 	{
 		fulpPics[fulpPics.length - 1].push(f);
 	});
-	console.log(fs.readdirSync(__dirname + '/pics/' + personFolder));
 }
 
 
