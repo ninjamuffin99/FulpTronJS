@@ -175,8 +175,7 @@ client.on('guildMemberAdd', async member =>
 client.on('message', async message => 
 {
 
-	let guildIndex = luckyGuilds.indexOf(member.guild.id);
-	console.log('Guild index: ' + guildIndex);
+	
 
 	// Don't respond to messages made by the bot itself
 	if (message.author.id == clientID) return;
@@ -186,6 +185,7 @@ client.on('message', async message =>
 
 	//RATING EMOTES ON NG SERVER
 	let guildIndex = isInGuild ? luckyGuilds.indexOf(message.guild.id) : -1;
+	console.log('Guild index: ' + guildIndex);
 	if (guildIndex != -1 && luckyChannels[guildIndex].includes(message.channel.id))
 	{
 		if (!message.content.startsWith('[noreact]'))
