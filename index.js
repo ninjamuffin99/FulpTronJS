@@ -177,11 +177,8 @@ client.on('guildMemberAdd', async member =>
 
 client.on('message', async message => 
 {
-
-	
-
 	// Don't respond to messages made by the bot itself
-	if (message.author.id == clientID) return;
+	if (message.author.id == client.user.id) return;
 
 	let isInGuild = message.guild != null;
 	let isDiscordUser = !message.author.bot;
