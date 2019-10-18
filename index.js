@@ -170,7 +170,7 @@ client.on('guildMemberAdd', async member =>
 		let intro = ngRef[Math.floor(Math.random() * ngRef.length)];
 		intro = intro.replace('username',  "**" + member.user.username + "**");
 
-		return member.guild.channels.find('id', `${luckyChannels[guildIndex][0]}`).send("*" + intro + infoPart);
+		return member.guild.channels.find('id', member.guild.defaultChannel.id).send("*" + intro + infoPart);
 	}
 
 });
