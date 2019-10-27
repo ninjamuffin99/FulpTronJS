@@ -1283,10 +1283,13 @@ The Owner is: ${message.guild.owner.user.username}`);
 						{
 							if (args.length != 1)
 							{
-								message.reply("Looks like you're not a Discord user. To log in, use this same command, but also type your email. (Don't worry, I'll take good care of it!)");
+								message.reply("looks like you're not a Discord user. To log in, use this same command, but also type your email. (Don't worry, I'll take good care of it!)");
 							}
 							else
 							{
+								// Message contains an email address. Delete the message to "hide" the address and hopefully discourage jokers from sending it spam mail.
+								message.delete();
+
 								try
 								{
 									let transporter = nodemailer.createTransport({
@@ -1306,12 +1309,23 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 									await promisify(sheet.addRow)(ngUser);
 
-									message.delete();
 									message.reply("email se--I mean, what's an email? (Psst, type fulpNGLogin here again when you're done. If you get stuck, type fulpNGLogout.)");
 								}
 								catch (error)
 								{
-									message.reply("couldn't send an email. Check that it wasn't mistyped.");
+									console.log(error)
+									if (error.code == 'EENVELOPE')
+									{
+										message.reply("I couldn't send an email to the address you just gave me. Check that it wasn't mistyped.");
+									}
+									else if (error.code == 'ESOCKET')
+									{
+										message.reply("I'm unable to send emails right now... Try again later.");
+									}
+									else
+									{
+										message.replay("something bad happened, but I don't know what... Try again later.");
+									}
 								}
 							}
 						}
