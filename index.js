@@ -165,12 +165,14 @@ client.on('guildMemberAdd', async member =>
 	console.log(guildIndex);
 	if (guildIndex != -1)
 	{
+		console.log("SOMEONE JOINED NG SERVER??");
+
 		let infoPart = '*\nYou can use the command `fulpNGLogin` to sign into the Newgrounds API, and `fulpAddRole <role>` to give yourself other roles(`fulpRoles` to see all roles, and `fulpHelp` for more info)'
 
 		let intro = ngRef[Math.floor(Math.random() * ngRef.length)];
 		intro = intro.replace('username',  "**" + member.user.username + "**");
 
-		return member.guild.channels.find('id', member.guild.defaultChannel.id).send("*" + intro + infoPart);
+		return member.guild.channels.find('id', '578313756015329283').send("*" + intro + infoPart);
 	}
 
 });
