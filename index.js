@@ -849,7 +849,7 @@ The Owner is: ${message.guild.owner.user.username}`);
   			.catch(console.error);
 	}
 
-	else if (command == 'shoom' || command == 'jojo' || command.match(/^(?:sho{2,}m)|(?:jo){2,}$/))// allow shoooooooom
+	else if (command == "shoom" || command == "jojo" || command.match(/^(?:sho{2,}m)|(?:jo){2,}$/))// allow shoooooooom
 	{
 		if (command.charAt(0) == s)
 			shoomOCound += command.length - 4; // shoom adds 1 shooom adds 2...
@@ -1430,11 +1430,6 @@ The Owner is: ${message.guild.owner.user.username}`);
 	}
  	*/
 });
-
-function getShoomAdditions(command)
-{
-	command == "shoom" || command == "jojo"
-}
 
 function clean(text)
 {
