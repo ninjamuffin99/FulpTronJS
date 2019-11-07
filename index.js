@@ -854,7 +854,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 		if (command.charAt(0) == s)
 			shoomOCound += command.length - 4; // shoom adds 1 shooom adds 2...
 		else
-			shoomOCound += (command.length / 2) - 1; // jojo adds
+			shoomOCound += (command.length / 2) - 1; // jojo adds 1 jojojo adds 2...
 
 		let shoomBeginning = "**SH";
 
