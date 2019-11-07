@@ -851,7 +851,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 	else if (command == "shoom" || command == "jojo" || command.match(/^(?:sho{2,}m)|(?:jo){2,}$/))// allow shoooooooom
 	{
-		if (command.charAt(0) == s)
+		if (command.charAt(0) == "s")
 			shoomOCound += command.length - 4; // shoom adds 1 shooom adds 2...
 		else
 			shoomOCound += (command.length / 2) - 1; // jojo adds 1 jojojo adds 2...
