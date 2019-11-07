@@ -57,7 +57,7 @@ const queue = new Map();
 // see prepPics() like 5 lines lower to see the bullshit im trying to do lmao
 const fulpPics = [];
 
-let shoomOCound = 2;
+let shoomOCound = 1;
 
 function prepPics()
 {
@@ -849,8 +849,13 @@ The Owner is: ${message.guild.owner.user.username}`);
   			.catch(console.error);
 	}
 
-	else if (command == "shoom" || command == "jojo")
+	else if (command == "shoom" || command == "jojo" || command.match(/^(?:sho{2,}m)|(?:jo){2,}$/))// allow shoooooooom
 	{
+		if (command.charAt(0) == "s")
+			shoomOCound += command.length - 4; // shoom adds 1 shooom adds 2...
+		else
+			shoomOCound += (command.length / 2) - 1; // jojo adds 1 jojojo adds 2...
+
 		let shoomBeginning = "**SH";
 
 		for (i = shoomOCound; i > 0; i--)
@@ -860,8 +865,6 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 		shoomBeginning += "M**";
 		shoomBeginning += `\nO Amount: ${shoomOCound}`
-
-		shoomOCound += 1;
 
 		message.channel.send(shoomBeginning);
 
