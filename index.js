@@ -870,6 +870,13 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 	}
 
+	else if (command === 'shoomreset')
+	{
+		message.channel.send(`DeSHOOMing complete.\nPrevious O Amount: ${shoomOCound}`);
+		
+		shoomOCound = 1;
+	}
+
 	else if (command === 'say')
 	{
 		let text = args.slice(0).join(" ");
