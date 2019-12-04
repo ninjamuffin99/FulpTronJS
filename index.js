@@ -682,7 +682,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 	{
 		if (!isInGuild) return;
 		let roleList = message.guild.roles.map(r => {
-			if (["Admins", 'Moderators', "@everyone", 'BrenBot', 'Mr. Fulp', 'Contributor', 'Nitro Booster'].indexOf(r.name) > -1 || r.name.endsWith('Collab'))
+			if (["Admins", 'Moderators', "@everyone", 'BrenBot', 'Mr. Fulp', 'Contributor', 'Nitro Booster', 'Advent Calendar'].indexOf(r.name) > -1 || r.name.endsWith('Collab'))
 				return "";
 			else
 				return r.name;
@@ -702,7 +702,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 		if (role.endsWith('Collab'))
 			return message.reply('Message the collab organizer if you would like to participate in this collab!');
 
-		if (['Admins', "Moderators", 'BrenBot', 'Contributor', 'james'].indexOf(role) > -1)
+		if (['Admins', "Moderators", 'BrenBot', 'Contributor', 'james', 'Advent Calendar'].indexOf(role) > -1)
 			return message.reply('Hey stop that!');
 		if (["Newgrounder", 'Supporter'].indexOf(role) > -1)
 			return message.reply('the role "' + role + '" requires you to log into the Newgrounds API. Use the command `fulpNGLogin`');
