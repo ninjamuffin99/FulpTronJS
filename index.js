@@ -808,7 +808,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 	else if (command == 'cam' || command == 'muffin')
 	{
 		
-		let curPic = randomFromArray(1);
+		let curPic = randomFromArray(2);
 		console.log("THE PIC");
 		console.log(curPic);
 
@@ -817,7 +817,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 	else if ( command == 'delete' || command == 'delet' || command == 'gun')
 	{
-		let curPic = randomFromArray(2);
+		let curPic = randomFromArray(3);
 		console.log("THE PIC");
 		console.log(curPic);
 
@@ -841,7 +841,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 		}
 		else if (command == 'cam' || command == 'muffin')
 		{
-			let curPic = randomFromArray(1);
+			let curPic = randomFromArray(2);
 			console.log("THE PIC");
 			console.log(curPic);
 
