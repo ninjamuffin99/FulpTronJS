@@ -65,6 +65,8 @@ function prepPics()
 	console.log('Fulp shit');
 	getImages('dogl');
 	console.log('dogl shit');
+	getImages('cam');
+	console.log('cam shit');
 	getImages('delete');
 	console.log('delete shit');
 	
@@ -803,9 +805,19 @@ The Owner is: ${message.guild.owner.user.username}`);
 		message.channel.send(curPic, {file: "pics/dogl/" + curPic});
 	}
 
+	else if (command == 'cam' || command == 'muffin')
+	{
+		
+		let curPic = randomFromArray(2);
+		console.log("THE PIC");
+		console.log(curPic);
+
+		message.channel.send(curPic, {file: "pics/cam/" + curPic});
+	}
+
 	else if ( command == 'delete' || command == 'delet' || command == 'gun')
 	{
-		let curPic = randomFromArray(2);
+		let curPic = randomFromArray(3);
 		console.log("THE PIC");
 		console.log(curPic);
 
@@ -826,6 +838,14 @@ The Owner is: ${message.guild.owner.user.username}`);
 			console.log(curPic);
 
 			return message.channel.send(curPic, {file: "pics/dogl/" + curPic});
+		}
+		else if (command == 'cam' || command == 'muffin')
+		{
+			let curPic = randomFromArray(2);
+			console.log("THE PIC");
+			console.log(curPic);
+
+			message.channel.send(curPic, {file: "pics/cam/" + curPic});
 		}
 
 		let curPic = randomFromArray(0);
