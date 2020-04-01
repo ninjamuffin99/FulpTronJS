@@ -139,7 +139,7 @@ client.on('ready', () =>
 	.'.''''       ''''''''''''''''''''''''''''''''''''''  ''''''''''            ''''''''''.......'''''''`);
 	console.info("FULPTRON IS ONLINE");
 	console.info(`FulpTron is on ${client.guilds.size} servers!`);
-	console.info(client.guilds.map(g => g.name).join("\n"));
+	console.info(client.guilds.map(g => g.name + " " + g.memberCount).join("\n"));
 
 	console.info("LUCKY GUILDS" + luckyGuilds);
 
