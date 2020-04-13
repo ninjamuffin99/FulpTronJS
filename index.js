@@ -26,8 +26,8 @@ const nonDiscordUserMsg = 'you need to be using Discord to get this feature!';
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.json');
-let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.example.json');
+let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.json');
+// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.example.json');
 
 
 //let gCreds = require('./fulpGdrive.json');
@@ -139,7 +139,7 @@ client.on('ready', () =>
 	.'.''''       ''''''''''''''''''''''''''''''''''''''  ''''''''''            ''''''''''.......'''''''`);
 	console.info("FULPTRON IS ONLINE");
 	console.info(`FulpTron is on ${client.guilds.size} servers!`);
-	console.info(client.guilds.map(g => g.name + " " + g.memberCount).join("\n"));
+	console.info(client.guilds.cache.map(g => g.name + " " + g.memberCount).join("\n"));
 
 	console.info("LUCKY GUILDS" + luckyGuilds);
 
@@ -285,13 +285,13 @@ client.on('message', async message =>
 			return message.reply(nonDiscordUserMsg);
 		}
 
-		const { voiceChannel } = message.member;
+		const { channel } = message.member.voice;
 
-		if (!voiceChannel) {
+		if (!channel) {
 			return message.reply('please join a voice channel first!');
 		}
 
-		return message.channel.send('http://www.discordapp.com/channels/' + message.guild.id + '/' + voiceChannel.id)
+		return message.channel.send('http://www.discordapp.com/channels/' + message.guild.id + '/' + channel.id)
 	}
 
 	const serverQueue = isInGuild ? queue.get(message.guild.id) : null;
@@ -311,13 +311,13 @@ client.on('message', async message =>
 
 		if (message.channel.type !== 'text') return;
 
-		const { voiceChannel } = message.member;
+		const { channel } = message.member.voice;
 
-		if (!voiceChannel) {
+		if (!channel) {
 			return message.reply('please join a voice channel first!');
 		}
 
-		const permissions = voiceChannel.permissionsFor(message.client.user);
+		const permissions = channel.permissionsFor(message.client.user);
 
 		/*
 		if (!message.member.speaking)
@@ -333,7 +333,7 @@ client.on('message', async message =>
 		{
 			return message.channel.send('I cannot speak in this voice channel with my current permissions :(');
 		}
-		if (!message.member.voiceChannel.memberPermissions(message.member).has('SPEAK'))
+		if (!message.member.voice.channel.memberPermissions(message.member).has('SPEAK'))
 		{
 			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
 		}
@@ -345,7 +345,7 @@ client.on('message', async message =>
 			for (const video of Object.values(videos)) 
 			{
 				const video2 = await youtube.getVideoByID(video.id); // eslint-disable-line no-await-in-loop
-				await handleVideo(video2, message, voiceChannel, true); // eslint-disable-line no-await-in-loop
+				await handleVideo(video2, message, channel, true); // eslint-disable-line no-await-in-loop
 			}
 			return message.channel.send(`✅ Playlist: **${playlist.title}** has been added to the queue!`);
 		} 
@@ -369,7 +369,9 @@ ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
 					// eslint-disable-next-line max-depth
 					try 
 					{
-						var response = await message.channel.awaitMessages(message2 => message2.content > 0 && message2.content < 11, {
+						console.log("selection: " + message.content);
+
+						var response = await message.channel.awaitMessages(message2 => parseInt(message2.content) > 0 && parseInt(message2.content) < 11, {
 							maxMatches: 1,
 							time: 10000,
 							errors: ['time']
@@ -388,45 +390,46 @@ ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
 					return message.channel.send('🆘 I could not obtain any search results.');
 				}
 			}
-			return handleVideo(video, message, voiceChannel);
+			return handleVideo(video, message, channel);
 		}
 	} else if (command === 'skip') {
 		if (!isDiscordUser)
 		{
 			return message.reply(nonDiscordUserMsg);
 		}
-		if (!message.member.voiceChannel) return message.channel.send('You are not in a voice channel!');
-		if (!message.member.voiceChannel.memberPermissions(message.member).has('SPEAK'))
+		if (!message.member.voice.channel) return message.channel.send('You are not in a voice channel!');
+		if (!message.member.voice.channel.memberPermissions(message.member).has('SPEAK'))
 		{
 			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
 		}
 		
 		if (!serverQueue) return message.channel.send('There is nothing playing that I could skip for you.');
-		serverQueue.connection.dispatcher.end('Skip command has been used!');
+		console.log('skip has been used');
+		serverQueue.connection.dispatcher.end();
 		return undefined;
 	} else if (command === 'stop') {
 		if (!isDiscordUser)
 		{
 			return message.reply(nonDiscordUserMsg);
 		}
-		if (!message.member.voiceChannel) return message.channel.send('You are not in a voice channel!');
-		if (!message.member.voiceChannel.memberPermissions(message.member).has('SPEAK'))
+		if (!message.member.voice.channel) return message.channel.send('You are not in a voice channel!');
+		if (!message.member.voice.channel.memberPermissions(message.member).has('SPEAK'))
 		{
 			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
 		}
 		
 		if (!serverQueue) return message.channel.send('There is nothing playing that I could stop for you.');
 		serverQueue.songs = [];
-		serverQueue.connection.dispatcher.end('Stop command has been used!');
+		serverQueue.connection.dispatcher.end();
 		return undefined;
 	} else if (command === 'volume') {
 		if (!isDiscordUser)
 		{
 			return message.reply(nonDiscordUserMsg);
 		}
-		if (!message.member.voiceChannel) return message.channel.send('You are not in a voice channel!');
+		if (!message.member.voice.channel) return message.channel.send('You are not in a voice channel!');
 
-		if (!message.member.voiceChannel.memberPermissions(message.member).has('SPEAK'))
+		if (!message.member.voice.channel.memberPermissions(message.member).has('SPEAK'))
 		{
 			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
 		}
@@ -441,12 +444,14 @@ ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
 		if (!serverQueue) return message.channel.send('There is nothing playing.');
 		return message.channel.send(`🎶 Now playing: **${serverQueue.songs[0].title}**`);
 	} else if (command === 'queue' || command === 'q') {
-		if (!serverQueue) return message.channel.send('There is nothing playing.');
-		return message.channel.send(`
+		if (!serverQueue) 
+			return message.channel.send('There is nothing playing.');
+		else
+			return message.channel.send(`
 __**Song queue:**__
 ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 **Now playing:** ${serverQueue.songs[0].title}
-		`);
+			`);
 	} else if (command === 'pause') {
 		if (!isDiscordUser)
 		{
@@ -457,7 +462,7 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 			serverQueue.connection.dispatcher.pause();
 			return message.channel.send('⏸ Paused the music for you!');
 		}
-		if (!message.member.voiceChannel.memberPermissions(message.member).has('SPEAK'))
+		if (!message.member.voice.channel.memberPermissions(message.member).has('SPEAK'))
 		{
 			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
 		}
@@ -681,7 +686,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 	else if (command == 'roles')
 	{
 		if (!isInGuild) return;
-		let roleList = message.guild.roles.map(r => {
+		let roleList = message.guild.roles.cache.map(r => {
 			if (["Admins", 'Moderators', "@everyone", 'BrenBot', 'Mr. Fulp', 'Contributor', 'Nitro Booster', 'Advent Calendar'].indexOf(r.name) > -1 || r.name.endsWith('Collab'))
 				return "";
 			else
@@ -957,7 +962,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 			return message.reply(nonDiscordUserMsg);
 		}
 
-		if (!message.member.voiceChannel.memberPermissions(message.member).has('SPEAK'))
+		if (!message.member.voice.channel.memberPermissions(message.member).has('SPEAK'))
 		{
 			return message.channel.send('You do not have permission to speak in this channel, so it is likely you should not be using me either!');
 		}
@@ -985,13 +990,13 @@ The Owner is: ${message.guild.owner.user.username}`);
 					let daSong = songList.toArray()[i].children[1].children[1].attribs.href;
 					daSong = daSong.slice(2, daSong.length);
 					daSong = "https://" + daSong;
-					handleNGSongs(daSong, message, message.member.voiceChannel, true);
+					handleNGSongs(daSong, message, message.member.voice.channel, true);
 				  }
 			  });
 		}
 		else
 		{
-			handleNGSongs(songUrl, message, message.member.voiceChannel);
+			handleNGSongs(songUrl, message, message.member.voice.channel);
 		}
 
 		
@@ -1476,7 +1481,7 @@ function handleNGSongs(songUrl, message, voicechannel, playlist=false)
 			return message.channel.send(`Song ${song.title} by ${resp.authors[0].name} cannot be played because they are not scouted yet!`)
 		
 
-		handleVideo(song, message, message.member.voiceChannel, playlist);
+		handleVideo(song, message, message.member.voice.channel, playlist);
 	});
 }
 
@@ -1541,8 +1546,8 @@ async function play(guild, song) {
 
 	if (song.onNG)
 	{
-		const dispatcher = serverQueue.connection.playStream(song.url, {volume: 0.2})
-		.on('end', reason => {
+		const dispatcher = serverQueue.connection.play(song.url, {volume: 0.2})
+		.on('finish', reason => {
 			if (reason === 'Stream is not generating quickly enough.') console.log('Song ended.');
 			else console.log(reason + " is the reason the thing ended");
 			serverQueue.songs.shift();
@@ -1552,8 +1557,8 @@ async function play(guild, song) {
 	}
 	else
 	{
-		const dispatcher = serverQueue.connection.playOpusStream(await ytdl(song.url, { filter: 'audioonly'}, { type: 'opus'}), {volume: 0.2})
-		.on('end', reason => {
+		const dispatcher = serverQueue.connection.play(await ytdl(song.url, { filter: 'audioonly'}, { type: 'opus'}), {volume: 0.2, type: 'opus'})
+		.on('finish', reason => {
 			if (reason === 'Stream is not generating quickly enough.') console.log('Song ended.');
 			else console.log(reason);
 			serverQueue.songs.shift();
