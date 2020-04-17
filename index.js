@@ -26,8 +26,8 @@ const nonDiscordUserMsg = 'you need to be using Discord to get this feature!';
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.json');
-let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.example.json');
+let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.json');
+// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.example.json');
 
 
 //let gCreds = require('./fulpGdrive.json');
@@ -154,7 +154,7 @@ client.on('guildMemberAdd', async member =>
 	// code specific to the Flash Holes server
 	if (member.guild.id == 283807027720093697)
 	{
-		let curRole = member.guild.roles.find("name", "Flash Hole");
+		let curRole = member.guild.roles.cache.find("name", "Flash Hole");
 			
 		member.addRole(curRole);
 	}
@@ -172,7 +172,7 @@ client.on('guildMemberAdd', async member =>
 		let intro = ngRef[Math.floor(Math.random() * ngRef.length)];
 		intro = intro.replace('username',  "**" + member.user.username + "**");
 
-		return member.guild.channels.find('id', '578313756015329283').send("*" + intro + infoPart);
+		return member.guild.channels.cache.find('id', '578313756015329283').send("*" + intro + infoPart);
 	}
 
 });
@@ -198,12 +198,12 @@ client.on('message', async message =>
 				if (Math.random() > 0.5)
 					picoSuffix = "pico"
 
-				message.react(message.guild.emojis.find('name', "0stars" + picoSuffix))
-				.then(react => message.react(message.guild.emojis.find('name', "1star" + picoSuffix)))
-				.then(react => message.react(message.guild.emojis.find('name', "2stars" + picoSuffix)))
-				.then(react => 	message.react(message.guild.emojis.find('name', "3stars" + picoSuffix)))
-				.then(react => message.react(message.guild.emojis.find('name', "4stars" + picoSuffix)))
-				.then(react => message.react(message.guild.emojis.find('name', "5stars" + picoSuffix)));
+				message.react(message.guild.emojis.cache.find('name', "0stars" + picoSuffix))
+				.then(react => message.react(message.guild.emojis.cache.find('name', "1star" + picoSuffix)))
+				.then(react => message.react(message.guild.emojis.cache.find('name', "2stars" + picoSuffix)))
+				.then(react => 	message.react(message.guild.emojis.cache.find('name', "3stars" + picoSuffix)))
+				.then(react => message.react(message.guild.emojis.cache.find('name', "4stars" + picoSuffix)))
+				.then(react => message.react(message.guild.emojis.cache.find('name', "5stars" + picoSuffix)));
 			}
 		}
 	}
@@ -274,7 +274,7 @@ client.on('message', async message =>
 	else if (command == 'emotetest')
 	{
 		if (!isInGuild) return;
-		message.channel.guild.createEmoji('./pics/luis/luis.jpg', 'luis', [message.guild.roles.find('name', 'Newgrounder')])
+		message.channel.guild.createEmoji('./pics/luis/luis.jpg', 'luis', [message.guild.roles.cache.find('name', 'Newgrounder')])
 	}
 
 	else if (command == 'screenshare' || command =='share')
@@ -711,7 +711,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 			return message.reply('Hey stop that!');
 		if (["Newgrounder", 'Supporter'].indexOf(role) > -1)
 			return message.reply('the role "' + role + '" requires you to log into the Newgrounds API. Use the command `fulpNGLogin`');
-		let curRole = message.guild.roles.find("name", role);
+		let curRole = message.guild.roles.cache.find("name", role);
 
 		if (!message.guild.roles.exists("name", role))
 		{
@@ -737,7 +737,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 		let role = args.slice(0).join(" ");
 		if (['Blammed'].indexOf(role) > -1)
 			return message.reply('lol dummy');
-		let curRole = message.guild.roles.find('name', role);
+		let curRole = message.guild.roles.cache.find('name', role);
 
 		if (!message.guild.roles.exists("name", role))
 		{
@@ -1215,7 +1215,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 								message.member.setNickname(parsedResp.result.data.session.user.name);
 
 								message.reply("successfully signed into the Newgrounds API!");
-								let role = message.guild.roles.find('name', 'Newgrounder');
+								let role = message.guild.roles.cache.find('name', 'Newgrounder');
 								if (role)
 								{
 									message.member.addRole(role);
@@ -1227,7 +1227,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 								if (row.supporter)
 								{
-									role = message.guild.roles.find('name', 'Supporter');
+									role = message.guild.roles.cache.find('name', 'Supporter');
 									if (role)
 									{
 										message.member.addRole(role);
