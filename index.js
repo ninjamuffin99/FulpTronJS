@@ -253,7 +253,7 @@ client.on('message', async message =>
 	if (command == 'ping') 
 	{
 		// var emoji = Discord.emoji.from
-		let pang = Math.round(client.ping);
+		let pang = Math.round(client.ws.ping);
 		message.channel.send(`Pong! Ping: ${pang}ms`);
 	}
 
