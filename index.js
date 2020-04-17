@@ -26,8 +26,8 @@ const nonDiscordUserMsg = 'you need to be using Discord to get this feature!';
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.json');
-let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.example.json');
+let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.json');
+// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.example.json');
 
 
 //let gCreds = require('./fulpGdrive.json');
@@ -794,7 +794,13 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 	else if (command == 'cringe' || command == 'snap')
 	{
-		message.channel.send('brandyCringe.png', {file: "pics/brandy/brandyCringe.png"});
+
+
+
+		message.channel.send('brandyCringe.png', {files: [{
+			attachment: "pics/brandy/brandyCringe.png",
+			name: 'brandyCringe.png'
+		}]});
 	}
 
 	else if (command == 'dogl' || command == 'dogg')
@@ -805,7 +811,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 		console.log("THE PIC");
 		console.log(curPic);
 
-		message.channel.send(curPic, {file: "pics/dogl/" + curPic});
+		message.channel.send(curPic, {files: [{attatchment: "pics/dogl/" + curPic}]});
 	}
 
 	else if ( command == 'delete' || command == 'delet' || command == 'gun')
@@ -814,14 +820,14 @@ The Owner is: ${message.guild.owner.user.username}`);
 		console.log("THE PIC");
 		console.log(curPic);
 
-		message.channel.send(curPic, {file: "pics/delete/" + curPic});
+		message.channel.send(curPic, {files: [{attatchment: "pics/delete/" + curPic, name: curPic}]});
 	}
 
 	if (command == `pic`)
 	{
 		if (args[0] == "luis")
 		{
-			return message.channel.send("luis.jpg", {file: "pics/luis/" + "luis.jpg"});
+			return message.channel.send("luis.jpg", {files: [{attachment: "pics/luis/" + "luis.jpg", name: 'luis.jpg'}]});
 		}
 
 		if (args[0] == 'dogl' || args[0] == "dogg")
@@ -830,14 +836,14 @@ The Owner is: ${message.guild.owner.user.username}`);
 			console.log("THE PIC");
 			console.log(curPic);
 
-			return message.channel.send(curPic, {file: "pics/dogl/" + curPic});
+			return message.channel.send(curPic, {files: [{attachment: "pics/dogl/" + curPic}]});
 		}
 
 		let curPic = randomFromArray(0);
 		console.log("THE PIC");
 		console.log(curPic);
 
-		message.channel.send(curPic, {file: "pics/fulp/" + curPic});
+		message.channel.send(curPic, {files: [{attachment: `pics/fulp/${curPic}`, name: curPic}]});
 	}
 
 	else if (command == "watching")
