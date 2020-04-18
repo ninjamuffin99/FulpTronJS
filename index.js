@@ -253,7 +253,7 @@ client.on('message', async message =>
 	if (command == 'ping') 
 	{
 		// var emoji = Discord.emoji.from
-		let pang = Math.round(client.ping);
+		let pang = Math.round(client.ws.ping);
 		message.channel.send(`Pong! Ping: ${pang}ms`);
 	}
 
@@ -713,11 +713,11 @@ The Owner is: ${message.guild.owner.user.username}`);
 			return message.reply('the role "' + role + '" requires you to log into the Newgrounds API. Use the command `fulpNGLogin`');
 		let curRole = message.guild.roles.cache.find(darole => darole.name === role);
 
-		if (!message.guild.roles.exists("name", role))
+		if (!message.guild.roles.cache.some(daRole => daRole.name == role))
 		{
 			return message.reply(`This server doesn't seem to have ${role} as a role... you should know that the roles are case sensitive!`)
 		}
-		if (message.member.roles.exists("name", role))
+		if (message.member.roles.cache.some(daRole => daRole.name == role))
 		{
 			return message.reply(`you already have the ${curRole.name} role!`)
 		}
@@ -739,11 +739,11 @@ The Owner is: ${message.guild.owner.user.username}`);
 			return message.reply('lol dummy');
 		let curRole = message.guild.roles.cache.find(darole => darole.name === role);
 
-		if (!message.guild.roles.exists("name", role))
+		if (!message.guild.roles.cache.some(daRole => daRole.name == role))
 		{
 			return message.reply(`This server doesn't seem to have ${role} as a role... you should know that the roles are case sensitive!`)
 		}
-		if (!message.member.roles.exists("name", role))
+		if (!message.member.roles.cache.some(daRole => daRole.name == role))
 		{
 			return message.reply(`you already had the ${curRole.name} role removed!`)
 		}
