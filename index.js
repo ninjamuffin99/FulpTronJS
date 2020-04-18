@@ -748,7 +748,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 			return message.reply(`you already had the ${curRole.name} role removed!`)
 		}
 
-		message.member.removeRole(curRole).then(message.reply(`removed your ${curRole.name} role!`))
+		message.member.roles.remove(curRole).then(message.reply(`removed your ${curRole.name} role!`))
 	}
 	/* 
 	if (command == "timeout" && message.author.role("mod"))
