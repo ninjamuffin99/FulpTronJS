@@ -156,7 +156,7 @@ client.on('guildMemberAdd', async member =>
 	{
 		let curRole = member.guild.roles.cache.find(darole => darole.name === "Flash Hole");
 			
-		roles.add(curRole);
+		member.roles.add(curRole);
 	}
 
 	//G
@@ -722,7 +722,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 			return message.reply(`you already have the ${curRole.name} role!`)
 		}
 			
-		message.roles.add(curRole);
+		message.member.roles.add(curRole);
 		message.reply(`just got the ${curRole.name} role!`);
 	}
 
@@ -1224,7 +1224,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 								let role = message.guild.roles.cache.find(darole => darole.name == 'Newgrounder');
 								if (role)
 								{
-									message.roles.add(role);
+									message.member.roles.add(role);
 								}
 								else
 								{
@@ -1236,7 +1236,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 									role = message.guild.roles.cache.find(darole => darole.name == 'Supporter');
 									if (role)
 									{
-										message.roles.add(role);
+										message.member.roles.add(role);
 									}
 									else
 									{
