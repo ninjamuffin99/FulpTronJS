@@ -26,8 +26,8 @@ const nonDiscordUserMsg = 'you need to be using Discord to get this feature!';
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.json');
-let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.example.json');
+let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.json');
+// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.example.json');
 
 
 //let gCreds = require('./fulpGdrive.json');
@@ -156,7 +156,7 @@ client.on('guildMemberAdd', async member =>
 	{
 		let curRole = member.guild.roles.cache.find(darole => darole.name === "Flash Hole");
 			
-		member.addRole(curRole);
+		roles.add(curRole);
 	}
 
 	//G
@@ -222,7 +222,7 @@ client.on('message', async message =>
 
 	//Automate Welcome Channel WIP
 	/*if(message.content.toLowerCase() === "test" || message.channel.id() === "read-the-rules-for-access"){
-		//message.member.addRole("NG");
+		//message.roles.add("NG");
 		message.reply("works");
 
 		let usr = args[0];
@@ -722,7 +722,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 			return message.reply(`you already have the ${curRole.name} role!`)
 		}
 			
-		message.member.addRole(curRole);
+		message.roles.add(curRole);
 		message.reply(`just got the ${curRole.name} role!`);
 	}
 
@@ -770,7 +770,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 			return message.reply(`you alread have the ${curRole.name} role!`)
 		}
 
-		message.member.addRole(curRole);
+		message.roles.add(curRole);
 		//message.reply('just got the ${curRole.name} role!');
 	}
 	 */
@@ -1224,7 +1224,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 								let role = message.guild.roles.cache.find(darole => darole.name == 'Newgrounder');
 								if (role)
 								{
-									message.member.addRole(role);
+									message.roles.add(role);
 								}
 								else
 								{
@@ -1236,7 +1236,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 									role = message.guild.roles.cache.find(darole => darole.name == 'Supporter');
 									if (role)
 									{
-										message.member.addRole(role);
+										message.roles.add(role);
 									}
 									else
 									{
