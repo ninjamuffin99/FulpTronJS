@@ -176,7 +176,7 @@ client.on('guildMemberAdd', async member =>
 	{
 		console.log("SOMEONE JOINED NG SERVER??");
 
-		let infoPart = '*\nYou can use the command `fulpNG` to sign into the Newgrounds API, and `fulpAddRole <role>` in the #dumping-grounds channel to give yourself other roles(`fulpRoles` to see all roles, and `fulpHelp` for more info)'
+		let infoPart = '*\nYou can use the command `fulpNG` to sign into the Newgrounds API, and `fulpAddRole <role>` in the <#578313950735892485> channel to give yourself other roles(`fulpRoles` to see all roles, and `fulpHelp` for more info)'
 
 		let intro = ngRef[Math.floor(Math.random() * ngRef.length)];
 		intro = intro.replace('username',  "**" + member.user.username + "**");
