@@ -3,6 +3,8 @@ const rp = require('request-promise');
 const path = require('path');
 const cheerio = require('cheerio');
 const nodemailer = require('nodemailer');
+const Keyv = require('keyv');
+
 
 // require the discord.js module
 const Discord = require('discord.js');
@@ -26,8 +28,8 @@ const nonDiscordUserMsg = 'you need to be using Discord to get this feature!';
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.json');
-// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.example.json');
+let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.json');
+// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.example.json');
 
 
 //let gCreds = require('./fulpGdrive.json');
@@ -49,6 +51,10 @@ if (process.env.private_key) gCreds.private_key = process.env.private_key.replac
 // Music bot shit
 const YouTube = require(`simple-youtube-api`);
 const youtube = new YouTube(GOOGLE_API_KEY);
+
+// TODO add process.env shit for heroku
+const keyv = new Keyv(mongoURI);
+keyv.on('error', err => console.error('Keyv connection error:', err));
 
 const queue = new Map();
 
@@ -138,10 +144,12 @@ client.on('ready', () =>
 	..'''''''    '''''''''''''''''''  ''''''''....'''''''''  ''''''''''''' '''' '''''''''''......'''''''
 	.'.''''       ''''''''''''''''''''''''''''''''''''''  ''''''''''            ''''''''''.......'''''''`);
 	console.info("FULPTRON IS ONLINE");
-	console.info(`FulpTron is on ${client.guilds.size} servers!`);
+	console.info(`FulpTron is on ${client.guilds.cache.size} servers!`);
 	console.info(client.guilds.cache.map(g => g.name + " " + g.memberCount).join("\n"));
 
 	console.info("LUCKY GUILDS" + luckyGuilds);
+
+	
 
 });
 
@@ -371,7 +379,9 @@ ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
 					{
 						console.log("selection: " + message.content);
 
-						var response = await message.channel.awaitMessages(message2 => parseInt(message2.content) > 0 && parseInt(message2.content) < 11, {
+						var filter = m => m.content.startsWith('!vote');
+
+						var response = await message.channel.awaitMessages(filter, {
 							maxMatches: 1,
 							time: 10000,
 							errors: ['time']

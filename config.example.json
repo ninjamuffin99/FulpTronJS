@@ -9,5 +9,6 @@
   "NGencKey": "",
   "spreadsheetID": "",
   "GOOGLE_API_KEY": "uhhh idk lol",
-  "MMappID": ""
+  "MMappID": "",
+  "mongoURI": ""
 }
