@@ -26,8 +26,8 @@ const nonDiscordUserMsg = 'you need to be using Discord to get this feature!';
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.json');
-let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.example.json');
+let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.json');
+// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID} = require('./config.example.json');
 
 
 //let gCreds = require('./fulpGdrive.json');
@@ -1022,7 +1022,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 			return message.reply("please input a newgrounds username!");
 	
 		// Buuilds the embed
-		let embed = new Discord.RichEmbed()
+		let embed = new Discord.MessageEmbed()
 		.setURL(`https://${usr}.newgrounds.com`)
 		.setTitle(`${usr}'s stats on Newgrounds`, )
 		.setTimestamp()
