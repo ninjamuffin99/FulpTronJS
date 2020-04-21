@@ -28,8 +28,8 @@ const nonDiscordUserMsg = 'you need to be using Discord to get this feature!';
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.json');
-let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.example.json');
+let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.json');
+// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.example.json');
 
 
 //let gCreds = require('./fulpGdrive.json');
@@ -176,7 +176,7 @@ client.on('guildMemberAdd', async member =>
 	{
 		console.log("SOMEONE JOINED NG SERVER??");
 
-		let infoPart = '*\nYou can use the command `fulpNGLogin` to sign into the Newgrounds API, and `fulpAddRole <role>` in the #dumping-grounds channel to give yourself other roles(`fulpRoles` to see all roles, and `fulpHelp` for more info)'
+		let infoPart = '*\nYou can use the command `fulpNG` to sign into the Newgrounds API, and `fulpAddRole <role>` in the #dumping-grounds channel to give yourself other roles(`fulpRoles` to see all roles, and `fulpHelp` for more info)'
 
 		let intro = ngRef[Math.floor(Math.random() * ngRef.length)];
 		intro = intro.replace('username',  "**" + member.user.username + "**");
@@ -721,7 +721,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 		if (['Admins', "Moderators", 'BrenBot', 'Contributor', 'james', 'Advent Calendar'].indexOf(role) > -1)
 			return message.reply('Hey stop that!');
 		if (["Newgrounder", 'Supporter'].indexOf(role) > -1)
-			return message.reply('the role "' + role + '" requires you to log into the Newgrounds API. Use the command `fulpNGLogin`');
+			return message.reply('the role "' + role + '" requires you to log into the Newgrounds API. Use the command `fulpNG`');
 		let curRole = message.guild.roles.cache.find(darole => darole.name === role);
 
 		if (!message.guild.roles.cache.some(daRole => daRole.name == role))
@@ -1175,113 +1175,88 @@ The Owner is: ${message.guild.owner.user.username}`);
 		}
 	}
 
-	else if (command == "nglogin")
+	else if (ommand == "nglogin" || command == 'ng' || command == 'login')
 	{
 		if (!isInGuild) return;
-		const doc = new GoogleSpreadsheet(spreadsheetID);
-		await promisify(doc.useServiceAccountAuth)(gCreds);
-		const info = await promisify(doc.getInfo)();
-
-		const sheet = info.worksheets[0];
-		console.log(`Title: ${sheet.title}, Rows: ${sheet.rowCount}`);
-
-		const Rows = await promisify(sheet.getRows)({
-				offset: 1
-		});
-
-		let signedIn = false;
-		let userInDatabase = false;
-
-
-		Rows.forEach(async function(row, index)
+		const isLoggedIn = await keyv.get(message.author.id);
+		if (isLoggedIn)
 		{
-			if (row.discord == message.author.id)
+			if (isLoggedIn.username == "")
 			{
-				userInDatabase = true;
-				console.log("FOUND USER...");
-				console.log(row.session);
-				var inputData = {
-					"app_id": NGappID,
-					"debug": true,
-					"session_id": row.session,
-					"call": {
-						"component": "App.checkSession",
-						"parameters": {},
-						}
-					};
-			
-				request.post(
-					'https://www.newgrounds.io/gateway_v3.php',
-					{ form: {input: JSON.stringify(inputData)} },
-					function (error, response, body) 
+				await keyv.delete(message.author.id);
+
+				return message.reply("sorry, there was an issue with your previous log in! Try again!");
+			}
+
+			console.log(message.author.username + ' EXISTS IN DATABASE');
+			console.log(isLoggedIn);
+			var inputData = {
+				"app_id": NGappID,
+				"debug": true,
+				"session_id": isLoggedIn.session,
+				"call": {
+					"component": "App.checkSession",
+					"parameters": {},
+					}
+				};
+		
+			request.post(
+				'https://www.newgrounds.io/gateway_v3.php',
+				{ form: {input: JSON.stringify(inputData)} },
+				async function (error, response, body) 
+				{
+					let parsedResp = JSON.parse(response.body);
+					
+					console.log(JSON.parse(response.body));
+
+					await keyv.set(message.author.id + ":expired", parsedResp.result.data.session.expired);
+
+					
+					signedIn = !parsedResp.result.data.session.expired && parsedResp.result.data.session.user;
+					if (signedIn)
 					{
-						//console.log("BODY")
-						//console.log(body);
-						let parsedResp = JSON.parse(response.body);
-						
-						console.log(JSON.parse(response.body));
-						row.expired = parsedResp.result.data.session.expired;
-						signedIn = !row.expired && parsedResp.result.data.session.user;
-						if (signedIn)
+						let newgroundsName = parsedResp.result.data.session.user.name;
+						let isSupporter = parsedResp.result.data.session.user.supporter;
+
+						let debugShit = await keyv.get(message.author.id);
+						console.log(debugShit);
+
+						if (isDiscordUser)
 						{
-							row.newgrounds = parsedResp.result.data.session.user.name;
-							row.supporter = parsedResp.result.data.session.user.supporter;
+							message.member.setNickname(newgroundsName);
 
-							if (isDiscordUser)
+							message.reply("successfully signed into the Newgrounds API!");
+							let role = message.guild.roles.cache.find(darole => darole.name == 'Newgrounder');
+							if (role)
 							{
-								message.member.setNickname(parsedResp.result.data.session.user.name);
+								message.member.roles.add(role);
+							}
+							else
+							{
+								console.error('Newgrounder role does not exist on this guild');
+							}
 
-								message.reply("successfully signed into the Newgrounds API!");
-								let role = message.guild.roles.cache.find(darole => darole.name == 'Newgrounder');
+							if (isSupporter)
+							{
+								role = message.guild.roles.cache.find(darole => darole.name == 'Supporter');
 								if (role)
 								{
 									message.member.roles.add(role);
 								}
 								else
 								{
-									console.error('Newgrounder role does not exist on this guild');
+									console.error('Supporter role does not exist on this guild');
 								}
-
-								if (row.supporter)
-								{
-									role = message.guild.roles.cache.find(darole => darole.name == 'Supporter');
-									if (role)
-									{
-										message.member.roles.add(role);
-									}
-									else
-									{
-										console.error('Supporter role does not exist on this guild');
-									}
-								}
-							}
-							else
-							{
-								message.reply("signed into the Newgrounds API, but without any Discord-specific features.");
 							}
 						}
-
-						row.save();
+						else
+						{
+							message.reply("signed into the Newgrounds API, but without any Discord-specific features.");
+						}
 					}
-				);
-			}
-			else
-			{
-				console.log("NOT USER");
-			}
-
-			console.log('SIGNED IN: ' + signedIn)
-
-			console.log(`Discord ID: ${row.discord}`);
-			console.log(`Session ID: ${row.session}`);
-			console.log(`Newgrounds Username ${row.newgrounds}`);
-			console.log(`Is Supporter: ${row.supporter}`);
-			console.log("----------");
-		});
-
-		console.log('USERS IN DATABASE: ' + userInDatabase)
-
-		if (!userInDatabase)
+				});
+		}
+		else
 		{
 			var inputData = {
 				"app_id": NGappID,
@@ -1290,84 +1265,87 @@ The Owner is: ${message.guild.owner.user.username}`);
 					"component": "App.startSession",
 					"parameters": {},
 					}
-				};
+			};
 		
-				request.post(
-					'https://www.newgrounds.io/gateway_v3.php',
-					{ form: {input: JSON.stringify(inputData)} },
-					async function (error, response, body) {
-						//console.log("BODY")
-						//console.log(body);
-						let parsedResp = JSON.parse(response.body);
-						
-						const ngUser = {
-							discord: message.author.id,
-							session: parsedResp.result.data.session.id
-						};
+			request.post(
+				'https://www.newgrounds.io/gateway_v3.php',
+				{ form: {input: JSON.stringify(inputData)} },
+				async function (error, response, body) {
+					//console.log("BODY")
+					//console.log(body);
+					let parsedResp = JSON.parse(response.body);
+					
+					const ngUser = {
+						discord: message.author.id,
+						session: parsedResp.result.data.session.id,
+						supporter: false,
+						username: ''
+					};
 
-						if (isDiscordUser)
+					if (isDiscordUser)
+					{
+						await keyv.set(message.author.id, ngUser);
+
+						console.log(parsedResp);
+						message.reply('link sent. Confirm it and then type fulpNG here again!');
+						message.author.send(`FulpTron will NOT have access to your Newgrounds password!!!\nFeel free to check the source code using the fulpSource command\nClick this link to sign into Newgrounds: ${parsedResp.result.data.session.passport_url}\nAnd then type in fulpNG again to get the roles!`);
+					}
+					else
+					{
+						if (args.length != 1)
 						{
-							await promisify(sheet.addRow)(ngUser);
-
-							console.log(parsedResp);
-							message.reply('link sent. Confirm it and then type fulpNGLogin here again!');
-							message.author.send(`FulpTron will NOT have access to your Newgrounds password!!!\nFeel free to check the source code using the fulpSource command\nClick this link to sign into Newgrounds: ${parsedResp.result.data.session.passport_url}\nAnd then type in fulpNGLogin again to get the roles!`);
+							message.reply("looks like you're not a Discord user. To log in, use this same command, but also type your email. (Don't worry, I'll take good care of it!)");
 						}
 						else
 						{
-							if (args.length != 1)
+							// Message contains an email address. Delete the message to "hide" the address and hopefully discourage jokers from sending it spam mail.
+							message.delete();
+
+							try
 							{
-								message.reply("looks like you're not a Discord user. To log in, use this same command, but also type your email. (Don't worry, I'll take good care of it!)");
+								let transporter = nodemailer.createTransport({
+									host: 'localhost',
+									port: 25,
+									tls: {
+										rejectUnauthorized: false
+									}
+								});
+
+								let info = await transporter.sendMail({
+									from: '"FulpTronJS" <noreply-fulptron@miscworks.net>',
+									to: `${args[0]}`,
+									subject: 'FulpTron login',
+									text: `Hi,\nLooks like you asked to link your Newgrounds account with a FulpTron-managed Discord server.\nFulpTron will NOT have access to your Newgrounds password!!!\nFeel free to check the source code using the fulpSource command\nClick this link to sign into Newgrounds: ${parsedResp.result.data.session.passport_url}\nAnd then type in fulpNG again to get the roles!\n\nIf none of this rings a bell, disregard this email.`
+								});
+
+								await keyv(ngUser.discord, ngUser);
+
+								message.reply("email se--I mean, what's an email? (Psst, type fulpNG here again when you're done. If you get stuck, type fulpNGLogout.)");
 							}
-							else
+							catch (error)
 							{
-								// Message contains an email address. Delete the message to "hide" the address and hopefully discourage jokers from sending it spam mail.
-								message.delete();
-
-								try
+								console.log(error)
+								if (error.code == 'EENVELOPE')
 								{
-									let transporter = nodemailer.createTransport({
-										host: 'localhost',
-										port: 25,
-										tls: {
-											rejectUnauthorized: false
-										}
-									});
-
-									let info = await transporter.sendMail({
-										from: '"FulpTronJS" <noreply-fulptron@miscworks.net>',
-										to: `${args[0]}`,
-										subject: 'FulpTron login',
-										text: `Hi,\nLooks like you asked to link your Newgrounds account with a FulpTron-managed Discord server.\nFulpTron will NOT have access to your Newgrounds password!!!\nFeel free to check the source code using the fulpSource command\nClick this link to sign into Newgrounds: ${parsedResp.result.data.session.passport_url}\nAnd then type in fulpNGLogin again to get the roles!\n\nIf none of this rings a bell, disregard this email.`
-									});
-
-									await promisify(sheet.addRow)(ngUser);
-
-									message.reply("email se--I mean, what's an email? (Psst, type fulpNGLogin here again when you're done. If you get stuck, type fulpNGLogout.)");
+									message.reply("I couldn't send an email to the address you just gave me. Check that it wasn't mistyped.");
 								}
-								catch (error)
+								else if (error.code == 'ESOCKET')
 								{
-									console.log(error)
-									if (error.code == 'EENVELOPE')
-									{
-										message.reply("I couldn't send an email to the address you just gave me. Check that it wasn't mistyped.");
-									}
-									else if (error.code == 'ESOCKET')
-									{
-										message.reply("I'm unable to send emails right now... Try again later.");
-									}
-									else
-									{
-										message.replay("something bad happened, but I don't know what... Try again later.");
-									}
+									message.reply("I'm unable to send emails right now... Try again later.");
+								}
+								else
+								{
+									message.replay("something bad happened, but I don't know what... Try again later.");
 								}
 							}
 						}
 					}
-				);
+				}
+			);
+			console.log('boop');
 		}
+			
 	}
-	
 
 	else if (command == "mmscores")
 	{
