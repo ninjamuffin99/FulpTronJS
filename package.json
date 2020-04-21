@@ -11,7 +11,6 @@
     "extend": "^3.0.2",
     "ffmpeg-static": "^2.7.0",
     "fstream": "^1.0.12",
-    "google-spreadsheet": "^2.0.9",
     "js-yaml": "^3.13.1",
     "keyv": "^4.0.0",
     "libsodium-wrappers": "^0.7.6",
