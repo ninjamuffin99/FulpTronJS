@@ -47,6 +47,7 @@ if (process.env.GOOGLE_API_KEY) GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 if (process.env.MMappID) MMappID = process.env.MMappID;
 if (process.env.private_key_id) gCreds.private_key_id = process.env.private_key_id;
 if (process.env.private_key) gCreds.private_key = process.env.private_key.replace(/\\n/g, '\n');
+if (process.env.mongoURI) mongoURI = process.env.mongoURI;
 
 // Music bot shit
 const YouTube = require(`simple-youtube-api`);
