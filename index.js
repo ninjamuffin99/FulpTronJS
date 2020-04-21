@@ -1134,12 +1134,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 		const isLoggedIn = await keyv.get(message.author.id);
 		if (isLoggedIn)
 		{
-			if (isLoggedIn.username == "")
-			{
-				await keyv.delete(message.author.id);
-
-				return message.reply("sorry, there was an issue with your previous log in! Try again!");
-			}
+			
 
 			console.log(message.author.username + ' EXISTS IN DATABASE');
 			console.log(isLoggedIn);
