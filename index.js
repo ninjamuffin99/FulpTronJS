@@ -1132,47 +1132,8 @@ The Owner is: ${message.guild.owner.user.username}`);
 	else if (command == "nglogout")
 	{
 		if (!isInGuild) return;
-		const doc = new GoogleSpreadsheet(spreadsheetID);
-		await promisify(doc.useServiceAccountAuth)(gCreds);
-		const info = await promisify(doc.getInfo)();
-
-		const sheet = info.worksheets[0];
-		console.log(`Title: ${sheet.title}, Rows: ${sheet.rowCount}`);
-
-		const Rows = await promisify(sheet.getRows)({
-				offset: 1
-		});
-
-		let rowToDelete = null;
-
-
-		Rows.forEach(function(row, index)
-		{
-			if (row.discord == message.author.id)
-			{
-				rowToDelete = row;
-				console.log("FOUND USER...");
-				console.log(row.session);
-			}
-			else
-			{
-				console.log("NOT USER");
-			}
-
-			console.log(`SIGNED IN: ${row.expired}`);
-
-			console.log(`Discord ID: ${row.discord}`);
-			console.log(`Session ID: ${row.session}`);
-			console.log(`Newgrounds Username ${row.newgrounds}`);
-			console.log(`Is Supporter: ${row.supporter}`);
-			console.log("----------");
-		});
-
-		if (rowToDelete)
-		{
-			rowToDelete.del();
-			return message.reply("all your base are belong back to you.");
-		}
+		await keyv.delete(message.author.id);
+		return message.reply("all your base are belong back to you.");
 	}
 
 	else if (ommand == "nglogin" || command == 'ng' || command == 'login')
