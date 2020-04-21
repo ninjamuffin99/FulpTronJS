@@ -1128,7 +1128,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 		return message.reply("all your base are belong back to you.");
 	}
 
-	else if (ommand == "nglogin" || command == 'ng' || command == 'login')
+	else if (command == "nglogin" || command == 'ng' || command == 'login')
 	{
 		if (!isInGuild) return;
 		const isLoggedIn = await keyv.get(message.author.id);
