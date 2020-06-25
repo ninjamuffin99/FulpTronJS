@@ -227,20 +227,14 @@ client.on('message', async message =>
 	{
 		daServerMetadata = JSON.parse(daServerMetadata);
 
-		if (daServerMetadata.bannedWords.every(function(bannedWord)
+		if (!daServerMetadata.bannedWords.every(function(bannedWord)
 		{
 			return !message.content.toLowerCase().includes(bannedWord.toLowerCase())
 		}))
 		{
-			console.log('passes test');
-		}
-		else
-		{
 			console.log('Deleted message in ' + message.guild.name + " by " + message.author.username + ": " + message.content);
 			return message.delete();
-		}
-			
-
+		}	
 	}
 
 	// if (message.content.includes())
