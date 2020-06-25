@@ -25,8 +25,8 @@ const nonDiscordUserMsg = 'you need to be using Discord to get this feature!';
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.json');
-let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.example.json');
+let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.json');
+// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.example.json');
 
 
 // THIS IS FOR HEROKU SHIT
@@ -220,6 +220,26 @@ client.on('message', async message =>
 		// message.reply basically the same as message.channel.send, but @'s the person who sent it
 		message.reply("\nRIP\nRIP\nRIP");
 	}
+
+	var daServerMetadata = await keyv.get(message.guild.id);
+
+	if (daServerMetadata != undefined)
+	{
+		daServerMetadata = JSON.parse(daServerMetadata);
+
+		if (daServerMetadata.bannedWords.every(function(bannedWord)
+		{
+			return !message.content.includes(bannedWord.toLowerCase())
+		}))
+		{
+			console.log('passes test');
+		}
+		else
+			return message.delete();
+
+	}
+
+	// if (message.content.includes())
 
 	//Automate Welcome Channel WIP
 	/*if(message.content.toLowerCase() === "test" || message.channel.id() === "read-the-rules-for-access"){
@@ -1126,6 +1146,56 @@ The Owner is: ${message.guild.owner.user.username}`);
 		if (!isInGuild) return;
 		await keyv.delete(message.author.id);
 		return message.reply("all your base are belong back to you.");
+	}
+	else if (command == 'curblacklist')
+	{
+		if (!isInGuild || !message.member.hasPermission('MANAGE_MESSAGES')) return;
+
+		var serverInfo = await keyv.get(message.guild.id);
+		
+
+		if (serverInfo == undefined)
+		{
+			serverInfo = {
+				"bannedWords": [
+				]
+			};
+		}
+		else
+			serverInfo = JSON.parse(serverInfo);
+
+		return message.channel.send(serverInfo.bannedWords);
+
+	}
+	else if (command == 'blacklist')
+	{
+		if (!isInGuild) return;
+
+		if (!message.member.hasPermission('MANAGE_MESSAGES'))
+		{
+			return message.channel.send('You do not have permissions to add words to the blacklist!');
+		}
+
+		if (args.length < 1)
+			return message.channel.send("Please input a word to blacklist!");
+
+		var serverInfo = await keyv.get(message.guild.id);
+		
+
+		if (serverInfo == undefined)
+		{
+			serverInfo = {
+				"bannedWords": [
+				]
+			};
+		}
+		else
+			serverInfo = JSON.parse(serverInfo);
+
+		serverInfo.bannedWords.push(args[0]);
+
+		await keyv.set(message.guild.id, JSON.stringify(serverInfo));
+		console.log(serverInfo);
 	}
 
 	else if (command == "nglogin" || command == 'ng' || command == 'login')
