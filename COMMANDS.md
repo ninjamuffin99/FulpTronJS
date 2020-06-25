@@ -33,6 +33,10 @@ parameters will be indicated in <> these brackets when required. If there's mult
 - `fulpEval` command to execute any piece of javascript, on the official FulpTron, only I can use it heheheh
 - `fulpScreenshare` generates a link to screenshare in current voice channel.
 
+### Moderation
+- 'fulpblacklist <banned word>' blacklists the banned word
+- 'fulpcurblacklist' displays current blacklist of words
+
 ### VARIOUS MUSIC COMMANDS!!
 I got a bunch of music code from this bot lol I pretty much stole all that shit so go check it out: https://github.com/Dev-Yukine/Music-Bot/
 
