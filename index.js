@@ -236,7 +236,7 @@ client.on('message', async message =>
 		}
 		else
 		{
-			console.log('Deleted message in ' + message.guild.name + " by " + message.author.username ": " + message.content);
+			console.log('Deleted message in ' + message.guild.name + " by " + message.author.username + ": " + message.content);
 			return message.delete();
 		}
 			
