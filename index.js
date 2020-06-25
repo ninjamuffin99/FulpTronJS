@@ -229,7 +229,7 @@ client.on('message', async message =>
 
 		if (daServerMetadata.bannedWords.every(function(bannedWord)
 		{
-			return !message.content.includes(bannedWord.toLowerCase())
+			return !message.content.toLowerCase().includes(bannedWord.toLowerCase())
 		}))
 		{
 			console.log('passes test');
