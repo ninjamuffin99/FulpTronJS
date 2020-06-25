@@ -1192,7 +1192,8 @@ The Owner is: ${message.guild.owner.user.username}`);
 		else
 			serverInfo = JSON.parse(serverInfo);
 
-		serverInfo.bannedWords.push(args[0]);
+		let text = args.slice(0).join(" ");
+		serverInfo.bannedWords.push(text);
 
 		await keyv.set(message.guild.id, JSON.stringify(serverInfo));
 		console.log(serverInfo);
