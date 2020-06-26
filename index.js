@@ -25,8 +25,8 @@ const nonDiscordUserMsg = 'you need to be using Discord to get this feature!';
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.json');
-let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.example.json');
+let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.json');
+// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.example.json');
 
 
 // THIS IS FOR HEROKU SHIT
@@ -73,7 +73,7 @@ function prepPics()
 // this event will trigger whenever your bot:
 // - finishes logging in
 // - reconnects after disconnecting
-client.on('ready', () => 
+client.on('ready', async () => 
 {
 	prepPics();
 
@@ -142,7 +142,35 @@ client.on('ready', () =>
 
 	console.info("LUCKY GUILDS" + luckyGuilds);
 
-	
+	var memberShit = await keyv.get('fulptron');
+
+	if (memberShit != undefined)
+	{
+		memberShit = JSON.parse(memberShit);
+
+		memberShit.usersAPI.every(function(apiUser)
+		{
+			var inputData = {
+				"app_id": NGappID,
+				"debug": true,
+				"call": {
+					"component": "Gateway.ping",
+					"parameters": {},
+					}
+			};
+		
+			request.post(
+				'https://www.newgrounds.io/gateway_v3.php',
+				{ form: {input: JSON.stringify(inputData)} },
+				async function (error, response, body) 
+				{
+					let parsedResp = JSON.parse(response.body);
+					
+					console.log(apiUser + ": " + parsedResp.result.data.success);
+				});
+		});
+
+	}
 
 });
 
@@ -826,11 +854,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 	else if (command == 'dogl' || command == 'dogg')
 	{
-		
-
 		let curPic = randomFromArray(1);
-		console.log("THE PIC");
-		console.log(curPic);
 
 		message.channel.send(curPic, {files: [{attatchment: "pics/dogl/" + curPic}]});
 	}
@@ -838,9 +862,6 @@ The Owner is: ${message.guild.owner.user.username}`);
 	else if ( command == 'delete' || command == 'delet' || command == 'gun')
 	{
 		let curPic = randomFromArray(2);
-		console.log("THE PIC");
-		console.log(curPic);
-
 		message.channel.send(curPic, {files: [{attatchment: "pics/delete/" + curPic, name: curPic}]});
 	}
 
@@ -854,15 +875,11 @@ The Owner is: ${message.guild.owner.user.username}`);
 		if (args[0] == 'dogl' || args[0] == "dogg")
 		{
 			let curPic = randomFromArray(1);
-			console.log("THE PIC");
-			console.log(curPic);
 
 			return message.channel.send(curPic, {files: [{attachment: "pics/dogl/" + curPic}]});
 		}
 
 		let curPic = randomFromArray(0);
-		console.log("THE PIC");
-		console.log(curPic);
 
 		message.channel.send(curPic, {files: [{attachment: `pics/fulp/${curPic}`, name: curPic}]});
 	}
@@ -1154,10 +1171,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 		if (serverInfo == undefined)
 		{
-			serverInfo = {
-				"bannedWords": [
-				]
-			};
+			serverInfo = initServerShit();
 		}
 		else
 			serverInfo = JSON.parse(serverInfo);
@@ -1182,10 +1196,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 
 		if (serverInfo == undefined)
 		{
-			serverInfo = {
-				"bannedWords": [
-				]
-			};
+			serverInfo = initServerShit();
 		}
 		else
 			serverInfo = JSON.parse(serverInfo);
@@ -1194,28 +1205,33 @@ The Owner is: ${message.guild.owner.user.username}`);
 		serverInfo.bannedWords.push(text);
 
 		await keyv.set(message.guild.id, JSON.stringify(serverInfo));
-		console.log(serverInfo);
+		return message.delete();
+		// console.log(serverInfo);
 	}
 
 	else if (command == "nglogin" || command == 'ng' || command == 'login')
 	{
 		if (!isInGuild) return;
-		const isLoggedIn = await keyv.get(message.author.id);
+		var isLoggedIn = await keyv.get(message.author.id);
 		if (isLoggedIn)
 		{
+			// console.log(message.author.username + ' EXISTS IN DATABASE');
+			isLoggedIn = JSON.parse(isLoggedIn);
+			// console.log(isLoggedIn);
 			
 
-			console.log(message.author.username + ' EXISTS IN DATABASE');
-			console.log(isLoggedIn);
 			var inputData = {
 				"app_id": NGappID,
 				"debug": true,
-				"session_id": isLoggedIn.session,
+				"session_id": isLoggedIn.session.id,
 				"call": {
 					"component": "App.checkSession",
 					"parameters": {},
 					}
 				};
+
+			// console.log('DA INPUT');
+			// console.log(inputData);
 		
 			request.post(
 				'https://www.newgrounds.io/gateway_v3.php',
@@ -1226,8 +1242,15 @@ The Owner is: ${message.guild.owner.user.username}`);
 					
 					console.log(JSON.parse(response.body));
 
-					await keyv.set(message.author.id + ":expired", parsedResp.result.data.session.expired);
+					
+					var memberInfo = await keyv.get(message.author.id);
+					memberInfo = JSON.parse(memberInfo);
+					
+					// NOTE actually fix this later
 
+					
+
+					console.log(parsedResp);
 					
 					signedIn = !parsedResp.result.data.session.expired && parsedResp.result.data.session.user;
 					if (signedIn)
@@ -1235,14 +1258,25 @@ The Owner is: ${message.guild.owner.user.username}`);
 						let newgroundsName = parsedResp.result.data.session.user.name;
 						let isSupporter = parsedResp.result.data.session.user.supporter;
 
-						let debugShit = await keyv.get(message.author.id);
-						console.log(debugShit);
+						memberInfo.supporter = isSupporter;
+						memberInfo.newgroundsName = newgroundsName;
+						memberInfo.expired = false;
+						memberInfo.rememberUser = parsedResp.result.data.session.rememberUser;
+
+						await keyv.set(message.author.id, JSON.stringify(memberInfo));
 
 						if (isDiscordUser)
 						{
 							message.member.setNickname(newgroundsName);
 
-							message.reply("successfully signed into the Newgrounds API!");
+							var remember = "";
+
+							if (!memberInfo.rememberUser)
+							{
+								remember = "In the passport settings, you didn't set 'Remember Me', please check that!";
+							}
+
+							message.reply("successfully signed into the Newgrounds API!" + remember);
 							let role = message.guild.roles.cache.find(darole => darole.name == 'Newgrounder');
 							if (role)
 							{
@@ -1292,16 +1326,33 @@ The Owner is: ${message.guild.owner.user.username}`);
 					//console.log(body);
 					let parsedResp = JSON.parse(response.body);
 					
-					const ngUser = {
-						discord: message.author.id,
-						session: parsedResp.result.data.session.id,
-						supporter: false,
-						username: ''
-					};
+					var ngUser = initMemberDate();
+
+					ngUser.discordUsername = message.author.username;
+					ngUser.discord = message.author.id;
+					ngUser.session = parsedResp.result.data.session;
+
+					var loggedInUsers = await keyv.get('fulptron');
+
+					if (loggedInUsers == undefined)
+					{
+						loggedInUsers = {
+							usersAPI: []
+						};
+					}
+					else
+						loggedInUsers = JSON.parse(loggedInUsers);
+					
+					loggedInUsers.usersAPI.push(message.author.id);
+					await keyv.set('fulptron', JSON.stringify(loggedInUsers));
+
+
+					console.log(ngUser.session);
+					console.log(parsedResp);
 
 					if (isDiscordUser)
 					{
-						await keyv.set(message.author.id, ngUser);
+						await keyv.set(message.author.id, JSON.stringify(ngUser));
 
 						console.log(parsedResp);
 						message.reply('link sent. Confirm it and then type fulpNG here again!');
@@ -1335,7 +1386,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 									text: `Hi,\nLooks like you asked to link your Newgrounds account with a FulpTron-managed Discord server.\nFulpTron will NOT have access to your Newgrounds password!!!\nFeel free to check the source code using the fulpSource command\nClick this link to sign into Newgrounds: ${parsedResp.result.data.session.passport_url}\nAnd then type in fulpNG again to get the roles!\n\nIf none of this rings a bell, disregard this email.`
 								});
 
-								await keyv(ngUser.discord, ngUser);
+								await keyv(ngUser.discord, JSON.stringify(ngUser));
 
 								message.reply("email se--I mean, what's an email? (Psst, type fulpNG here again when you're done. If you get stuck, type fulpNGLogout.)");
 							}
@@ -1495,6 +1546,34 @@ function handleNGSongs(songUrl, message, voicechannel, playlist=false)
 
 		handleVideo(song, message, message.member.voice.channel, playlist);
 	});
+}
+
+function initServerShit()
+{
+	var daServer = {
+		"bannedWords": [
+
+		],
+		"aliases": [
+
+		]
+	};
+	return daServer;
+}
+
+function initMemberDate()
+{
+	var daMember = {
+		discord: false,
+		discordUsername: "",
+		supporter: false,
+		session: {},
+		username: '',
+		expired: false,
+		rememberUser: false
+	};
+
+	return daMember;
 }
 
 async function handleVideo(video, message, voiceChannel, playlist = false) {
