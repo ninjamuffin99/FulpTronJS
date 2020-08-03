@@ -25,8 +25,8 @@ const nonDiscordUserMsg = 'you need to be using Discord to get this feature!';
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.json');
-let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.example.json');
+let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.json');
+// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.example.json');
 
 
 // THIS IS FOR HEROKU SHIT
@@ -52,7 +52,6 @@ keyv.on('error', err => console.error('Keyv connection error:', err));
 const queue = new Map();
 
 // gets filled later
-// TODO: make it get filled in order consistently, often it fills the dogl section and deleteThis shit out of order
 // see prepPics() like 5 lines lower to see the bullshit im trying to do lmao
 const fulpPics = [];
 
@@ -852,13 +851,6 @@ The Owner is: ${message.guild.owner.user.username}`);
 		}]});
 	}
 
-	else if (command == 'dogl' || command == 'dogg')
-	{
-		let curPic = randomFromArray(1);
-
-		message.channel.send(curPic, {files: [{attatchment: "pics/dogl/" + curPic}]});
-	}
-
 	else if ( command == 'delete' || command == 'delet' || command == 'gun')
 	{
 		let curPic = randomFromArray(2);
@@ -870,13 +862,6 @@ The Owner is: ${message.guild.owner.user.username}`);
 		if (args[0] == "luis")
 		{
 			return message.channel.send("luis.jpg", {files: [{attachment: "pics/luis/" + "luis.jpg", name: 'luis.jpg'}]});
-		}
-
-		if (args[0] == 'dogl' || args[0] == "dogg")
-		{
-			let curPic = randomFromArray(1);
-
-			return message.channel.send(curPic, {files: [{attachment: "pics/dogl/" + curPic}]});
 		}
 
 		let curPic = randomFromArray(0);
