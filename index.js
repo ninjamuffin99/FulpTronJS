@@ -16,6 +16,12 @@ const {Util} = require('discord.js');
 
 //command set up
 client.commands = new Discord.Collection();
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	client.commands.set(command.name, command);
+}
 
 //extra shit
 const ytdl = require('ytdl-core-discord');
@@ -40,6 +46,9 @@ if (process.env.spreadsheetID) spreadsheetID = process.env.spreadsheetID;
 if (process.env.GOOGLE_API_KEY) GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 if (process.env.MMappID) MMappID = process.env.MMappID;
 if (process.env.mongoURI) mongoURI = process.env.mongoURI;
+
+exports.prefix = prefix;
+exports.MMappID = MMappID;
 
 // Music bot shit
 const YouTube = require(`simple-youtube-api`);
@@ -285,59 +294,62 @@ client.on('message', async message =>
 		}
 	}*/
 
-	else if(message.content.toLowerCase() === "monster mashing"){
+	// Fixed the ing- thing??
+
+	if(message.content.toLowerCase() === "monster mashing"){
 		message.reply("Did someone say M0NSTER MASHING!?\nhttps://www.newgrounds.com/portal/view/707498");
 	}
 
 	//IF IT DOESNT START WITH "FULP" then IT DONT REGISTER PAST THIS POINT
-	else if (!message.content.toLowerCase().startsWith(prefix)) return;
+	if (!message.content.toLowerCase().startsWith(prefix)) return;
 
 	const args = message.content.slice(prefix.length).split(/ +/);
 	const command = args.shift().toLowerCase();
 
+	console.log(args);
+	console.log(args.length);
+	
+
+
+	// uncomment when all the commands are implemented
+	// if (!client.commands.has(command))
+
+	try {
+
+		const daCommand = client.commands.get(command)
+			|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command));
+
+		// Commands that need arguments
+		if (daCommand.args && !args.length)
+		{
+			let reply = "You didn't provide any arguments!"
+			
+			if (daCommand.usage)
+			{
+				reply += `\nThe proper usage would be: \`${prefix}${daCommand.name} ${daCommand.usage}\``
+			}
+
+			return message.channel.send(reply);
+		}
+
+		// Commands that need to be in a server
+		if (daCommand.guildOnly && message.channel.type !== 'text') {
+			return message.reply('I can\'t execute that command inside DMs!');
+		}
+		
+
+		daCommand.execute(message, args)
+	} catch (err)
+	{
+		console.error(err);
+		message.reply(' there was an error trying to execute that command!');
+	}
+
 	// this message(and all others below it) does need a prefix, because it's after the if statement, and also needs the other info above, like command and args
-	if (command == 'ping') 
-	{
-		// var emoji = Discord.emoji.from
-		let pang = Math.round(client.ws.ping);
-		message.channel.send(`Pong! Ping: ${pang}ms`);
-	}
-
-	else if (command == 'shame')
-	{
-		message.channel.send('**SHAAAAAME**');
-	}
-
-	else if(command == 'die'){
-		message.channel.send(`(＾A＾)  ̿ ̿'̿'\̵͇̿̿\з`);
-	}
-
-	else if (command == 'help')
-	{
-		message.channel.send("https://github.com/ninjamuffin99/FulpTronJS/blob/master/COMMANDS.md");
-	}
-
-	else if (command == 'emotetest')
+	if (command == 'emotetest')
 	{
 		if (!isInGuild) return;
 		message.channel.guild.createEmoji('./pics/luis/luis.jpg', 'luis', [message.guild.roles.cache.find(darole => darole.name === 'Newgrounder')])
-	}
-
-	else if (command == 'screenshare' || command =='share')
-	{
-		if (!isInGuild) return;
-		if (!isDiscordUser)
-		{
-			return message.reply(nonDiscordUserMsg);
-		}
-
-		const { channel } = message.member.voice;
-
-		if (!channel) {
-			return message.reply('please join a voice channel first!');
-		}
-
-		return message.channel.send('http://www.discordapp.com/channels/' + message.guild.id + '/' + channel.id)
 	}
 
 	const serverQueue = isInGuild ? queue.get(message.guild.id) : null;
@@ -529,26 +541,6 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		}
 		return message.channel.send('There is nothing playing.');
 	}
-
-	 
-	// STUPID JS NOTE: MAKE SURE YOU USE ` BACKTICKS LIKE THIS, INSTEAD OF ' APOSTROPHES LIKE THIS
-	// IF YOU WANT TO USE EZ VARIABLES AND SHIT
-	else if (command == 'server') 
-	{
-		if (!isInGuild) return;
-		message.channel.send(`This server's name is: ${message.guild.name}
-Total members: ${message.guild.memberCount}
-Server Region: ${message.guild.region}
-		
-FulpTron joined this server at: ${message.guild.joinedAt}
-The Owner is: ${message.guild.owner.user.username}`);
-	}
-
-	else if (command == 'invite')
-	{
-		message.channel.send(`Use this link to invite FulpTron to a server that you have admin access on! https://discordapp.com/oauth2/authorize?client_id=381604281968623617&scope=bot&permissions=8`);
-	}
-
 	else if (command == 'discord')
 	{
 		message.channel.send("https://discord.gg/HzvnXfZ");
@@ -604,18 +596,6 @@ The Owner is: ${message.guild.owner.user.username}`);
 		})
 	}
 
-	else if (command == "uptime"){
-		//message.reply(`Current uptime is : ${client.uptime.toPrecision(2) * 0.001} seconds`)
-		let totalSeconds = (client.uptime / 1000);
-		let hours = Math.floor(totalSeconds / 3600);
-		totalSeconds %= 3600;
-		let minutes = Math.floor(totalSeconds / 60);
-		let seconds = totalSeconds % 60;
-		let sec = Math.floor(seconds);
-		let uptime = `${hours} hours, ${minutes} minutes and ${sec} seconds`;
-		message.reply("Current uptime is : " + uptime);
-	}
-
 	else if (command == "points")
 	{
 		if (!isInGuild) return;
@@ -638,98 +618,6 @@ The Owner is: ${message.guild.owner.user.username}`);
 		client.setScore.run(score);
 		console.log(score);
 	}
-
-	else if (command == "picarto")
-	{
-		let username = args[0];
-		let url = `https://api.picarto.tv/v1/channel/name/${username}`;
-
-		https.get(url, (resp) => 
-		{
-			let data = '';
-
-			// A chunk of data has been recieved.
-			resp.on('data', (chunk) => {
-			  data += chunk;
-			});
-
-			resp.on('end', () => {
-				console.log(JSON.parse(data));
-				JSON.parse(data, (key, value) =>
-				{
-					if (key == "online")
-					{
-						if (value)
-						{
-							message.channel.send(`${username} is streaming!`)
-						}
-						else
-							message.channel.send(`${username} is not streaming :(`)
-					}
-				});
-
-			  });
-		});
-
-	}
-
-
-	else if (command == "quiz")
-	{
-		// https://opentdb.com/api.php?amount=1
-
-		let url = `https://opentdb.com/api.php?amount=1`;
-
-
-
-		https.get(url, (resp) => 
-		{
-			let data = '';
-
-			// A chunk of data has been recieved.
-			resp.on('data', (chunk) => {
-			  data += chunk;
-			});
-
-			resp.on('end', () => {
-				let theQuiz = JSON.parse(data).results[0];
-				console.log(JSON.parse(data).results[0])
-
-				let messageSending = theQuiz.category + "\n" + unescapeHTML(theQuiz.question);
-
-				let answerArray = theQuiz.incorrect_answers;
-				let correctAnswerPos = Math.floor(Math.random() * (theQuiz.incorrect_answers.length + 1));
-				console.log("Answer is " + correctAnswerPos);
-				answerArray.splice(correctAnswerPos, 0, theQuiz.correct_answer)
-
-				for (let a = 0; a < answerArray.length; a++)
-				{
-					messageSending += "\n" + (a + 1) + ". " + answerArray[a];
-				}
-
-				message.channel.send(messageSending).then(() =>
-				{
-					message.channel.awaitMessages(mess => mess.content.startsWith(correctAnswerPos + 1), {
-						max: 1,
-						time: 20000,
-						errors: ['time'],
-					  })
-					  .then((collected) => {
-						  message.reply(`You got the right answer i think, ${theQuiz.correct_answer}`);
-						})
-						.catch(() => {
-						  message.channel.send(`Ran outta time, the correct answer was ${(correctAnswerPos + 1) + ". " + theQuiz.correct_answer}`);
-						});
-				});
-
-// message.channel.awaitMessages(message2 => message2.content > 0 && message2.content < 11, {
-
-			  });
-		});
-
-	}
-
-
 
 	else if (command == 'roles')
 	{
@@ -821,25 +709,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 		message.roles.add(curRole);
 		//message.reply('just got the ${curRole.name} role!');
 	}
-	 */
-	else if (command == 'args-info')
-	{
-		if (!args.length)
-		{
-			return message.channel.send(`You didn't provide any arguments, ${message.author}`);
-		}
-
-		message.channel.send(`Command name: ${command}\nArgumenets: ${args}`);
-	}
-
-	else if (command === "asl") 
-	{
-		let age = args[0]; // Remember arrays are 0-based!.
-		let sex = args[1];
-		let location = args[2];
-		message.reply(`Hello ${message.author.username}, I see you're a ${age} year old ${sex} from ${location}. Wanna date?`);
-	}
-
+	*/
 	else if (command == 'cringe' || command == 'snap')
 	{
 
@@ -900,7 +770,7 @@ The Owner is: ${message.guild.owner.user.username}`);
 		shoomBeginning += "M**";
 		shoomBeginning += `\nO Amount: ${shoomOCound}`
 
-		message.channel.send(shoomBeginning);
+		message.channel.send(shoomBeginning, { split: true });
 
 	}
 
@@ -1399,68 +1269,6 @@ The Owner is: ${message.guild.owner.user.username}`);
 		}
 			
 	}
-
-	else if (command == "mmscores")
-	{
-
-		var inputData = {
-			"app_id": MMappID,
-			"debug": false,
-			"call": {
-				"component": "ScoreBoard.getScores",
-				"parameters": 
-				{
-					"id": 8004,
-					"limit": 20,
-					"period": "A"
-				},
-			}
-		};
-	
-		request.post(
-			'https://www.newgrounds.io/gateway_v3.php',
-			{ form: {input: JSON.stringify(inputData)} },
-			function (error, response, body) {
-				console.log("RESPONSE")
-				let parsedResp = JSON.parse(response.body);
-				console.log(parsedResp);
-				
-				let scorePos = 0;
-
-				let embed = new Discord.RichEmbed()
-				.setURL(`https://www.newgrounds.com/portal/view/707498`)
-				.setTitle(`Monster Mashing Hall Of Shame`, )
-				.setTimestamp()
-				.setColor(0xF30DFF)
-				.setThumbnail("https://i.imgur.com/PMJb6SI.png");
-
-				let field1 = [];
-				let field2 = [];
-
-				let listOfPeople = parsedResp.result.data.scores.map(s => {
-					scorePos += 1;
-					if (scorePos <= 10)
-					{
-						field1.push(`${scorePos}. [${s.user.name}](https://${s.user.name}.newgrounds.com) --- ${s.formatted_value}`);
-					}
-					else
-						field2.push(`${scorePos}. [${s.user.name}](https://${s.user.name}.newgrounds.com) --- ${s.formatted_value}`);
-
-					return `${scorePos}. [${s.user.name}](https://${s.user.name}.newgrounds.com) --- ${s.formatted_value}`;
-				});
-
-				console.log(listOfPeople.length);
-
-				embed.addField("Distance", field1);
-				embed.addField(" - ", field2);
-
-				message.channel.send({embed});
-
-				}
-		);
-
-	}
-
 	else if (command == "testerror" && message.channel.author.id == ownerID)
 		message.channel.send(` <@${ownerID}> an error occured`);
 	/* 
