@@ -332,6 +332,12 @@ client.on('message', async message =>
 			return message.channel.send(reply);
 		}
 
+		// If needs to be discord user
+		if (daCommand.discord && !isDiscordUser)
+		{
+			return message.reply(nonDiscordUserMsg);
+		}
+
 		// Commands that need to be in a server
 		if (daCommand.guildOnly && message.channel.type !== 'text') {
 			return message.reply('I can\'t execute that command inside DMs!');
@@ -546,56 +552,6 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		message.channel.send("https://discord.gg/HzvnXfZ");
 	}
 
-	else if (command == 'kick')
-	{
-		if (!isDiscordUser)
-		{
-			return message.reply(nonDiscordUserMsg);
-		}
-		if (!message.member.permissions.has("KICK_MEMBERS"))
-		{
-			return message.reply("you don't have permission to kick u doof!");
-		}
-		if (!message.mentions.users.size)
-		{
-			return message.reply('you need to @ someone to kick em')
-		}
-
-		const taggedUser = message.mentions.users.first();
-
-		message.channel.send(`You wanted to kick: ${taggedUser.username}`);
-	}
-
-	else if (command == 'prune' || command == 'purge')
-	{
-		if (!isDiscordUser)
-		{
-			return message.reply(nonDiscordUserMsg);
-		}
-		if (!message.member.hasPermission('MANAGE_MESSAGES'))
-		{
-			return message.channel.send("You need to have the permission 'Manage Messages' enabled for one of your roles!");
-		}
-
-		const amount = parseInt(args[0]) + 1;
-
-		if (isNaN(amount))
-		{
-			return message.reply('that does not seem to be a valid number');
-		}
-		else if (amount <= 1 || amount > 100)
-		{
-			return message.reply('you need to input a number between 1 and 99');
-		}
-
-		message.channel.bulkDelete(amount, true).catch(err =>
-		{
-			console.error(err);
-			message.channel.send("OOPSIE WOOPSIE!! Uwu We madea fucky wucky!! A wittle fucko boingo! The code monkeys at our headquarters are working VEWY HAWD to fix this!");
-			message.channel.send("acutally there was just an error trying to prune message oopsies");
-		})
-	}
-
 	else if (command == "points")
 	{
 		if (!isInGuild) return;
@@ -751,34 +707,6 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 			client.user.setActivity(text, { type: 'PLAYING' })
 			.then(presence => console.log(`Activity set to ${presence.game ? presence.game.name : 'none'}`))
   			.catch(console.error);
-	}
-
-	else if (command == "shoom" || command == "jojo" || command.match(/^(?:sho{2,}m)|(?:jo){2,}$/))// allow shoooooooom
-	{
-		if (command.charAt(0) == "s")
-			shoomOCound += command.length - 4; // shoom adds 1 shooom adds 2...
-		else
-			shoomOCound += (command.length / 2) - 1; // jojo adds 1 jojojo adds 2...
-
-		let shoomBeginning = "**SH";
-
-		for (i = shoomOCound; i > 0; i--)
-		{
-			shoomBeginning += "O";
-		}
-
-		shoomBeginning += "M**";
-		shoomBeginning += `\nO Amount: ${shoomOCound}`
-
-		message.channel.send(shoomBeginning, { split: true });
-
-	}
-
-	else if (command === 'shoomreset')
-	{
-		message.channel.send(`DeSHOOMing complete.\nPrevious O Amount: ${shoomOCound}`);
-		
-		shoomOCound = 1;
 	}
 
 	else if (command === 'say')
