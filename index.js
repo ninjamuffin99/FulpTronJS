@@ -79,8 +79,8 @@ function prepPics()
 
 // ID's for server, and announcement channel in NG server
 // used for caching shit and role reactions
-const ngServerID = '628006277984944167';
-const ngChannelID = '631992224296468531';
+const ngServerID = '578313756015329281';
+const ngChannelID = '578314067752779796';
 
 // when the client is ready, run this code
 // this event will trigger whenever your bot:
