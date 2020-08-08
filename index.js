@@ -238,7 +238,7 @@ client.on("messageReactionAdd", (e, user) => {
             if (e.emoji.name == emojiname[o]) {
                 let i = e.message.guild.roles.cache.find(e => e.name == rolename[o]);
 				e.message.guild.member(user).roles.add(i).catch(console.error);
-				console.log('added role');
+				// console.log('added role');
 			}
 });
 
@@ -248,7 +248,7 @@ client.on("messageReactionRemove", (e, n) => {
             if (e.emoji.name == emojiname[o]) {
                 let i = e.message.guild.roles.cache.find(e => e.name == rolename[o]);
 				e.message.guild.member(n).roles.remove(i).catch(console.error)
-				console.log('removed role');
+				// console.log('removed role');
             }
 });
 
