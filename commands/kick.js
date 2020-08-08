@@ -1,7 +1,9 @@
 module.exports = {
     name: "kick",
     description: "Kicks the user",
-    discord: true,
+	discord: true,
+	guildOnly: true,
+	args: false,
     execute(message, args) {
         if (!message.member.permissions.has("KICK_MEMBERS"))
 		{

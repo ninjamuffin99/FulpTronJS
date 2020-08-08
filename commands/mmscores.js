@@ -1,6 +1,7 @@
 module.exports = {
     name: 'mmscores',
-    description: "Checks the top 20 scores of Monster Mashing!",
+	description: "Checks the top 20 scores of Monster Mashing!",
+	args: false,
     execute(message, args) {
         let {MMappID} = require('../index.js');
         const request = require('request');

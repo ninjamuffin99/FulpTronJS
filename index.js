@@ -31,8 +31,8 @@ const nonDiscordUserMsg = 'you need to be using Discord to get this feature!';
 
 // NOTE IMPORTANT READ THIS
 // This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.json');
-// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.example.json');
+// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.json');
+let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.example.json');
 
 
 // THIS IS FOR HEROKU SHIT
@@ -76,6 +76,11 @@ function prepPics()
 	console.log('delete shit');
 	
 }
+
+// ID's for server, and announcement channel in NG server
+// used for caching shit and role reactions
+const ngServerID = '628006277984944167';
+const ngChannelID = '631992224296468531';
 
 // when the client is ready, run this code
 // this event will trigger whenever your bot:
@@ -148,6 +153,12 @@ client.on('ready', async () =>
 	console.info(`FulpTron is on ${client.guilds.cache.size} servers!`);
 	console.info(client.guilds.cache.map(g => g.name + " " + g.memberCount).join("\n"));
 
+	// Specific code for newgrounds server, that finds the announcements channel, and caches the messages
+	// Swap this with something for general purpose reacts later
+	let ngServer = client.guilds.cache.find(ngGuild => ngGuild.id === ngServerID);
+	let announcements = ngServer.channels.cache.find(announc => announc.id === ngChannelID);
+	announcements.messages.fetchPinned();
+
 	console.info("LUCKY GUILDS" + luckyGuilds);
 
 	var memberShit = await keyv.get('fulptron');
@@ -202,9 +213,14 @@ client.on('guildMemberAdd', async member =>
 	console.log(guildIndex);
 	if (guildIndex != -1)
 	{
+		//REFRESHES CACHE FOR ROLE REACTIONS FOR NEW PEOPLE?
+		let ngServer = client.guilds.cache.find(ngGuild => ngGuild.id === ngServerID);
+		let announcements = ngServer.channels.cache.find(announc => announc.id === ngChannelID);
+		announcements.messages.fetchPinned();
+
 		console.log("SOMEONE JOINED NG SERVER??");
 
-		let infoPart = '*\nYou can use the command `fulpNG` to sign into the Newgrounds API, and `fulpAddRole <role>` in the <#578313950735892485> channel to give yourself other roles(`fulpRoles` to see all roles, and `fulpHelp` for more info)'
+		let infoPart = '*\nYou can use the command `fulpNG` to sign into the Newgrounds API, roles can be added in the <#578314067752779796> and `fulpHelp` for more info)'
 
 		let intro = ngRef[Math.floor(Math.random() * ngRef.length)];
 		intro = intro.replace('username',  "**" + member.user.username + "**");
@@ -212,6 +228,28 @@ client.on('guildMemberAdd', async member =>
 		return member.guild.channels.cache.find(channel => channel.id === '578313756015329283').send("*" + intro + infoPart);
 	}
 
+});
+var emojiname = ["🎮", "🖥️", "🎵", "🎙️", "🎞️", "🎨", "✍️", "💩"],
+    rolename = ["Game Developer", "Programmer", "Musician", "Voice Actor", "Animator", "Illustrator", "Writer", "Shitposter"];
+
+client.on("messageReactionAdd", (e, user) => {
+	if (user && !user.bot && e.message.channel.guild)
+        for (let o in emojiname)
+            if (e.emoji.name == emojiname[o]) {
+                let i = e.message.guild.roles.cache.find(e => e.name == rolename[o]);
+				e.message.guild.member(user).roles.add(i).catch(console.error);
+				console.log('added role');
+			}
+});
+
+client.on("messageReactionRemove", (e, n) => {
+    if (n && !n.bot && e.message.channel.guild)
+        for (let o in emojiname)
+            if (e.emoji.name == emojiname[o]) {
+                let i = e.message.guild.roles.cache.find(e => e.name == rolename[o]);
+				e.message.guild.member(n).roles.remove(i).catch(console.error)
+				console.log('removed role');
+            }
 });
 
 client.on('message', async message => 
@@ -294,8 +332,6 @@ client.on('message', async message =>
 		}
 	}*/
 
-	// Fixed the ing- thing??
-
 	if(message.content.toLowerCase() === "monster mashing"){
 		message.reply("Did someone say M0NSTER MASHING!?\nhttps://www.newgrounds.com/portal/view/707498");
 	}
@@ -319,32 +355,35 @@ client.on('message', async message =>
 		const daCommand = client.commands.get(command)
 			|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command));
 
-		// Commands that need arguments
-		if (daCommand.args && !args.length)
+		if (daCommand != undefined)
 		{
-			let reply = "You didn't provide any arguments!"
-			
-			if (daCommand.usage)
+			// Commands that need arguments
+			if (daCommand.args && !args.length)
 			{
-				reply += `\nThe proper usage would be: \`${prefix}${daCommand.name} ${daCommand.usage}\``
+				let reply = "You didn't provide any arguments!"
+				
+				if (daCommand.usage)
+				{
+					reply += `\nThe proper usage would be: \`${prefix}${daCommand.name} ${daCommand.usage}\``
+				}
+
+				return message.channel.send(reply);
 			}
 
-			return message.channel.send(reply);
-		}
+			// If needs to be discord user
+			if (daCommand.discord && !isDiscordUser)
+			{
+				return message.reply(nonDiscordUserMsg);
+			}
 
-		// If needs to be discord user
-		if (daCommand.discord && !isDiscordUser)
-		{
-			return message.reply(nonDiscordUserMsg);
-		}
+			// Commands that need to be in a server
+			if (daCommand.guildOnly && message.channel.type !== 'text') {
+				return message.reply('I can\'t execute that command inside DMs!');
+			}
 
-		// Commands that need to be in a server
-		if (daCommand.guildOnly && message.channel.type !== 'text') {
-			return message.reply('I can\'t execute that command inside DMs!');
+			daCommand.execute(message, args)
 		}
 		
-
-		daCommand.execute(message, args)
 	} catch (err)
 	{
 		console.error(err);
@@ -352,15 +391,43 @@ client.on('message', async message =>
 	}
 
 	// this message(and all others below it) does need a prefix, because it's after the if statement, and also needs the other info above, like command and args
-	if (command == 'emotetest')
-	{
-		if (!isInGuild) return;
-		message.channel.guild.createEmoji('./pics/luis/luis.jpg', 'luis', [message.guild.roles.cache.find(darole => darole.name === 'Newgrounder')])
-	}
 
 	const serverQueue = isInGuild ? queue.get(message.guild.id) : null;
 		console.log(serverQueue);
-	 
+	
+	if (command == 'rolesetup')
+	{
+		if (!message.member.hasPermission('MANAGE_MESSAGES'))
+			return;
+
+		let rolesEmbed = new Discord.MessageEmbed()
+		.setTitle('NEWGROUNDS SERVER ROLE MANAGER')
+		.setDescription('REACT WITH EMOTE TO GET ROLE U WANT')
+		.setColor(0xfda238);
+
+		var daString = "";
+		var i;
+		for (i = 0; i < emojiname.length; i++)
+		{
+			daString += `${rolename[i]} - ${emojiname[i]}\n`;
+		}
+
+		rolesEmbed.addField('ROLES', daString);
+
+		let daMessage = await message.channel.send(rolesEmbed);
+		message.delete();
+		//"🎮", "🖥️", "🎵", "🎙️", "🎞️", "🎨", "✍️", "💩"
+		daMessage.react("🎮")
+		.then(react => daMessage.react("🖥️"))
+		.then(react => daMessage.react("🎵"))
+		.then(react => daMessage.react("🎙️"))
+		.then(react => daMessage.react("🎞️"))
+		.then(react => daMessage.react("🎨"))
+		.then(react => daMessage.react("✍️"))
+		.then(react => daMessage.react("💩"));
+	}
+
+	
 	if (command == 'play' || command == 'join') 
 	{
 		if (!isInGuild) return;
@@ -551,97 +618,6 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 	{
 		message.channel.send("https://discord.gg/HzvnXfZ");
 	}
-
-	else if (command == "points")
-	{
-		if (!isInGuild) return;
-		let score = client.getScore.get(message.author.id, message.guild.id);
-		if (!score)
-		{
-			score = {id: `${message.guild.id}-${message.author.id}`, user: message.author.id, guild: message.guild.id, points: 0, level: 1 };
-		}
-		score.points++;
-		
-		const curLevel = Math.floor(0.1 * Math.sqrt(score.points));
-		if(score.level < curLevel) 
-		{
-		  score.level++;
-		  message.reply(`You've leveled up to level **${curLevel}**! Ain't that dandy?`);
-		}
-
-		console.log(`level status: ${curLevel} / ${score.level}`);
-
-		client.setScore.run(score);
-		console.log(score);
-	}
-
-	else if (command == 'roles')
-	{
-		if (!isInGuild) return;
-		let roleList = message.guild.roles.cache.map(r => {
-			if (["Admins", 'Moderators', "@everyone", 'BrenBot', 'Mr. Fulp', 'Contributor', 'Nitro Booster', 'Advent Calendar'].indexOf(r.name) > -1 || r.name.endsWith('Collab'))
-				return "";
-			else
-				return r.name;
-		}).join("--");
-		message.channel.send("Roles on " + message.guild.name + "\n " + roleList)
-	}
-
-	//Cam you do it
-	else if (command == "addrole"){
-		if (!isInGuild) return;
-		if (!isDiscordUser)
-		{
-			return message.reply(nonDiscordUserMsg);
-		}
-
-		let role = args.slice(0).join(" ");
-		if (role.endsWith('Collab'))
-			return message.reply('Message the collab organizer if you would like to participate in this collab!');
-
-		if (['Admins', "Moderators", 'BrenBot', 'Contributor', 'james', 'Advent Calendar'].indexOf(role) > -1)
-			return message.reply('Hey stop that!');
-		if (["Newgrounder", 'Supporter'].indexOf(role) > -1)
-			return message.reply('the role "' + role + '" requires you to log into the Newgrounds API. Use the command `fulpNG`');
-		let curRole = message.guild.roles.cache.find(darole => darole.name === role);
-
-		if (!message.guild.roles.cache.some(daRole => daRole.name == role))
-		{
-			return message.reply(`This server doesn't seem to have ${role} as a role... you should know that the roles are case sensitive!`)
-		}
-		if (message.member.roles.cache.some(daRole => daRole.name == role))
-		{
-			return message.reply(`you already have the ${curRole.name} role!`)
-		}
-			
-		message.member.roles.add(curRole);
-		message.reply(`just got the ${curRole.name} role!`);
-	}
-
-	else if (command == "removerole")
-	{
-		if (!isInGuild) return;
-		if (!isDiscordUser)
-		{
-			return message.reply(nonDiscordUserMsg);
-		}
-
-		let role = args.slice(0).join(" ");
-		if (['Blammed'].indexOf(role) > -1)
-			return message.reply('lol dummy');
-		let curRole = message.guild.roles.cache.find(darole => darole.name === role);
-
-		if (!message.guild.roles.cache.some(daRole => daRole.name == role))
-		{
-			return message.reply(`This server doesn't seem to have ${role} as a role... you should know that the roles are case sensitive!`)
-		}
-		if (!message.member.roles.cache.some(daRole => daRole.name == role))
-		{
-			return message.reply(`you already had the ${curRole.name} role removed!`)
-		}
-
-		message.member.roles.remove(curRole).then(message.reply(`removed your ${curRole.name} role!`))
-	}
 	/* 
 	if (command == "timeout" && message.author.role("mod"))
 	{
@@ -668,9 +644,6 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 	*/
 	else if (command == 'cringe' || command == 'snap')
 	{
-
-
-
 		message.channel.send('brandyCringe.png', {files: [{
 			attachment: "pics/brandy/brandyCringe.png",
 			name: 'brandyCringe.png'
@@ -708,16 +681,6 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 			.then(presence => console.log(`Activity set to ${presence.game ? presence.game.name : 'none'}`))
   			.catch(console.error);
 	}
-
-	else if (command === 'say')
-	{
-		let text = args.slice(0).join(" ");
-		message.delete();
-		message.channel.send(text);
-		
-		console.log(message.author.username + " says: " + text);
-	}
-
 	else if (command == 'roll')
 	{
 		let min = 1;
@@ -1197,8 +1160,6 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
 		}
 			
 	}
-	else if (command == "testerror" && message.channel.author.id == ownerID)
-		message.channel.send(` <@${ownerID}> an error occured`);
 	/* 
 	if (command == "ngaura")
 	{
