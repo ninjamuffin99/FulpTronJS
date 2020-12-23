@@ -207,6 +207,12 @@ client.on('guildMemberAdd', async member =>
 		member.roles.add(curRole);
 	}
 
+	if (member.guild.id == 791394250557358111) {
+		let curRole = member.guild.roles.cache.find(darole => darole.name === "funkhead");
+
+		member.roles.add(curRole);
+	}
+
 	//G
 	let guildIndex = luckyGuilds.indexOf(member.guild.id);
 
