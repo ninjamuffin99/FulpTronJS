@@ -1,67 +1,74 @@
-﻿const fs = require('fs');
-const rp = require('request-promise');
-const path = require('path');
-const cheerio = require('cheerio');
-const nodemailer = require('nodemailer');
-const Keyv = require('keyv');
+﻿const { readdirSync } = require('fs'),
+  rp = require('request-promise'),
+  path = require('path'),
+  cheerio = require('cheerio'),
+  nodemailer = require('nodemailer'),
+  Keyv = require('keyv'),
+  // Require the discord.js module
+  { Client, Collection, Util } = require('discord.js'),
+  // Create a new Discord client
+  client = new Client(),
+  https = require('https'),
+  request = require('request'),
+  // Extra shit
+  ytdl = require('ytdl-core-discord'),
+  nonDiscordUserMsg = 'you need to be using Discord to get this feature!';
 
-
-// require the discord.js module
-const Discord = require('discord.js');
-// create a new Discord client
-const client = new Discord.Client();
-const https = require('https');
-const request = require('request');
-const {Util} = require('discord.js');
-
-//command set up
-client.commands = new Discord.Collection();
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+// Setup commands
+client.commands = new Collection();
+const commandFiles = readdirSync('./commands')
+    .filter((file) => file.endsWith('.js')),
+  failedCommands = [];
 
 for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	client.commands.set(command.name, command);
+  try {
+    const command = require(`./commands/${file}`);
+    client.commands.set(command.name, command);
+  } catch (error) {
+    failedCommands.push({
+      name: file.slice(0, -3),
+      error
+    });
+  }
 }
 
-//extra shit
-const ytdl = require('ytdl-core-discord');
-
-// consts
-const nonDiscordUserMsg = 'you need to be using Discord to get this feature!';
-
-// NOTE IMPORTANT READ THIS
-// This line is commented in the master/heroku version, but it is needed if you were to run the code locally
-// let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.json');
-let {prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI} = require('./config.example.json');
+/**
+ * NOTE IMPORTANT READ THIS
+ * This line is commented in the master/heroku version, but it is needed if you were to run the code locally
+ */
+// let { prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI } = require('./config.json');
+let { prefix, token, clientID, luckyGuilds, luckyChannels, ownerID, NGappID, NGencKey, spreadsheetID, GOOGLE_API_KEY, MMappID, mongoURI } = require('./config.example.json');
 
 
 // THIS IS FOR HEROKU SHIT
-if (process.env.prefix) prefix = process.env.prefix;
-if (process.env.clientID) clientID = process.env.clientID;
-if (process.env.ownerID) ownerID = process.env.ownerID;
-if (process.env.token) token = process.env.token;
-if (process.env.NGappID) NGappID = process.env.NGappID;
-if (process.env.NGencKey) NGencKey = process.env.NGencKey;
-if (process.env.spreadsheetID) spreadsheetID = process.env.spreadsheetID;
-if (process.env.GOOGLE_API_KEY) GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
-if (process.env.MMappID) MMappID = process.env.MMappID;
-if (process.env.mongoURI) mongoURI = process.env.mongoURI;
+if ('prefix' in process.env) prefix = process.env.prefix;
+if ('clientID' in process.env) clientID = process.env.clientID;
+if ('ownerID' in process.env) ownerID = process.env.ownerID;
+if ('token' in process.env) token = process.env.token;
+if ('NGappID' in process.env) NGappID = process.env.NGappID;
+if ('NGencKey' in process.env) NGencKey = process.env.NGencKey;
+if ('spreadsheetID' in process.env) spreadsheetID = process.env.spreadsheetID;
+if ('GOOGLE_API_KEY' in process.env) GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+if ('MMappID' in process.env) MMappID = process.env.MMappID;
+if ('mongoURI' in process.env) mongoURI = process.env.mongoURI;
 
 exports.prefix = prefix;
 exports.MMappID = MMappID;
 
 // Music bot shit
-const YouTube = require(`simple-youtube-api`);
+const YouTube = require('simple-youtube-api');
 const youtube = new YouTube(GOOGLE_API_KEY);
 
-// TODO add process.env shit for heroku
+// TODO: Add process.env shit for heroku
 const keyv = new Keyv(mongoURI);
 keyv.on('error', err => console.error('Keyv connection error:', err));
 
-const queue = new Map();
+const queue = new Collection();
 
-// gets filled later
-// see prepPics() like 5 lines lower to see the bullshit im trying to do lmao
+/**
+ * Gets filled later,
+ * see prepPics() like 5 lines lower to see the bullshit I'm trying to do lmao
+ */
 const fulpPics = [];
 
 let shoomOCound = 1;
@@ -71,21 +78,24 @@ function prepPics()
 	getImages('fulp');
 	console.log('Fulp shit');
 	getImages('dogl');
-	console.log('dogl shit');
+	console.log('Dogl shit');
 	getImages('delete');
-	console.log('delete shit');
-	
+	console.log('Delete shit');
 }
 
-// ID's for server, and announcement channel in NG server
-// used for caching shit and role reactions
+/**
+ * ID's for server, and announcement channel in NG server
+ * used for caching shit and role reactions.
+ */
 const ngServerID = '578313756015329281';
 const ngChannelID = '578314067752779796';
 
-// when the client is ready, run this code
-// this event will trigger whenever your bot:
-// - finishes logging in
-// - reconnects after disconnecting
+/**
+ * When the client is ready, run this code
+ * this event will trigger whenever your bot:
+ * - finishes logging in
+ * - reconnects after disconnecting
+ */
 client.on('ready', async () => 
 {
 	prepPics();
@@ -149,111 +159,97 @@ client.on('ready', async () =>
 	....''''''   ''''''''''''''''''' ''''.:+oyyyyyyyso+/:.''''  '''''''''''''''''''''''''''''...''''''''
 	..'''''''    '''''''''''''''''''  ''''''''....'''''''''  ''''''''''''' '''' '''''''''''......'''''''
 	.'.''''       ''''''''''''''''''''''''''''''''''''''  ''''''''''            ''''''''''.......'''''''`);
-	console.info("FULPTRON IS ONLINE");
-	console.info(`FulpTron is on ${client.guilds.cache.size} servers!`);
-	console.info(client.guilds.cache.map(g => g.name + " " + g.memberCount).join("\n"));
+	console.info(`${client.user.username.toUpperCase()} IS ONLINE`);
+	console.info(`${client.user.username} is on ${client.guilds.cache.size.toLocaleString()} servers!`);
+	console.info(client.guilds.cache.map(g => `${g.name} ${g.memberCount}`).join('\n'));
 
-	// Specific code for newgrounds server, that finds the announcements channel, and caches the messages
-	// Swap this with something for general purpose reacts later
-	let ngServer = client.guilds.cache.find(ngGuild => ngGuild.id === ngServerID);
-	let announcements = ngServer.channels.cache.find(announc => announc.id === ngChannelID);
-	announcements.messages.fetchPinned();
+	/**
+       * Specific code for newgrounds server, that finds the announcements channel, and caches the messages.
+	 * Swap this with something for general purpose reacts later.
+       */
+	const ngServer = client.guilds.cache.get(ngServerID);
+	const announcements = ngServer.channels.cache.get(ngChannelID);
+	await announcements.messages.fetchPinned().catch(() => null);
 
-	console.info("LUCKY GUILDS" + luckyGuilds);
+	console.info(`LUCKY GUILDS ${luckyGuilds}`);
 
-	var memberShit = await keyv.get('fulptron');
+	let memberShit = await keyv.get('fulptron');
 
-	if (memberShit != undefined)
+      // eslint-disable-next-line eqeqeq
+	if (memberShit != null)
 	{
 		memberShit = JSON.parse(memberShit);
 
-		memberShit.usersAPI.every(function(apiUser)
+		for (const apiUser of memberShit.usersAPI) 
 		{
-			var inputData = {
-				"app_id": NGappID,
-				"debug": true,
-				"call": {
-					"component": "Gateway.ping",
-					"parameters": {},
+			const inputData = {
+				app_id: NGappID,
+				debug: true,
+				call: {
+					component: 'Gateway.ping',
+					parameters: {},
 					}
 			};
 		
-			request.post(
+			await request.post(
 				'https://www.newgrounds.io/gateway_v3.php',
-				{ form: {input: JSON.stringify(inputData)} },
-				async function (error, response, body) 
-				{
-					let parsedResp = JSON.parse(response.body);
-					
-					console.log(apiUser + ": " + parsedResp.result.data.success);
-				});
-		});
+				{ form: { input: JSON.stringify(inputData) } },
+				async (error, response, body) => 
+				console.log(`${apiUser}: ${JSON.parse(response.body).result.data.success}`)).catch(() => null);
+		}
 
 	}
 
 });
 
-let ngRef = ['Cock joke. username is here', 'username, just do what comes natural -T', 'le username has arrived', 'username, do you remember what a tardigrade is?',
-			'Angels sang out in an immaculate chorus, down from the heavends decended username', 'username was blammed for this post', 'username has nice titties for a lil boy',
+const ngRef = ['Cock joke. username is here', 'username, just do what comes natural -T', 'le username has arrived', 'username, do you remember what a tardigrade is?',
+			'Angels sang out in an immaculate chorus, down from the heavens decended username', 'username was blammed for this post', 'username has nice boobas for a lil boy',
 		"Aw gee whiz I hope a username doesn't totally come out of nowhere and own me.", 'Cryptic metaphor -username', 'What the hell is private username doing in there?'];
 
 client.on('guildMemberAdd', async member =>
 {
-	// code specific to the Flash Holes server
-	if (member.guild.id == 283807027720093697)
+	// Code specific to the Flash Holes server
+	if (member.guild.id === '283807027720093697') await member.roles.add(member.guild.roles.cache.find(darole => darole.name === 'Flash Hole')).catch(() => null);
+
+	if (member.guild.id === '791394250557358111') await member.roles.add(member.guild.roles.cache.find(darole => darole.name === 'funkhead')).catch(() => null);
+
+	if (luckyGuilds.includes(member.guild.id))
 	{
-		let curRole = member.guild.roles.cache.find(darole => darole.name === "Flash Hole");
-			
-		member.roles.add(curRole);
-	}
+		// REFRESHES CACHE FOR ROLE REACTIONS FOR NEW PEOPLE?
+                const ngServer = client.guilds.cache.get(ngServerID);
+	        const announcements = ngServer.channels.cache.get(ngChannelID);
+		await announcements.messages.fetchPinned().catch(() => null);
 
-	if (member.guild.id == 791394250557358111) {
-		let curRole = member.guild.roles.cache.find(darole => darole.name === "funkhead");
+		console.log('SOMEONE JOINED NG SERVER??');
 
-		member.roles.add(curRole);
-	}
+		const infoPart = '*\nYou can use the command `fulpNG` to sign into the Newgrounds API, roles can be added in the <#578314067752779796> and `fulpHelp` for more info)';
 
-	//G
-	let guildIndex = luckyGuilds.indexOf(member.guild.id);
+		const intro = ngRef[Math.floor(Math.random() * ngRef.length)].replace('username',  `**${Util.escapeMarkdown(member.user.username)}**`);
 
-	console.log(guildIndex);
-	if (guildIndex != -1)
-	{
-		//REFRESHES CACHE FOR ROLE REACTIONS FOR NEW PEOPLE?
-		let ngServer = client.guilds.cache.find(ngGuild => ngGuild.id === ngServerID);
-		let announcements = ngServer.channels.cache.find(announc => announc.id === ngChannelID);
-		announcements.messages.fetchPinned();
-
-		console.log("SOMEONE JOINED NG SERVER??");
-
-		let infoPart = '*\nYou can use the command `fulpNG` to sign into the Newgrounds API, roles can be added in the <#578314067752779796> and `fulpHelp` for more info)'
-
-		let intro = ngRef[Math.floor(Math.random() * ngRef.length)];
-		intro = intro.replace('username',  "**" + member.user.username + "**");
-
-		return member.guild.channels.cache.find(channel => channel.id === '578313756015329283').send("*" + intro + infoPart);
+		return await member.guild.channels.cache.get('578313756015329283').send(`*${intro}${infoPart}`).catch(() => null);
 	}
 
 });
-var emojiname = ["🎮", "🖥️", "🎵", "🎙️", "🎞️", "🎨", "✍️", "💩"],
-    rolename = ["Game Developer", "Programmer", "Musician", "Voice Actor", "Animator", "Illustrator", "Writer", "Shitposter"];
 
-client.on("messageReactionAdd", (e, user) => {
-	if (user && !user.bot && e.message.channel.guild)
-        for (let o in emojiname)
-            if (e.emoji.name == emojiname[o]) {
-                let i = e.message.guild.roles.cache.find(e => e.name == rolename[o]);
-				e.message.guild.member(user).roles.add(i).catch(console.error);
+const emojiname = ['🎮', '🖥️', '🎵', '🎙️', '🎞️', '🎨', '✍️', '💩'],
+    rolename = ['Game Developer', 'Programmer', 'Musician', 'Voice Actor', 'Animator', 'Illustrator', 'Writer', 'Shitposter'];
+
+client.on('messageReactionAdd', async (e, user) => {
+	if (user && !user.bot && e.message.guild)
+        for (const o in emojiname)
+            if (e.emoji.name === emojiname[o]) {
+                const i = e.message.guild.roles.cache.find(e => e.name === rolename[o]);
+				await e.message.guild.members.fetch(user.id).then(async m => await m.roles.add(i)).catch(console.error);
 				// console.log('added role');
 			}
 });
 
-client.on("messageReactionRemove", (e, n) => {
-    if (n && !n.bot && e.message.channel.guild)
-        for (let o in emojiname)
-            if (e.emoji.name == emojiname[o]) {
-                let i = e.message.guild.roles.cache.find(e => e.name == rolename[o]);
-				e.message.guild.member(n).roles.remove(i).catch(console.error)
+client.on('messageReactionRemove', async (e, n) => {
+    if (n && !n.bot && e.message.guild)
+        for (const o in emojiname)
+            if (e.emoji.name === emojiname[o]) {
+                const i = e.message.guild.roles.cache.find(e => e.name === rolename[o]);
+				await e.message.guild.members.fetch(n).then(async m => await m.roles.remove(i)).catch(console.error);
 				// console.log('removed role');
             }
 });
@@ -261,65 +257,57 @@ client.on("messageReactionRemove", (e, n) => {
 client.on('message', async message => 
 {
 	// Don't respond to messages made by the bot itself
-	if (message.author.id == client.user.id) return;
+	if (message.author.id === client.user.id) return;
 
-	let isInGuild = message.guild != null;
-	let isDiscordUser = !message.author.bot;
+	const isDiscordUser = !message.author.bot,
+        content = message.content.toLowerCase();
 
-	//RATING EMOTES ON NG SERVER
-	let guildIndex = isInGuild ? luckyGuilds.indexOf(message.guild.id) : -1;
-	if (guildIndex != -1)
+	// RATING EMOTES ON NG SERVER
+        const guildIndex = message.guild ? luckyGuilds.indexOf(message.guild.id) : -1;
+	if (guildIndex !== -1)
 	{
-		if (!message.content.startsWith('[noreact]') && luckyChannels[guildIndex].includes(message.channel.id))
+		if (!content.startsWith('[noreact]') && luckyChannels[guildIndex].includes(message.channel.id))
 		{
-			let regShit = new RegExp('((\.png|\.jpg|\.jpeg)|newgrounds\.com\/(art|audio|portal)\/(view|listen))', 'gi');
+			let regShit = /((\.png|\.jpg|\.jpeg)|newgrounds\.com\/(art|audio|portal)\/(view|listen))/gi;
 			if (message.attachments.size > 0 || regShit.test(message.content))
 			{
-				let picoSuffix = "";
-				if (Math.random() > 0.5)
-					picoSuffix = "pico"
+				const picoSuffix = (Math.random() > 0.5) ? 'pico' : '';
 
-				message.react(message.guild.emojis.cache.find(emoji => emoji.name === "0stars" + picoSuffix))
-				.then(react => message.react(message.guild.emojis.cache.find(emoji => emoji.name === "1star" + picoSuffix)))
-				.then(react => message.react(message.guild.emojis.cache.find(emoji => emoji.name === "2stars" + picoSuffix)))
-				.then(react => 	message.react(message.guild.emojis.cache.find(emoji => emoji.name === "3stars" + picoSuffix)))
-				.then(react => message.react(message.guild.emojis.cache.find(emoji => emoji.name === "4stars" + picoSuffix)))
-				.then(react => message.react(message.guild.emojis.cache.find(emoji => emoji.name === "5stars" + picoSuffix)));
+				await Promise.all(Array.from({ length: 6 }, (_, i) => mmessage.guild.emojis.cache.find(emoji => emoji.name === `${i}stars${picoSuffix}`))
+				.map(emoji => message.react(emoji).catch(() => null)));
 			}
 		}
 	}
 
 
-	if (message.content.toLowerCase() === "are we talking about tom fulp?" || message.content.toLowerCase() === "are we talking about tom fulp?" )
+	if (content === 'are we talking about tom fulp?')
 	{
 		// message.reply basically the same as message.channel.send, but @'s the person who sent it
-		message.reply("I **LOVE** talking about Tom Fulp!");
+		await message.reply('I **LOVE** talking about Tom Fulp!');
 	}
-	else if (message.content.toLowerCase() === "can i get a rip in chat?")
+	else if (content === 'can i get a rip in chat?')
 	{
 		// message.reply basically the same as message.channel.send, but @'s the person who sent it
-		message.reply("\nRIP\nRIP\nRIP");
+		await message.reply('RIP\nRIP\nRIP');
 	}
 
-	var daServerMetadata = await keyv.get(message.guild.id);
+	let daServerMetadata = await keyv.get(message.guild.id);
 
-	if (daServerMetadata != undefined)
+      // eslint-disable-next-line eqeqeq
+	if (daServerMetadata != null)
 	{
 		daServerMetadata = JSON.parse(daServerMetadata);
 
-		if (!daServerMetadata.bannedWords.every(function(bannedWord)
+		if (!daServerMetadata.bannedWords.some(bannedWord => content.includes(bannedWord.toLowerCase()))
 		{
-			return !message.content.toLowerCase().includes(bannedWord.toLowerCase())
-		}))
-		{
-			console.log('Deleted message in ' + message.guild.name + " by " + message.author.username + ": " + message.content);
-			return message.delete();
+			console.log(`Deleted message in ${message.guild.name} by ${message.author.tag}: ${message.content}`);
+			return await message.delete();
 		}	
 	}
 
 	// if (message.content.includes())
 
-	//Automate Welcome Channel WIP
+	// Automate Welcome Channel WIP
 	/*if(message.content.toLowerCase() === "test" || message.channel.id() === "read-the-rules-for-access"){
 		//message.roles.add("NG");
 		message.reply("works");
@@ -338,21 +326,17 @@ client.on('message', async message =>
 		}
 	}*/
 
-	if(message.content.toLowerCase() === "monster mashing"){
-		message.reply("Did someone say M0NSTER MASHING!?\nhttps://www.newgrounds.com/portal/view/707498");
-	}
+	if (content === 'monster mashing') await message.reply('Did someone say M0NSTER MASHING!?\nhttps://www.newgrounds.com/portal/view/707498');
 
-	//IF IT DOESNT START WITH "FULP" then IT DONT REGISTER PAST THIS POINT
-	if (!message.content.toLowerCase().startsWith(prefix)) return;
+	// IF IT DOESNT START WITH "FULP" then IT DONT REGISTER PAST THIS POINT
+	if (!content.startsWith(prefix)) return;
 
-	const args = message.content.slice(prefix.length).split(/ +/);
+	const args = message.content.trim().slice(prefix.length).split(/ +/);
 	const command = args.shift().toLowerCase();
 
 	console.log(args);
 	console.log(args.length);
 	
-
-
 	// uncomment when all the commands are implemented
 	// if (!client.commands.has(command))
 
@@ -361,39 +345,31 @@ client.on('message', async message =>
 		const daCommand = client.commands.get(command)
 			|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command));
 
-		if (daCommand != undefined)
+		if (daCommand)
 		{
 			// Commands that need arguments
 			if (daCommand.args && !args.length)
 			{
 				let reply = "You didn't provide any arguments!"
 				
-				if (daCommand.usage)
-				{
-					reply += `\nThe proper usage would be: \`${prefix}${daCommand.name} ${daCommand.usage}\``
-				}
+				if (daCommand.usage) reply += `\nThe proper usage would be: \`${prefix}${daCommand.name} ${daCommand.usage}\``;
 
-				return message.channel.send(reply);
+				return await message.channel.send(reply);
 			}
 
 			// If needs to be discord user
-			if (daCommand.discord && !isDiscordUser)
-			{
-				return message.reply(nonDiscordUserMsg);
-			}
+			if (daCommand.discord && !isDiscordUser) return await message.reply(nonDiscordUserMsg);
 
 			// Commands that need to be in a server
-			if (daCommand.guildOnly && message.channel.type !== 'text') {
-				return message.reply('I can\'t execute that command inside DMs!');
-			}
+			if (daCommand.guildOnly && message.channel.type !== 'text') return await message.reply("I can't execute that command inside DMs!");
 
-			daCommand.execute(message, args)
+			return await daCommand.execute(message, args);
 		}
 		
 	} catch (err)
 	{
 		console.error(err);
-		message.reply(' there was an error trying to execute that command!');
+		return await message.reply(`there was an error trying to execute that command:\n\`\`\`js\n${err.message}\n\`\`\``);
 	}
 
 	// this message(and all others below it) does need a prefix, because it's after the if statement, and also needs the other info above, like command and args
@@ -401,9 +377,9 @@ client.on('message', async message =>
 	const serverQueue = isInGuild ? queue.get(message.guild.id) : null;
 		console.log(serverQueue);
 	
-	if (command == 'rolesetup')
+	if (command === 'rolesetup')
 	{
-		if (!message.member.hasPermission('MANAGE_MESSAGES'))
+		if (!message.member.permissions.has('MANAGE_MESSAGES', true))
 			return;
 
 		let rolesEmbed = new Discord.MessageEmbed()
@@ -1390,7 +1366,7 @@ function unescapeHTML(str) {
 function getImages(personFolder)
 {
 	fulpPics.push([]);
-	files = fs.readdirSync(__dirname + '/pics/' + personFolder);
+	files = readdirSync(__dirname + '/pics/' + personFolder);
 	files.forEach(function(f)
 	{
 		fulpPics[fulpPics.length - 1].push(f);
