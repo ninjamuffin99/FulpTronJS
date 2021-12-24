@@ -1,6 +1,8 @@
 # FulpTronJS
 A stinky DiscordJS bot
 
+There is a re-write in progress!! peep the "v2-rewrite" branch! https://github.com/ninjamuffin99/FulpTronJS/tree/v2-rewrite
+
 FulpTron is 100% free to use or copy, preferably with a shoutout though. If you want to invite the official one to your servers, use this link:
 https://discordapp.com/oauth2/authorize?client_id=381604281968623617&scope=bot
 
