@@ -27,21 +27,3 @@ module.exports = {
         await interaction.reply(`Hello ${interaction.member.displayName}, I see you're a ${a} year old ${s} from ${l}. Wanna date?`);
     }
 }
-
-/*
-.addIntegerOption(age => {
-            age.setName('age')
-                .setDescription('age???')
-                .setRequired(true)
-        })
-        .addStringOption(sex => {
-            sex.setName('sex')
-                .setDescription('sex? (yes)')
-                .setRequired(true)
-        })
-        .addStringOption(location => {
-            location.setName('location')
-                .setDescription('location???')
-                .setRequired(true)
-        })
-*/
