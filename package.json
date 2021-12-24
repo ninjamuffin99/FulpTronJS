@@ -6,17 +6,22 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "commands": "node deploy-commands.js",
-        "dev": "nodemon index.js    "
+        "dev": "nodemon index.js"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "dependencies": {
         "@discordjs/builders": "^0.10.0",
+        "@discordjs/opus": "^0.5.3",
         "@discordjs/rest": "^0.2.0-canary.0",
+        "@discordjs/voice": "^0.7.5",
         "discord-api-types": "^0.26.0",
         "discord.js": "^13.4.0",
-        "dotenv": "^10.0.0"
+        "dotenv": "^10.0.0",
+        "ffmpeg-static": "^4.4.0",
+        "libsodium-wrappers": "^0.7.9",
+        "ytdl-core": "^4.9.2"
     },
     "devDependencies": {
         "nodemon": "^2.0.15"
